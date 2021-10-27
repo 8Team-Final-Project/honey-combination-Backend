@@ -18,9 +18,9 @@ module.exports = (app, Post) => {
     }
   });
 
-  //postId로 해당 유저 찾기
-  app.get("/find/:postId", async (req, res) => {
-    Post.findOne({ postId: req.params.postId }, (err, post) => {
+  //_id으로 해당 포스트 찾기
+  app.get("/find/:_id", async (req, res) => {
+    Post.findOne({ _id: req.params._id }, (err, post) => {
       if (err) return res.status(500).json({ error: err });
       if (!post)
         return res
@@ -30,9 +30,9 @@ module.exports = (app, Post) => {
     });
   });
 
-  //update
-  app.put("/update/:postId", function (req, res) {
-    Post.findOne({ postId: req.params.postId }, (err, post) => {
+  //update수정
+  app.put("/update/:_id", function (req, res) {
+    Post.findOne({ _id: req.params._id }, (err, post) => {
       if (err) return res.status(500).json({ error: "Database Failure!" });
       if (!post)
         return res
@@ -48,8 +48,9 @@ module.exports = (app, Post) => {
   });
   //update 아래에 작성해주세요
 
+  //삭제
   app.delete("/delete", (req, res) => {
-    Post.deleteOne({ postId: req.body.postId }, (err, output) => {
+    Post.deleteOne({ _id: req.body._id }, (err, output) => {
       if (err) return res.status(500).json({ error: "Database Failure!" });
       res.json({ message: "삭제완료" });
       res.status(204).end();
