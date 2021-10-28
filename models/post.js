@@ -12,3 +12,6 @@ const Post = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("Post", Post);
+module.exports = mongoose.model("Like", Like);
+// module.exports = mongoose.model("Hate", Hate);
+// module.exports = mongoose.model("KeepPost", KeepPost);

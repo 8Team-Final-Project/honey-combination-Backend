@@ -8,8 +8,8 @@ const port = process.env.PORT || 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-const User = require("./models/post"); //post스키마를 쓰겠다.
-const router = require("./routes/post")(app, User);
+const Post = require("./models/post"); //post스키마를 쓰겠다.
+const router = require("./routes/post")(app, Post); //이게 뭐야!!!!!!!!!!!!!!!이게 user일때는 왜 돌아간거지????
 
 app.listen(port, function () {
   console.log("Express server has started on port " + port);
