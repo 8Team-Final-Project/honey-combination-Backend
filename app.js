@@ -33,3 +33,13 @@ try {
 }
 
 // module.exports = app;
+
+//로컬 서버 잘 돌아가는지 테스트 코드 
+const gossipMiddleware = (req, res, next) =>{
+  console.log(`Someone is going to: ${req.url}`);
+  next();
+};
+const handleHome = (req, res, next) => {
+  return res.send("I love middleware")
+};
+app.get("/", gossipMiddleware, handleHome);
