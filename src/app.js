@@ -2,14 +2,13 @@ const express = require("express");
 const app = express();
 require("dotenv").config();
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
 
 const port = process.env.PORT || 3000;
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-const User = require("./models/post");
+const User = require("./models/post"); //post스키마를 쓰겠다.
 const router = require("./routes/post")(app, User);
 
 app.listen(port, function () {
