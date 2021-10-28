@@ -1,7 +1,7 @@
 module.exports = (app, Post) => {
   app.post("/likeClick", async (req, res) => {
-    const userId = req.body;
-    const postId = req.params;
+    const userId = req.body; //이건 로그인 쿠키로 받아야 할껄?
+    const postId = req.body;
     const post = await Post.findById({ _id: postId });
     try {
       if (!post.likeUser.id(userId)) {
@@ -23,5 +23,3 @@ module.exports = (app, Post) => {
     }
   });
 };
-
-module.exports = { likeClick };
