@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
-require("dotenv").config();
+// require("dotenv").config();
+const dotenv = require("dotenv");
+dotenv.config();
 const mongoose = require("mongoose");
 
 const port = process.env.PORT || 3000;
@@ -8,7 +10,7 @@ const port = process.env.PORT || 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-const Post = require("./models/post"); //post스키마를 쓰겠다.
+const Post = require("./models/Post"); //post스키마를 쓰겠다.
 const router = require("./routes/post")(app, Post); //이게 뭐야!!!!!!!!!!!!!!!이게 user일때는 왜 돌아간거지????
 
 app.listen(port, function () {
@@ -31,14 +33,12 @@ try {
   console.log("mongo connect error : ", error);
 }
 
-// module.exports = app;
-
-//로컬 서버 잘 돌아가는지 테스트 코드 
-const gossipMiddleware = (req, res, next) =>{
+//로컬 서버 잘 돌아가는지 테스트 코드
+const gossipMiddleware = (req, res, next) => {
   console.log(`Someone is going to: ${req.url}`);
   next();
 };
 const handleHome = (req, res, next) => {
-  return res.send("I love middleware")
+  return res.send("I love middleware");
 };
 app.get("/", gossipMiddleware, handleHome);
