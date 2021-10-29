@@ -9,7 +9,7 @@ import {
   me,
   profilepatch,
   quitme,
-} from "../controllers/userController"
+} from "../controllers/userController.js";
 
 const userRouter = express.Router();
 
@@ -22,7 +22,5 @@ userRouter.get("/logout", logout); //post 로그아웃
 userRouter.get("/me", me); //프로필
 userRouter.get("/:userid", profilepatch); //patch 프로필수정
 userRouter.get("/me", quitme); //delete 탈퇴
-
-
 
 export default userRouter;
