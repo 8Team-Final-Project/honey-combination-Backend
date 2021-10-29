@@ -1,5 +1,5 @@
 import express from "express";
-import {homelending} from "../controllers/eventController"
+import { homelending } from "../controllers/eventController.js";
 
 const globalRouter = express.Router();
 

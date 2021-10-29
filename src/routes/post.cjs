@@ -8,7 +8,7 @@ module.exports = (app, Post) => {
         postContent,
       });
       return res
-        .status(201)
+        .status(200)
         .json({ success: true, msg: "성공적으로 게시글이 등록되었습니다." });
     } catch (err) {
       console.log("게시글 등록 기능 중 발생한 에러: ", err);
