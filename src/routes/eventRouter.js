@@ -4,8 +4,8 @@ import {eventlanding, eventlist} from "../controllers/eventController"
 
 const eventRouter = express.Router();
 
-eventRouter.get("/",eventlanding);
-eventRouter.get("/list",eventlist);
+eventRouter.get("/",eventlanding); //이벤트 렌딩페이지
+eventRouter.get("/list",eventlist); //이벤트 게시판
 
 
 export default eventRouter;

@@ -1,19 +1,24 @@
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+import globalRouter from "../src/routes/globalRouter.js";
+import eventRouter from "../src/routes/eventRouter.js";
+import userRouter from "../src/routes/userRouter.js";
+
 const express = require("express");
+const cors = require("cors");
 const app = express();
-require("dotenv").config();
+const dotenv = require("dotenv");
+dotenv.config();
 const mongoose = require("mongoose");
 const port = process.env.PORT || 3000;
 
-
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-import globalRouter from "../src/routes/globalRouter";
-import eventRouter from "../src/routes/eventRouter";
-import userRouter from "../src/routes/userRouter";
 
-const User = require("./models/Post"); //post스키마를 쓰겠다.
-const router = require("./routes/post")(app, User);
+const User = require("./models/Post.cjs"); //post스키마를 쓰겠다.
+const router = require("./routes/post.cjs")(app, User);
 
 app.listen(port, function () {
   console.log("Express server has started on port " + port);
