@@ -89,37 +89,3 @@ export const postdelete = async (req, res) => {
     });
   });
 };
-
-// export const postdelete = async (req, res) => {
-//   Post.find((err, posts) => {
-//     if (err) return res.status(500).send({ error: "database실패" });
-//     res.send(posts);
-//   });
-// };
-
-// export const postdelete = async (req, res, next) => {
-//   const { postid } = req.params.postid;
-//   console.log(postid);
-//   const { _id } = req.user;
-//   try {
-//     const { postid } = req.params;
-//     const postDetail = await Post.findById(postid);
-//     const current_user = res.user._id;
-//     if (postDetail._id !== current_user) {
-//       res.status(403).send({ errorMessage: "작성자만 삭제할수 있습니다." });
-//       return;
-//     }
-//     await Post.deleteOne({ _id: postId });
-//     res.send({ result: "success" });
-//   } catch (err) {
-//     console.error(err);
-//     next(err);
-//   }
-// };
-
-// console.log(req.body._id);
-// Post.deleteOne({ _id: req.body._id }, (err, output) => {
-//   if (err) return res.status(500).json({ error: "Database Failure!" });
-//   res.json({ message: "삭제완료" });
-//   res.status(204).end();
-// });
