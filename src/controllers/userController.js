@@ -1,7 +1,9 @@
-import User from "../models/User.cjs";
+import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwtToken from "jsonwebtoken";
 
+
+//회원가입API
 export const signup = async (req, res) => {
   const { userEmail, userNickname, userPassword } = req.body;
 
@@ -41,7 +43,6 @@ export const signup = async (req, res) => {
     const hashedPassword = await bcrypt.hash(userPassword, 5);
 
     // const string_birthDt = String(birthDt); //스트링 값으로 변환, 이미ㅣ db에는 스트링으로 저장됨
-
     const newUser = {
       userEmail,
       userNickname,
@@ -61,23 +62,23 @@ export const signup = async (req, res) => {
   }
 };
 
+//로그인API
 export const login = async (req, res) => {
   const { userEmail, userPassword } = req.body;
   console.log(userEmail, userPassword);
   try {
     const user = await User.findOne({ userEmail });
     const isPwMatched = await bcrypt.compare(userPassword, user.userPassword);
-    console.log(token);
+    // console.log(token);
     if (!isPwMatched)
       return res
         .status(400)
         .send({ result: "failure", msg: "아이디 혹은 비밀번호가 틀립니다." });
     const { _id } = user;
-    const token = jwtToken.sign({ _id }, "airbnb-secret-key");
+    const token = jwtToken.sign({ _id }, "honeytip-secret-key");
     return res
       .status(200)
       .send({ result: "success", msg: "로그인 완료", token });
-      console.log(token);
   } catch (error) {
     console.log(error);
     return res
@@ -86,11 +87,101 @@ export const login = async (req, res) => {
   }
 };
 
+//닉네임중복확인API
+export const checknick = async(req,res) => {
+  const { userNickname } = req.body;
+  try {
+    const checknick = await User.findOne({ userNickname}); //
+    if (!checknick) {
+      res.status(200).send({ message: "사용 가능한 닉네임 입니다." });
+    } else {
+      res.status(400).send({ message: "이미 사용중인 닉네임 입니다." });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({
+      message: "알 수 없는 문제가 발생했습니다. 잠시 후 다시 시도해주세요.",
+    });
+  }
+};
+
+//이메일중복확인API
+export const checkemail = async(req,res) => {
+  const { userEmail } = req.body;
+  try {
+    const checkemail = await User.findOne({ userEmail}); //
+    if (!checkemail) {
+      res.status(200).send({ message: "사용 가능 이메일 입니다." });
+    } else {
+      res.status(400).send({ message: "이미 사용중인 이메일 입니다." });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({
+      message: "알 수 없는 문제가 발생했습니다. 잠시 후 다시 시도해주세요.",
+    });
+  }
+};
+//로그인 확인 API
+export const logincheck = async(req,res,next) => {
+  const { authorization } = req.headers;
+  const [tokenType, tokenValue] = authorization.split(" ");
+    try{
+      const { _id } = jwtToken.verify(tokenValue, "honeytip-secret-key");
+      const user = await User.findById(_id);
+      req.user = user;
+      const userNickname = user.userNickname
+      res.status(200).send({ userNickname, isLogin : true });
+      next();
+    } catch (err) {
+      console.log(err);
+      res.status(401).send({
+        errorMessage: "로그인 후 이용 가능한 기능입니다.",
+      });
+    }
+  };
 
 
-export const checknick = (req,res) => {return res.send("checknick")};
-export const logincheck = (req,res) => {return res.send("logincheck")};
-export const logout = (req,res) => {return res.send("logout")};
-export const me = (req,res) => {return res.send("me")};
+//로그아웃 API
+export const logout = (req,res) => {
+  try{
+  User.findOneAndUpdate({_id: req.user._id},{token:""},(err, user) => {
+    console.log(user.userNickname)  
+    if(err) return res.json({ success: false, err});
+      return res.status(200).send({
+          success: true
+      })
+      })
+    } catch (err) {
+      console.log(err);
+      res.status(500).send({
+        message: "알 수 없는 문제가 발생했습니다. 잠시 후 다시 시도해주세요.",
+      });
+    }
+};
+
+//마이프로필API-작업중
+export const me = async(req,res,next) => {
+  const { authorization } = req.headers;
+  const [tokenType, tokenValue] = authorization.split(" ");
+    try{
+      const { _id } = jwtToken.verify(tokenValue, "honeytip-secret-key");
+      const user = await User.findById(_id);
+      req.user = user;
+      const userNickname = user.userNickname
+      const userEmail = user.userEmail
+      const myPost = user.myPost
+      const userId = user._id
+      const keepPost = user.keepPost      
+      res.status(200).send({ userNickname,userEmail,myPost,userId,keepPost });
+      next();
+    } catch (err) {
+      console.log(err);
+      res.status(401).send({
+        errorMessage: "로그인 후 이용 가능한 기능입니다.",
+      });
+    }
+  };
+
 export const profilepatch = (req,res) => {return res.send("profilepatch")};
 export const quitme = (req,res) => {return res.send("quitme")};

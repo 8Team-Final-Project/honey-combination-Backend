@@ -3,9 +3,9 @@ import User from "../models/User.js";
 
 export const authMiddleware = async (req, res, next) => {
   const { authorization } = req.headers;
-
+  // const authorization = req.headers.authorization;
   if (!authorization) {
-    res.status(401).send({
+    return res.status(401).send({
       errorMessage: "로그인 후 사용하세요",
     });
   }
@@ -19,10 +19,11 @@ export const authMiddleware = async (req, res, next) => {
   }
 
   try {
-    const { _id } = jwt.verify(tokenValue, "airbnb-secret-key");
+    const { _id } = jwt.verify(tokenValue, "honeytip-secret-key");
     const user = await User.findById(_id);
     req.user = user;
     next();
+    console.log(req.user);
   } catch (err) {
     console.log(err);
     res.status(401).send({
