@@ -8,8 +8,8 @@ export const signup = async (req, res) => {
   const { userEmail, userNickname, userPassword } = req.body;
 
   const re_userEmail = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
-  const re_userNickname =/^[가-힣a-zA-Z]{2,10}$/;
-  const re_userPassword = /^(?=.*[a-zA-Z])((?=.*\d)|(?=.*\W)).{5,20}$/
+  const re_userNickname = /^[가-힣a-zA-Z]{2,10}$/;
+  const re_userPassword = /^(?=.*[a-zA-Z])((?=.*\d)|(?=.*\W)).{5,20}$/;
 
   if (userEmail.search(re_userEmail) == -1) {
     return res.status(400).send({
@@ -23,23 +23,24 @@ export const signup = async (req, res) => {
     return res.status(402).send({
       errorMessage: "비밀번호의 형식이 일치하지 않습니다.",
     });
-  }  
+  }
   try {
     console.log(userEmail);
     const isemailExisting = await User.find({ userEmail }); //둘중 하나가 User 몽고DB에 존재하는지 여부 확인
-    const isnickExisting = await User.find({ userNickname }); //둘중 하나가 User 몽고DB에 존재하는지 여부 확인    
-    if (isemailExisting.length){
+    console.log(isemailExisting);
+    const isnickExisting = await User.find({ userNickname }); //둘중 하나가 User 몽고DB에 존재하는지 여부 확인
+    if (isemailExisting.length) {
       //둘중 하나라도 존재하면 1이상의 값이 나오므로 true로 처리해서 아래 값을 return
       return res.status(404).send({
         result: "failure",
         msg: "이미 가입한 이메일이 있습니다.",
       });
-    }else if (isnickExisting.length) {
+    } else if (isnickExisting.length) {
       return res.status(408).send({
         result: "failure",
         msg: "이미 가입한 닉네임이 있습니다.",
       });
-    }  
+    }
     const hashedPassword = await bcrypt.hash(userPassword, 5);
 
     // const string_birthDt = String(birthDt); //스트링 값으로 변환, 이미ㅣ db에는 스트링으로 저장됨
