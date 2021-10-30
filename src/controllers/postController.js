@@ -63,8 +63,9 @@ export const postupdate = async (req, res) => {
       return res
         .status(404)
         .json({ error: "해당 포스트가 존재하지 않습니다." });
-
+    post.postTitle = req.body.postTitle;
     post.postContent = req.body.postContent;
+    post.postImg = req.body.postImg;
     post.save((err) => {
       if (err) res.status(500).json({ error: "Failed to update!" });
       res.json({ message: "수정이 완료되었습니다!" });
