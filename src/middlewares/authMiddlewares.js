@@ -24,7 +24,6 @@ export const authMiddleware = async (req, res, next) => {
     const user = await User.findById(_id);
     req.user = user;
     next();
-    console.log(req.user);
   } catch (err) {
     console.log(err);
     res.status(401).send({

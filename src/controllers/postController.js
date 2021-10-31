@@ -1,4 +1,4 @@
-import Post from "../models/Post.js";
+import { Post, Like } from "../models/Post.js";
 import express from "express";
 //CREATE
 export const postcreate = async (req, res) => {
@@ -16,6 +16,7 @@ export const postcreate = async (req, res) => {
     const postState = true;
     const postDate = new Date();
     let currentDate = postDate.toLocaleString();
+    const likeCnt = 0;
     const newPost = await Post.create({
       userId,
       userNickname,
@@ -29,16 +30,17 @@ export const postcreate = async (req, res) => {
       keepPoststate,
       postState,
       createDate: currentDate,
+      likeCnt,
     });
 
-    //createDate 넣어야함
+    //likeCnt 넣어야함
 
     return res.status(200).send({ success: true, newPost: newPost });
   } catch (err) {
     console.log("게시글 등록 기능 중 발생한 에러: ", err);
     return res
       .status(500)
-      .json({ success: false, msg: "게시글 등록 중 에러가 발생했습니다" });
+      .send({ success: false, msg: "게시글 등록 중 에러가 발생했습니다" });
   }
 };
 
@@ -46,29 +48,29 @@ export const postcreate = async (req, res) => {
 export const postfind = async (req, res) => {
   Post.findOne({ _id: req.params.postid }, (err, post) => {
     console.log(req.params.postid);
-    if (err) return res.status(500).json({ error: err });
+    if (err) return res.status(500).send({ error: err });
     if (!post)
       return res
         .status(404)
-        .json({ error: "해당 포스트가 존재하지 않습니다." });
-    res.json(post);
+        .send({ error: "해당 포스트가 존재하지 않습니다." });
+    res.send(post);
   });
 };
 
 //update수정
 export const postupdate = async (req, res) => {
   Post.findOne({ _id: req.params.postid }, (err, post) => {
-    if (err) return res.status(500).json({ error: "Database Failure!" });
+    if (err) return res.status(500).send({ error: "Database Failure!" });
     if (!post)
       return res
         .status(404)
-        .json({ error: "해당 포스트가 존재하지 않습니다." });
+        .send({ error: "해당 포스트가 존재하지 않습니다." });
     post.postTitle = req.body.postTitle;
     post.postContent = req.body.postContent;
     post.postImg = req.body.postImg;
     post.save((err) => {
-      if (err) res.status(500).json({ error: "Failed to update!" });
-      res.json({ message: "수정이 완료되었습니다!" });
+      if (err) res.status(500).send({ error: "Failed to update!" });
+      res.send({ message: "수정이 완료되었습니다!" });
     });
   });
 };
@@ -78,15 +80,15 @@ export const postupdate = async (req, res) => {
 
 export const postdelete = async (req, res) => {
   Post.findOne({ _id: req.params.postid }, (err, post) => {
-    if (err) return res.status(500).json({ error: "Database Failure!" });
+    if (err) return res.status(500).send({ error: "Database Failure!" });
     if (!post)
       return res
         .status(404)
-        .json({ error: "해당 포스트가 존재하지 않습니다." });
+        .send({ error: "해당 포스트가 존재하지 않습니다." });
     post.postState = false;
     post.save((err) => {
-      if (err) res.status(500).json({ error: "Failed to update!" });
-      res.json({ message: "삭제가 완료되었습니다!" });
+      if (err) res.status(500).send({ error: "Failed to update!" });
+      res.send({ message: "삭제가 완료되었습니다!" });
     });
   });
 };
