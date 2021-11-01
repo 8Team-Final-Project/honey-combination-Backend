@@ -159,7 +159,7 @@ export const logout = (req, res) => {
   }
 };
 
-//마이프로필API-작업중
+//마이프로필API-작업중(아직 글 더미 데이터 넣어보고 테스트 안함)
 export const me = async (req, res, next) => {
   const { authorization } = req.headers;
   const [tokenType, tokenValue] = authorization.split(" ");

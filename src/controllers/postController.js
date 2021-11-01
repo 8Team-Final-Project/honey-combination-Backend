@@ -1,12 +1,17 @@
 import Post from "../models/Post.js";
+// require('dotenv').config();
+import dotenv from "dotenv";
+dotenv.config()
+
 import express from "express";
 //CREATE
 export const postcreate = async (req, res) => {
   const post = new Post();
+
   try {
-    const { postTitle, postContent, postImg } = req.body;
-    // const { user } = req.user;
-    // const postTag =
+    console.log(req.file);
+    const { postTitle, postContent } = req.body;
+    const postImg= req.file.transforms[0].location;
     const userId = req.user._id;
     const userNickname = req.user.userNickname;
     const myPost = false;
@@ -17,6 +22,7 @@ export const postcreate = async (req, res) => {
     const postDate = new Date();
     let currentDate = postDate.toLocaleString();
     const newPost = await Post.create({
+      postImg,
       userId,
       userNickname,
       postTitle,
@@ -30,9 +36,7 @@ export const postcreate = async (req, res) => {
       postState,
       createDate: currentDate,
     });
-
-    //createDate 넣어야함
-
+    
     return res.status(200).send({ success: true, newPost: newPost });
   } catch (err) {
     console.log("게시글 등록 기능 중 발생한 에러: ", err);
@@ -65,7 +69,7 @@ export const postupdate = async (req, res) => {
         .json({ error: "해당 포스트가 존재하지 않습니다." });
     post.postTitle = req.body.postTitle;
     post.postContent = req.body.postContent;
-    post.postImg = req.body.postImg;
+    post.postImg = req.file.transforms[0].location;
     post.save((err) => {
       if (err) res.status(500).json({ error: "Failed to update!" });
       res.json({ message: "수정이 완료되었습니다!" });

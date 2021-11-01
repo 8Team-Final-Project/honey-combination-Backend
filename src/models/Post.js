@@ -76,6 +76,10 @@ const postSchema = new mongoose.Schema({
   likeUser: [Like],
 });
 
+postSchema.set('toJSON', {
+  virtuals: true,
+});
+
 const Post = mongoose.model("Post", postSchema);
 
 export default Post;
