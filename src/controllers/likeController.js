@@ -1,16 +1,16 @@
 import { Post, Like } from "../models/Post.js";
 
 export const likeclick = async (req, res) => {
-  const postid = req.params.postid;
-  const userid = req.user._id;
+  const postId = req.params.postid;
+  const userId = req.user._id;
   // const likeCnt = post.likeUser.length;
-  Post.findOne({ _id: postid }, (err, post) => {
+  Post.findOne({ _id: postId }, (err, post) => {
     try {
       if (err) return res.status(500).send({ error: "Database Failure!" });
-      if (!post.likeUser.id(userid)) {
+      if (!post.likeUser.id(userId)) {
         post.likeUser.push(
           new Like({
-            _id: userid,
+            _id: userId,
           })
         );
         post.likeCnt += 1;
@@ -18,7 +18,7 @@ export const likeclick = async (req, res) => {
         post.save();
         return res.status(200).send({ msg: "좋아요 성공" });
       } else {
-        post.likeUser.pull(userid);
+        post.likeUser.pull(userId);
         post.likeCnt -= 1;
         post.likeState = false;
         post.save();

@@ -5,13 +5,10 @@ export const postcreate = async (req, res) => {
   const post = new Post();
   try {
     const { postTitle, postContent, postImg } = req.body;
-    // const { user } = req.user;
-    // const postTag =
     const userId = req.user._id;
     const userNickname = req.user.userNickname;
     const myPost = false;
     const likeState = false;
-    const unlikeState = false;
     const keepPoststate = false;
     const postState = true;
     const postDate = new Date();
@@ -23,10 +20,8 @@ export const postcreate = async (req, res) => {
       postTitle,
       postContent,
       postImg,
-      // postTag,
       myPost,
       likeState,
-      unlikeState,
       keepPoststate,
       postState,
       createDate: currentDate,
@@ -44,11 +39,26 @@ export const postcreate = async (req, res) => {
   }
 };
 
+//포스트 전체 불러오기
+export const postlist = async (req, res) => {
+  Post.find({}, (err, post) => {
+    if (err) return res.status(500).send({ error: err });
+    if (!post)
+      return res
+        .status(404)
+        .send({ error: "해당 포스트가 존재하지 않습니다." });
+    res.send(post);
+  });
+};
+
 //_id으로 해당 포스트 찾기
 export const postfind = async (req, res) => {
+  const userid = req.user._id;
   Post.findOne({ _id: req.params.postid }, (err, post) => {
-    console.log(req.params.postid);
     if (err) return res.status(500).send({ error: err });
+    if (post.likeUser.id(userid)) {
+      post.likeState = true;
+    }
     if (!post)
       return res
         .status(404)

@@ -1,20 +1,21 @@
 import User from "../models/User.js";
 
 export const keepclick = async (req, res) => {
-  const userid = req.user._id;
-  const postid = req.params.postid;
+  const userId = req.user._id;
+  const postId = req.params.postid;
   const post = req.params;
-  User.findOne({ _id: userid }, (err, user) => {
+  User.findOne({ _id: userId }, (err, user) => {
     try {
       if (err) return res.status(500).send({ error: "유저가 없네?" });
-      if (!user.keepPost.id(postid)) {
-        user.keepPost.push(post);
+      if (!user.keepPost.id(postId)) {
+        user.keepPost.push(postId);
+        user.keepPost;
         user.save();
-        console.log(userid);
-        console.log(post);
+        console.log(userId);
+        console.log(user.keepPost);
         return res.status(200).send({ msg: "이게 되네?" });
       } else {
-        user.keepPost.pull(post);
+        user.keepPost.pull(postId);
         user.save();
         return res.status(200).send({ msg: "되냐?" });
       }

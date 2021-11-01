@@ -38,23 +38,12 @@ const postSchema = new mongoose.Schema(
       required: false,
       unique: false,
     },
-    postTag: {
-      type: String,
-      required: false,
-      unique: false,
-    },
-
     myPost: {
       type: Boolean,
       required: false,
       unique: false,
     },
     likeState: {
-      type: Boolean,
-      required: false,
-      unique: false,
-    },
-    unlikeState: {
       type: Boolean,
       required: false,
       unique: false,
@@ -75,6 +64,7 @@ const postSchema = new mongoose.Schema(
       unique: false,
     },
     likeUser: [likeSchema],
+    postTag: [String],
     likeCnt: {
       type: Number,
     },
