@@ -1,8 +1,8 @@
-import express from "express";
-import { homelending } from "../controllers/eventController.js";
+// import express from "express";
+// import { homelending } from "../controllers/eventController.js";
 
-const globalRouter = express.Router();
+// const globalRouter = express.Router();
 
-globalRouter.get("/",homelending);//홈페이지
+// // globalRouter.get("/",homelending);//홈페이지
 
-export default globalRouter;
+// export default globalRouter;

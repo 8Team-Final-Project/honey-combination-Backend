@@ -7,6 +7,7 @@ export const postcreate = async (req, res) => {
     const { postTitle, postContent, postImg } = req.body;
     const userId = req.user._id;
     const userNickname = req.user.userNickname;
+    const postTag = post;
     const myPost = false;
     const likeState = false;
     const keepPoststate = false;
@@ -14,20 +15,19 @@ export const postcreate = async (req, res) => {
     const postDate = new Date();
     let currentDate = postDate.toLocaleString();
     const likeCnt = 0;
-    const keepCnt = 0;
     const newPost = await Post.create({
       userId,
       userNickname,
       postTitle,
       postContent,
       postImg,
+      postTag,
       myPost,
       likeState,
       keepPoststate,
       postState,
       createDate: currentDate,
       likeCnt,
-      keepCnt,
     });
 
     //likeCnt 넣어야함

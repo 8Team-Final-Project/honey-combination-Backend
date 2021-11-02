@@ -1,6 +1,6 @@
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
-import globalRouter from "../src/routes/globalRouter.js";
+// import globalRouter from "../src/routes/globalRouter.js";
 import eventRouter from "../src/routes/eventRouter.js";
 import userRouter from "../src/routes/userRouter.js";
 import postRouter from "../src/routes/postRouter.js";
@@ -44,7 +44,7 @@ try {
 
 // module.exports = app;
 
-app.use("/", globalRouter);
+// app.use("/", globalRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/event", eventRouter);
 app.use("/api/v1/post", postRouter);

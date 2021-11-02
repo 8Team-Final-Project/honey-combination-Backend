@@ -9,7 +9,10 @@ export const keepclick = async (req, res) => {
       if (err) return res.status(500).send({ error: "유저가 없네?" });
       if (!user.keepPost.id(postId)) {
         user.keepPost.push(postId);
+        user.keepPost;
         user.save();
+        console.log(userId);
+        console.log(user.keepPost);
         return res.status(200).send({ msg: "이게 되네?" });
       } else {
         user.keepPost.pull(postId);

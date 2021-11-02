@@ -2,11 +2,11 @@ import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 
-const likeSchema = new mongoose.Schema({
+const eventlikeSchema = new mongoose.Schema({
   _id: Schema.Types.ObjectId,
 });
 
-const postSchema = new mongoose.Schema(
+const eventSchema = new mongoose.Schema(
   {
     postId: {
       type: String,
@@ -38,6 +38,11 @@ const postSchema = new mongoose.Schema(
       required: false,
       unique: false,
     },
+    postTag: {
+      type: String,
+      required: false,
+      unique: false,
+    },
     myPost: {
       type: Boolean,
       required: false,
@@ -63,7 +68,7 @@ const postSchema = new mongoose.Schema(
       required: false,
       unique: false,
     },
-    likeUser: [likeSchema],
+    likeUser: [eventlikeSchema],
     postTag: [String],
     likeCnt: {
       type: Number,
@@ -72,7 +77,7 @@ const postSchema = new mongoose.Schema(
   { versionKey: false }
 );
 
-const Post = mongoose.model("Post", postSchema);
-const Like = mongoose.model("Like", likeSchema);
+const Event = mongoose.model("Event", eventSchema);
+const EventLike = mongoose.model("EventLike", eventlikeSchema);
 
-export { Post, Like };
+export { Event, EventLike };
