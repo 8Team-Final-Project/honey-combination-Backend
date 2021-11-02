@@ -1,13 +1,19 @@
 import { Post, Like } from "../models/Post.js";
+// require('dotenv').config();
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 //CREATE
 export const postcreate = async (req, res) => {
   const post = new Post();
+
   try {
-    const { postTitle, postContent, postImg } = req.body;
+    console.log(req.file);
+    const { postTitle, postContent, postTag } = req.body;
+    const postImg = req.file.transforms[0].location;
     const userId = req.user._id;
     const userNickname = req.user.userNickname;
-    const postTag = post;
     const myPost = false;
     const likeState = false;
     const keepPoststate = false;
@@ -29,8 +35,6 @@ export const postcreate = async (req, res) => {
       createDate: currentDate,
       likeCnt,
     });
-
-    //likeCnt 넣어야함
 
     return res.status(200).send({ success: true, newPost: newPost });
   } catch (err) {
@@ -75,7 +79,8 @@ export const postupdate = async (req, res) => {
         .send({ error: "해당 포스트가 존재하지 않습니다." });
     post.postTitle = req.body.postTitle;
     post.postContent = req.body.postContent;
-    post.postImg = req.body.postImg;
+    post.postImg = req.file.transforms[0].location;
+    post.postTag = req.body.postTag;
     post.save((err) => {
       if (err) res.status(500).send({ error: "Failed to update!" });
       res.send({ message: "수정이 완료되었습니다!" });

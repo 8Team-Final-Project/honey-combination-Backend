@@ -1,10 +1,14 @@
 import { Event, EventLike } from "../models/Event.js";
-import express from "express";
+// require('dotenv').config();
+import dotenv from "dotenv";
+dotenv.config();
 
+import express from "express";
 export const eventcreate = async (req, res) => {
   const event = new Event();
   try {
-    const { postTitle, postContent, postImg, postTag } = req.body;
+    const { postTitle, postContent, postTag } = req.body;
+    const postImg = req.file.transforms[0].location;
     const userId = req.user._id;
     const userNickname = req.user.userNickname;
     const myPost = false;
@@ -28,8 +32,6 @@ export const eventcreate = async (req, res) => {
       createDate: currentDate,
       likeCnt,
     });
-
-    //likeCnt 넣어야함
 
     return res.status(200).send({ success: true, newEvent: newEvent });
   } catch (err) {
@@ -74,7 +76,7 @@ export const eventupdate = async (req, res) => {
         .send({ error: "해당 포스트가 존재하지 않습니다." });
     post.postTitle = req.body.postTitle;
     post.postContent = req.body.postContent;
-    post.postImg = req.body.postImg;
+    post.postImg = req.file.transforms[0].location;
     post.postTag = req.body.postTag;
     post.save((err) => {
       if (err) res.status(500).send({ error: "Failed to update!" });

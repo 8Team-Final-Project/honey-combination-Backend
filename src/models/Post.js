@@ -72,6 +72,10 @@ const postSchema = new mongoose.Schema(
   { versionKey: false }
 );
 
+postSchema.set('toJSON', {
+  virtuals: true,
+});
+
 const Post = mongoose.model("Post", postSchema);
 const Like = mongoose.model("Like", likeSchema);
 
