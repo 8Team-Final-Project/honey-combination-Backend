@@ -14,6 +14,7 @@ export const postcreate = async (req, res) => {
     const postDate = new Date();
     let currentDate = postDate.toLocaleString();
     const likeCnt = 0;
+    const keepCnt = 0;
     const newPost = await Post.create({
       userId,
       userNickname,
@@ -26,6 +27,7 @@ export const postcreate = async (req, res) => {
       postState,
       createDate: currentDate,
       likeCnt,
+      keepCnt,
     });
 
     //likeCnt 넣어야함
@@ -53,12 +55,8 @@ export const postlist = async (req, res) => {
 
 //_id으로 해당 포스트 찾기
 export const postfind = async (req, res) => {
-  const userid = req.user._id;
   Post.findOne({ _id: req.params.postid }, (err, post) => {
     if (err) return res.status(500).send({ error: err });
-    if (post.likeUser.id(userid)) {
-      post.likeState = true;
-    }
     if (!post)
       return res
         .status(404)

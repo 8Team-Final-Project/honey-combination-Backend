@@ -68,6 +68,9 @@ const postSchema = new mongoose.Schema(
     likeCnt: {
       type: Number,
     },
+    keepCnt: {
+      type: Number,
+    },
   },
   { versionKey: false }
 );
