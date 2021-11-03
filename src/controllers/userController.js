@@ -7,7 +7,7 @@ export const signup = async (req, res) => {
   const { userEmail, userNickname, userPassword } = req.body;
 
   const re_userEmail = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
-  const re_userNickname = /^[가-힣a-zA-Z]{2,10}$/;
+  const re_userNickname = /^[가-힣a-zA-Z0-9]{2,10}$/;
   const re_userPassword = /^(?=.*[a-zA-Z])((?=.*\d)|(?=.*\W)).{5,20}$/;
 
   if (userEmail.search(re_userEmail) == -1) {
@@ -181,10 +181,57 @@ export const me = async (req, res, next) => {
     });
   }
 };
-
-export const profilepatch = (req, res) => {
-  return res.send("profilepatch");
+//프로필 수정 api(수정은 되나 중복검사 및 정규식 검사 안됨)
+export const profilepatch = async (req, res) => {
+  const { authorization } = req.headers;
+  const [tokenType, tokenValue] = authorization.split(" ");
+  try {
+    const { _id } = jwtToken.verify(tokenValue, "honeytip-secret-key");
+    const user = await User.findById(_id);
+    req.user = user;
+    const userNickname = user.userNickname;
+    const userEmail = user.userEmail;
+    const re_userEmail = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
+    const re_userNickname = /^[가-힣a-zA-Z0-9]{2,10}$/;
+    // const { nicknameNew, passwordOld, passwordNew } = res.verifyBody;
+    // console.log(res.verifyBody);
+    const existUser = await User.findOne({ where: { _id: user._id } });
+   //존재 여부 확인 if문을 여러번 사용해서 거르면서 내려오기
+    const checknick = await User.findOne({ userNickname }); //
+    //닉네임 
+    const checkemail = await User.findOne({ userEmail }); //
+    //등록된 유저가 있는지 다시 한번 조회
+    // if (existUser) {
+    //     return err({message: "유저가 존재하지 않습니다."})
+    // };
+    // if (!checknick && !checkemail) {
+    //     return error.status(403).send({ errorMessage: "이미 존재하는 이메일이나 닉네임 입니다" })
+    // };
+    // if (userEmail.search(re_userEmail) == -1 && userNickname.search(re_userNickname) == -1) {
+    //     return error.status(403).send({ errorMessage: "이메일의 형식이 일치하지 않습니다." });
+    // };
+        //기존 비밀번호 확인
+        // if (bcrypt.compareSync(passwordOld, existUser.password)) {
+        //   const encryptPassword = bcrypt.hashSync(passwordNew, 10);
+    if (existUser) {
+    await User.updateOne({ _id: user._id },
+          {
+            $set: {
+              userNickname: req.body.userNickname,
+              userEmail: req.body.userEmail,
+            },
+          },
+          { where: { _id: user._id } }
+        );
+        res.status(200).send({message:"변경 성공"});
+      }}catch (err) {
+    console.log(err);
+    res.status(500).send({
+      message: "알 수 없는 문제가 발생했습니다. 잠시 후 다시 시도해주세요.",
+    })
+  }
 };
+
 export const quitme = (req, res) => {
   return res.send("quitme");
 };
