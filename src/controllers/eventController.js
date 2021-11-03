@@ -7,8 +7,8 @@ import express from "express";
 export const eventcreate = async (req, res) => {
   const event = new Event();
   try {
-    const { postTitle, postContent, postTag } = req.body;
-    const postImg = req.file.transforms[0].location;
+    const { postTitle, postContent, postTag, postImg } = req.body;
+    // const postImg = req.file.transforms[0].location;
     const userId = req.user._id;
     const userNickname = req.user.userNickname;
     const myPost = false;
@@ -72,7 +72,8 @@ export const eventupdate = async (req, res) => {
         .send({ error: "해당 포스트가 존재하지 않습니다." });
     post.postTitle = req.body.postTitle;
     post.postContent = req.body.postContent;
-    post.postImg = req.file.transforms[0].location;
+    // post.postImg = req.file.transforms[0].location;
+    post.postImg = req.body.postImg;
     post.postTag = req.body.postTag;
     post.save((err) => {
       if (err) res.status(500).send({ error: "Failed to update!" });
