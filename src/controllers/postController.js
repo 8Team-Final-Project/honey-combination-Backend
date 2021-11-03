@@ -10,8 +10,8 @@ export const postcreate = async (req, res) => {
 
   try {
     console.log(req.file);
-    const { postTitle, postContent, postTag } = req.body;
-    const postImg = req.file.transforms[0].location;
+    const { postTitle, postContent,postTag, postImg } = req.body;
+    // const postImg= req.file.transforms[0].location;
     const userId = req.user._id;
     const userNickname = req.user.userNickname;
     const myPost = false;
@@ -79,8 +79,8 @@ export const postupdate = async (req, res) => {
         .send({ error: "해당 포스트가 존재하지 않습니다." });
     post.postTitle = req.body.postTitle;
     post.postContent = req.body.postContent;
-    post.postImg = req.file.transforms[0].location;
-    post.postTag = req.body.postTag;
+    post.postImg = req.body.postImg;
+    // post.postImg = req.file.transforms[0].location;
     post.save((err) => {
       if (err) res.status(500).send({ error: "Failed to update!" });
       res.send({ message: "수정이 완료되었습니다!" });
@@ -104,4 +104,24 @@ export const postdelete = async (req, res) => {
       res.send({ message: "삭제가 완료되었습니다!" });
     });
   });
+};
+
+//이미지 업로드 API
+export const postuploadimg = async (req, res) => {
+  const post = new Post();
+
+  try {
+    console.log(req.file);
+    const postImg= req.file.transforms[0].location;
+    const newPost = await Post.create({
+      postImg,
+    });
+    
+    return res.status(200).send({postImg: postImg });
+  } catch (err) {
+    console.log("게시글 등록 기능 중 발생한 에러: ", err);
+    return res
+      .status(500)
+      .json({ success: false, msg: "게시글 등록 중 에러가 발생했습니다" });
+  }
 };
