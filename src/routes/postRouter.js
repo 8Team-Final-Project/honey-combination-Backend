@@ -7,6 +7,7 @@ import {
   postfind,
   postupdate,
   postdelete,
+  postuploadimg,
 } from "../controllers/postController.js";
 const postRouter = express.Router();
 
@@ -14,7 +15,6 @@ const postRouter = express.Router();
 postRouter.post(
   "/",
   authMiddleware,
-  uploadSingle.single("postImg"),
   postcreate
 );
 postRouter.get("/", postlist);
@@ -22,9 +22,10 @@ postRouter.get("/:postid", postfind);
 postRouter.patch(
   "/postupdate/:postid",
   authMiddleware,
-  uploadSingle.single("postImg"),
   postupdate
 );
 postRouter.patch("/postdelete/:postid", authMiddleware, postdelete);
-
+postRouter.post("/uploadimg",uploadSingle.single('postImg'), postuploadimg);
+// /image
+//단일 url 만들고 이미지 리턴 post이미지에 그대로 url req로 다시 돌려 받는다.
 export default postRouter;

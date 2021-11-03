@@ -21,7 +21,7 @@ userRouter.post("/checknick", checknick); //post 닉네임중복체크
 userRouter.post("/login", login); //로그인
 userRouter.get("/logout",authMiddleware, logout); //post 로그아웃
 userRouter.get("/me",authMiddleware, me); //프로필
-userRouter.get("/:userid", profilepatch); //patch 프로필수정
-userRouter.get("/me", quitme); //delete 탈퇴
+userRouter.patch("/:userid",authMiddleware, profilepatch); //patch 프로필수정
+userRouter.get("/me",authMiddleware, quitme); //delete 탈퇴
 
 export default userRouter;
