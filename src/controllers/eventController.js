@@ -44,12 +44,8 @@ export const eventcreate = async (req, res) => {
 
 //이벤트 포스트 전체 불러오기
 export const eventlist = async (req, res) => {
-  Event.find({}, (err, post) => {
+  Event.find({ postState: true }, (err, post) => {
     if (err) return res.status(500).send({ error: err });
-    if (!post)
-      return res
-        .status(404)
-        .send({ error: "해당 포스트가 존재하지 않습니다." });
     res.send(post);
   });
 };
