@@ -1,4 +1,5 @@
 import { Post, Like } from "../models/Post.js";
+import { Event, EventLike } from "../models/Event.js";
 
 export const likeclick = async (req, res) => {
   const postId = req.params.postid;

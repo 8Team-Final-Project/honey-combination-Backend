@@ -1,7 +1,7 @@
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwtToken from "jsonwebtoken";
-import {Post} from "../models/Post.js";
+import { Post } from "../models/Post.js";
 
 //회원가입API
 export const signup = async (req, res) => {
@@ -167,7 +167,7 @@ export const me = async (req, res, next) => {
   try {
     const { _id } = jwtToken.verify(tokenValue, "honeytip-secret-key");
     const user = await User.findById(_id);
-    req.user = user;
+    req.user = user; //token에서 유저뽑아내기
     const userNickname = user.userNickname;
     const userEmail = user.userEmail;
     // const myPost = user.myPost;
@@ -176,9 +176,9 @@ export const me = async (req, res, next) => {
     // console.log("owner",owner)
     // console.log("userId",userId)
     const keepPost = user.keepPost;
-    const myPost = await Post.find({userId:userId});
-    console.log("Post.userId",userId)
-    console.log("myPost",myPost)
+    const myPost = await Post.find({ userId: userId });
+    console.log("Post.userId", userId);
+    console.log("myPost", myPost);
     user.myPost.push(myPost);
     user.myPost;
     user.save();
@@ -191,7 +191,6 @@ export const me = async (req, res, next) => {
     });
   }
 };
-
 
 //프로필 수정 api(수정은 되나 중복검사 및 정규식 검사 안됨)
 export const profilepatch = async (req, res) => {

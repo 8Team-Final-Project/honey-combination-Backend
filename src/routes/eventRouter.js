@@ -21,7 +21,7 @@ eventRouter.post(
   // uploadSingle.single("postImg"),
   eventcreate
 ); //이벤트 렌딩페이지
-eventRouter.get("/", authMiddleware, eventlist); //이벤트 게시판
+eventRouter.get("/", eventlist); //이벤트 게시판
 eventRouter.get("/:postid", eventfind);
 eventRouter.patch(
   "/eventupdate/:postid",
