@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import User from "./User.js"
+import User from "./User.js";
 const { Schema } = mongoose;
 
 const likeSchema = new mongoose.Schema({
@@ -69,11 +69,31 @@ const postSchema = new mongoose.Schema(
     likeCnt: {
       type: Number,
     },
+    mainlist: {
+      type: Boolean,
+      required: false,
+      unique: false,
+    },
+    event1list: {
+      type: Boolean,
+      required: false,
+      unique: false,
+    },
+    event2list: {
+      type: Boolean,
+      required: false,
+      unique: false,
+    },
+    event3list: {
+      type: Boolean,
+      required: false,
+      unique: false,
+    },
   },
   { versionKey: false }
 );
 
-postSchema.set('toJSON', {
+postSchema.set("toJSON", {
   virtuals: true,
 });
 

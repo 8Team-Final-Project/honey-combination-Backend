@@ -4,12 +4,21 @@ dotenv.config();
 
 import express from "express";
 //CREATE
+
 export const postcreate = async (req, res) => {
   const post = new Post();
 
   try {
-    console.log(req.file);
-    const { postTitle, postContent, postTag, postImg } = req.body;
+    const {
+      postTitle,
+      postContent,
+      postTag,
+      postImg,
+      mainlist,
+      event1list,
+      event2list,
+      event3list,
+    } = req.body;
     // const postImg= req.file.transforms[0].location;
     const userId = req.user._id;
     const userNickname = req.user.userNickname;
@@ -33,8 +42,12 @@ export const postcreate = async (req, res) => {
       postState,
       createDate: currentDate,
       likeCnt,
+      mainlist,
+      event1list,
+      event2list,
+      event3list,
     });
-
+    console.log(event1list);
     return res.status(200).send({ success: true, newPost: newPost });
   } catch (err) {
     console.log("게시글 등록 기능 중 발생한 에러: ", err);
@@ -44,9 +57,33 @@ export const postcreate = async (req, res) => {
   }
 };
 
-//포스트 전체 불러오기
+//꿀조합 포스트 전체 불러오기
 export const postlist = async (req, res) => {
-  Post.find({ postState: true }, (err, post) => {
+  Post.find({ mainlist: true, postState: true }, (err, post) => {
+    if (err) return res.status(500).send({ error: err });
+    res.send(post);
+  });
+};
+
+//이벤트1 포스트 전체 불러오기
+export const event1list = async (req, res) => {
+  Post.find({ event1list: true, postState: true }, (err, post) => {
+    if (err) return res.status(500).send({ error: err });
+    res.send(post);
+  });
+};
+
+//이벤트2 포스트 전체 불러오기
+export const event2list = async (req, res) => {
+  Post.find({ event2list: true, postState: true }, (err, post) => {
+    if (err) return res.status(500).send({ error: err });
+    res.send(post);
+  });
+};
+
+//이벤트3 포스트 전체 불러오기
+export const event3list = async (req, res) => {
+  Post.find({ event3list: true, postState: true }, (err, post) => {
     if (err) return res.status(500).send({ error: err });
     res.send(post);
   });

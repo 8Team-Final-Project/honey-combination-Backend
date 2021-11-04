@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 // import User from "../models/User.js";
 import User from "../models/User.js";
 import { Post } from "../models/Post.js";
-import { Event } from "../models/Event.js";
+// import { Event } from "../models/Event.js";
 
 export const authMiddleware = async (req, res, next) => {
   const { authorization } = req.headers;

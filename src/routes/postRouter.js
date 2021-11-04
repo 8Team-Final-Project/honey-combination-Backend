@@ -4,6 +4,9 @@ import { Post } from "../models/Post.js";
 import express from "express";
 import {
   postlist,
+  event1list,
+  event2list,
+  event3list,
   postcreate,
   postfind,
   postupdate,
@@ -15,6 +18,9 @@ const postRouter = express.Router();
 //multer을 어스와 post 사이에 넣기
 postRouter.post("/", authMiddleware, postcreate);
 postRouter.get("/", postlist);
+postRouter.get("/event1list", event1list);
+postRouter.get("/event2list", event2list);
+postRouter.get("/event3list", event3list);
 postRouter.get("/:postid", postfind);
 postRouter.patch(
   "/postupdate/:postid",

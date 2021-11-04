@@ -1,6 +1,6 @@
 import User from "../models/User.js";
 import { Post } from "../models/Post.js";
-import { Event } from "../models/Event.js";
+// import { Event } from "../models/Event.js";
 
 export const keepclick = async (req, res) => {
   const userId = req.user._id;
