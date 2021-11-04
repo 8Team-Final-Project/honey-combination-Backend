@@ -13,11 +13,11 @@ export const keepclick = async (req, res) => {
         user.save();
         console.log(userId);
         console.log(user.keepPost);
-        return res.status(200).send({ msg: "이게 되네?" });
+        return res.status(200).send({ msg: "게시물이 찜 되었습니다" });
       } else {
         user.keepPost.pull(postId);
         user.save();
-        return res.status(200).send({ msg: "되냐?" });
+        return res.status(200).send({ msg: "게시물이 찜이 취소 되었습니다" });
       }
     } catch (error) {
       console.error(error);

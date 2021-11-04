@@ -1,4 +1,7 @@
-import { authMiddleware } from "../middlewares/authMiddlewares.js";
+import {
+  authMiddleware,
+  eventauthorCheck,
+} from "../middlewares/authMiddlewares.js";
 import { uploadSingle } from "../middlewares/imagepostMiddlewares.js";
 import express from "express";
 import {
@@ -18,15 +21,21 @@ eventRouter.post(
   // uploadSingle.single("postImg"),
   eventcreate
 ); //이벤트 렌딩페이지
-eventRouter.get("/", eventlist); //이벤트 게시판
+eventRouter.get("/", authMiddleware, eventlist); //이벤트 게시판
 eventRouter.get("/:postid", eventfind);
 eventRouter.patch(
   "/eventupdate/:postid",
   authMiddleware,
+  eventauthorCheck,
   // uploadSingle.single("postImg"),
   eventupdate
 );
-eventRouter.patch("/eventdelete/:postid", authMiddleware, eventdelete);
+eventRouter.patch(
+  "/eventdelete/:postid",
+  authMiddleware,
+  eventauthorCheck,
+  eventdelete
+);
 eventRouter.post("/uploadimg", uploadSingle.single("postImg"), postuploadimg);
 
 export default eventRouter;

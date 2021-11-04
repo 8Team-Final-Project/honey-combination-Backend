@@ -3,7 +3,6 @@ import { Post, Like } from "../models/Post.js";
 export const likeclick = async (req, res) => {
   const postId = req.params.postid;
   const userId = req.user._id;
-  // const likeCnt = post.likeUser.length;
   Post.findOne({ _id: postId }, (err, post) => {
     try {
       if (err) return res.status(500).send({ error: "Database Failure!" });

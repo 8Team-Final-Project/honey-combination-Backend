@@ -208,9 +208,9 @@ export const profilepatch = async (req, res) => {
     // const { nicknameNew, passwordOld, passwordNew } = res.verifyBody;
     // console.log(res.verifyBody);
     const existUser = await User.findOne({ where: { _id: user._id } });
-   //존재 여부 확인 if문을 여러번 사용해서 거르면서 내려오기
+    //존재 여부 확인 if문을 여러번 사용해서 거르면서 내려오기
     const checknick = await User.findOne({ userNickname }); //
-    //닉네임 
+    //닉네임
     const checkemail = await User.findOne({ userEmail }); //
     //등록된 유저가 있는지 다시 한번 조회
     // if (existUser) {
@@ -222,25 +222,27 @@ export const profilepatch = async (req, res) => {
     // if (userEmail.search(re_userEmail) == -1 && userNickname.search(re_userNickname) == -1) {
     //     return error.status(403).send({ errorMessage: "이메일의 형식이 일치하지 않습니다." });
     // };
-        //기존 비밀번호 확인
-        // if (bcrypt.compareSync(passwordOld, existUser.password)) {
-        //   const encryptPassword = bcrypt.hashSync(passwordNew, 10);
+    //기존 비밀번호 확인
+    // if (bcrypt.compareSync(passwordOld, existUser.password)) {
+    //   const encryptPassword = bcrypt.hashSync(passwordNew, 10);
     if (existUser) {
-    await User.updateOne({ _id: user._id },
-          {
-            $set: {
-              userNickname: req.body.userNickname,
-              userEmail: req.body.userEmail,
-            },
+      await User.updateOne(
+        { _id: user._id },
+        {
+          $set: {
+            userNickname: req.body.userNickname,
+            userEmail: req.body.userEmail,
           },
-          { where: { _id: user._id } }
-        );
-        res.status(200).send({message:"변경 성공"});
-      }}catch (err) {
+        },
+        { where: { _id: user._id } }
+      );
+      res.status(200).send({ message: "변경 성공" });
+    }
+  } catch (err) {
     console.log(err);
     res.status(500).send({
       message: "알 수 없는 문제가 발생했습니다. 잠시 후 다시 시도해주세요.",
-    })
+    });
   }
 };
 

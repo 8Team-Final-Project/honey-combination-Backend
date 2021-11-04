@@ -1,5 +1,4 @@
 import { Event, EventLike } from "../models/Event.js";
-// require('dotenv').config();
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -8,7 +7,6 @@ export const eventcreate = async (req, res) => {
   const event = new Event();
   try {
     const { postTitle, postContent, postTag, postImg } = req.body;
-    // const postImg = req.file.transforms[0].location;
     const userId = req.user._id;
     const userNickname = req.user.userNickname;
     const myPost = false;

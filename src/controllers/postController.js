@@ -1,5 +1,4 @@
 import { Post, Like } from "../models/Post.js";
-// require('dotenv').config();
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -10,7 +9,7 @@ export const postcreate = async (req, res) => {
 
   try {
     console.log(req.file);
-    const { postTitle, postContent,postTag, postImg } = req.body;
+    const { postTitle, postContent, postTag, postImg } = req.body;
     // const postImg= req.file.transforms[0].location;
     const userId = req.user._id;
     const userNickname = req.user.userNickname;
@@ -76,6 +75,7 @@ export const postupdate = async (req, res) => {
     post.postTitle = req.body.postTitle;
     post.postContent = req.body.postContent;
     post.postImg = req.body.postImg;
+    post.postTag = req.body.postTag;
     // post.postImg = req.file.transforms[0].location;
     post.save((err) => {
       if (err) res.status(500).send({ error: "Failed to update!" });
@@ -108,12 +108,12 @@ export const postuploadimg = async (req, res) => {
 
   try {
     console.log(req.file);
-    const postImg= req.file.transforms[0].location;
+    const postImg = req.file.transforms[0].location;
     const newPost = await Post.create({
       postImg,
     });
-    
-    return res.status(200).send({postImg: postImg });
+
+    return res.status(200).send({ postImg: postImg });
   } catch (err) {
     console.log("게시글 등록 기능 중 발생한 에러: ", err);
     return res
