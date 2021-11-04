@@ -37,7 +37,7 @@ const userSchema = new Schema(
         _id: { type: String },
         createDate: { type: String },
         postTitle: { type: String },
-        postImg: {},
+        postImg: {type: String},
         postTag: {},
         likeCount: { type: Number, default: 0 },
         postCount: { type: Number, default: 0 },

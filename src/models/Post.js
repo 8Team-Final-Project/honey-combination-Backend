@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import User from "./User.js"
 const { Schema } = mongoose;
 
 const likeSchema = new mongoose.Schema({
@@ -17,6 +17,7 @@ const postSchema = new mongoose.Schema(
       type: String,
       required: false,
       unique: false,
+      ref: User,
     },
     userNickname: {
       type: String,

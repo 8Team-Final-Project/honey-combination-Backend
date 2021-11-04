@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwtToken from "jsonwebtoken";
+import {Post} from "../models/Post.js";
 
 //회원가입API
 export const signup = async (req, res) => {
@@ -169,9 +170,18 @@ export const me = async (req, res, next) => {
     req.user = user;
     const userNickname = user.userNickname;
     const userEmail = user.userEmail;
-    const myPost = user.myPost;
+    // const myPost = user.myPost;
     const userId = user._id;
+    // const owner = await Post.findById(Post.userId).populate(User.id)
+    // console.log("owner",owner)
+    // console.log("userId",userId)
     const keepPost = user.keepPost;
+    const myPost = await Post.find({userId:userId});
+    console.log("Post.userId",userId)
+    console.log("myPost",myPost)
+    user.myPost.push(myPost);
+    user.myPost;
+    user.save();
     res.status(200).send({ userNickname, userEmail, myPost, userId, keepPost });
     next();
   } catch (err) {
@@ -181,6 +191,8 @@ export const me = async (req, res, next) => {
     });
   }
 };
+
+
 //프로필 수정 api(수정은 되나 중복검사 및 정규식 검사 안됨)
 export const profilepatch = async (req, res) => {
   const { authorization } = req.headers;
@@ -232,6 +244,7 @@ export const profilepatch = async (req, res) => {
   }
 };
 
+//탈퇴기능-부가기능
 export const quitme = (req, res) => {
   return res.send("quitme");
 };
