@@ -206,6 +206,7 @@ try{
 //_id으로 해당 포스트 찾기
 export const postfind = async (req, res) => {
   Post.findOne({ _id: req.params.postid }, (err, post) => {
+    console.log(req)
     if (err) return res.status(500).send({ error: err });
     if (!post)
       return res
