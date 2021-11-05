@@ -11,7 +11,9 @@ export const postcreate = async (req, res) => {
   try {
     const {
       postTitle,
+      postSubtitle,
       postContent,
+      postRecipe,
       postTag,
       postImg,
       mainlist,
@@ -33,7 +35,9 @@ export const postcreate = async (req, res) => {
       userId,
       userNickname,
       postTitle,
+      postSubtitle,
       postContent,
+      postRecipe,
       postImg,
       postTag,
       myPost,
@@ -60,30 +64,31 @@ export const postcreate = async (req, res) => {
 //포스트리스트 전체 불러오기
 export const postlist = async (ctx, res) => {
   console.log(ctx.query);
-  const page = parseInt(ctx.query.page || '1', 10);
-  if(page < 1){
+  const page = parseInt(ctx.query.page || "1", 10);
+  if (page < 1) {
     res.status = 400;
-    return;      
+    return;
   }
-try{
-  const posts = await Post.find({ mainlist: true, postState: true }, (err,post) => {
-    if (err) return res.status(500).send({ error: err });
-    res.send(post);
-  })
-    .sort({ _id: -1 })
-    .limit(10)
-    .skip((page - 1) * 10)
-    .lean()
-    .exec();
+  try {
+    const posts = await Post.find(
+      { mainlist: true, postState: true },
+      (err, post) => {
+        if (err) return res.status(500).send({ error: err });
+        res.send(post);
+      }
+    )
+      .sort({ _id: -1 })
+      .limit(10)
+      .skip((page - 1) * 10)
+      .lean()
+      .exec();
     const postCount = await Post.countDocuments(posts).exec();
-    ctx.set('Last-Page', Math.ceil(postCount / 10));
+    ctx.set("Last-Page", Math.ceil(postCount / 10));
     ctx.body = posts.map((post) => ({
       post,
       body: removeHtmlAndShorten(post.body),
     }));
-
-  }
-  catch (err) {
+  } catch (err) {
     // console.log("게시물 조회중 발생한 에러: ", err);
     // return res
     //   .status(500)
@@ -102,30 +107,31 @@ try{
 //이벤트1 포스트 전체 불러오기
 export const event1list = async (ctx, res) => {
   console.log(ctx.query);
-  const page = parseInt(ctx.query.page || '1', 10);
-  if(page < 1){
+  const page = parseInt(ctx.query.page || "1", 10);
+  if (page < 1) {
     res.status = 400;
-    return;      
+    return;
   }
-try{
-  const posts = await Post.find({ event1list: true, postState: true }, (err,post) => {
-    if (err) return res.status(500).send({ error: err });
-    res.send(post);
-  })
-    .sort({ _id: -1 })
-    .limit(10)
-    .skip((page - 1) * 10)
-    .lean()
-    .exec();
+  try {
+    const posts = await Post.find(
+      { event1list: true, postState: true },
+      (err, post) => {
+        if (err) return res.status(500).send({ error: err });
+        res.send(post);
+      }
+    )
+      .sort({ _id: -1 })
+      .limit(10)
+      .skip((page - 1) * 10)
+      .lean()
+      .exec();
     const postCount = await Post.countDocuments(posts).exec();
-    ctx.set('Last-Page', Math.ceil(postCount / 10));
+    ctx.set("Last-Page", Math.ceil(postCount / 10));
     ctx.body = posts.map((post) => ({
       post,
       body: removeHtmlAndShorten(post.body),
     }));
-
-  }
-  catch (err) {
+  } catch (err) {
     // console.log("게시물 조회중 발생한 에러: ", err);
     // return res
     //   .status(500)
@@ -133,35 +139,34 @@ try{
   }
 };
 
-
-
 //이벤트2 포스트 전체 불러오기
 export const event2list = async (ctx, res) => {
   console.log(ctx.query);
-  const page = parseInt(ctx.query.page || '1', 10);
-  if(page < 1){
+  const page = parseInt(ctx.query.page || "1", 10);
+  if (page < 1) {
     res.status = 400;
-    return;      
+    return;
   }
-try{
-  const posts = await Post.find({ event2list: true, postState: true }, (err,post) => {
-    if (err) return res.status(500).send({ error: err });
-    res.send(post);
-  })
-    .sort({ _id: -1 })
-    .limit(10)
-    .skip((page - 1) * 10)
-    .lean()
-    .exec();
+  try {
+    const posts = await Post.find(
+      { event2list: true, postState: true },
+      (err, post) => {
+        if (err) return res.status(500).send({ error: err });
+        res.send(post);
+      }
+    )
+      .sort({ _id: -1 })
+      .limit(10)
+      .skip((page - 1) * 10)
+      .lean()
+      .exec();
     const postCount = await Post.countDocuments(posts).exec();
-    ctx.set('Last-Page', Math.ceil(postCount / 10));
+    ctx.set("Last-Page", Math.ceil(postCount / 10));
     ctx.body = posts.map((post) => ({
       post,
       body: removeHtmlAndShorten(post.body),
     }));
-
-  }
-  catch (err) {
+  } catch (err) {
     // console.log("게시물 조회중 발생한 에러: ", err);
     // return res
     //   .status(500)
@@ -172,30 +177,31 @@ try{
 //이벤트3 포스트 전체 불러오기
 export const event3list = async (ctx, res) => {
   console.log(ctx.query);
-  const page = parseInt(ctx.query.page || '1', 10);
-  if(page < 1){
+  const page = parseInt(ctx.query.page || "1", 10);
+  if (page < 1) {
     res.status = 400;
-    return;      
+    return;
   }
-try{
-  const posts = await Post.find({ event3list: true, postState: true }, (err,post) => {
-    if (err) return res.status(500).send({ error: err });
-    res.send(post);
-  })
-    .sort({ _id: -1 })
-    .limit(10)
-    .skip((page - 1) * 10)
-    .lean()
-    .exec();
+  try {
+    const posts = await Post.find(
+      { event3list: true, postState: true },
+      (err, post) => {
+        if (err) return res.status(500).send({ error: err });
+        res.send(post);
+      }
+    )
+      .sort({ _id: -1 })
+      .limit(10)
+      .skip((page - 1) * 10)
+      .lean()
+      .exec();
     const postCount = await Post.countDocuments(posts).exec();
-    ctx.set('Last-Page', Math.ceil(postCount / 10));
+    ctx.set("Last-Page", Math.ceil(postCount / 10));
     ctx.body = posts.map((post) => ({
       post,
       body: removeHtmlAndShorten(post.body),
     }));
-
-  }
-  catch (err) {
+  } catch (err) {
     // console.log("게시물 조회중 발생한 에러: ", err);
     // return res
     //   .status(500)
