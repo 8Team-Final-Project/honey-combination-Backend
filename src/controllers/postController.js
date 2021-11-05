@@ -57,36 +57,150 @@ export const postcreate = async (req, res) => {
   }
 };
 
-//꿀조합 포스트 전체 불러오기
-export const postlist = async (req, res) => {
-  Post.find({ mainlist: true, postState: true }, (err, post) => {
+//포스트리스트 전체 불러오기
+export const postlist = async (ctx, res) => {
+  console.log(ctx.query);
+  const page = parseInt(ctx.query.page || '1', 10);
+  if(page < 1){
+    res.status = 400;
+    return;      
+  }
+try{
+  const posts = await Post.find({ mainlist: true, postState: true }, (err,post) => {
     if (err) return res.status(500).send({ error: err });
     res.send(post);
-  });
+  })
+    .sort({ _id: -1 })
+    .limit(10)
+    .skip((page - 1) * 10)
+    .lean()
+    .exec();
+    const postCount = await Post.countDocuments(posts).exec();
+    ctx.set('Last-Page', Math.ceil(postCount / 10));
+    ctx.body = posts.map((post) => ({
+      post,
+      body: removeHtmlAndShorten(post.body),
+    }));
+
+  }
+  catch (err) {
+    // console.log("게시물 조회중 발생한 에러: ", err);
+    // return res
+    //   .status(500)
+    //   .json({ success: false, msg: "게시글 조회 중 에러가 발생했습니다" });
+  }
 };
+
+//꿀조합 포스트 전체 불러오기
+// export const postlist = async (req, res) => {
+//   Post.find({ mainlist: true, postState: true }, (err, post) => {
+//     if (err) return res.status(500).send({ error: err });
+//     res.send(post);
+//   }).limit(10).skip((page-1)*10).lean().exec();
+// };
 
 //이벤트1 포스트 전체 불러오기
-export const event1list = async (req, res) => {
-  Post.find({ event1list: true, postState: true }, (err, post) => {
+export const event1list = async (ctx, res) => {
+  console.log(ctx.query);
+  const page = parseInt(ctx.query.page || '1', 10);
+  if(page < 1){
+    res.status = 400;
+    return;      
+  }
+try{
+  const posts = await Post.find({ event1list: true, postState: true }, (err,post) => {
     if (err) return res.status(500).send({ error: err });
     res.send(post);
-  });
+  })
+    .sort({ _id: -1 })
+    .limit(10)
+    .skip((page - 1) * 10)
+    .lean()
+    .exec();
+    const postCount = await Post.countDocuments(posts).exec();
+    ctx.set('Last-Page', Math.ceil(postCount / 10));
+    ctx.body = posts.map((post) => ({
+      post,
+      body: removeHtmlAndShorten(post.body),
+    }));
+
+  }
+  catch (err) {
+    // console.log("게시물 조회중 발생한 에러: ", err);
+    // return res
+    //   .status(500)
+    //   .json({ success: false, msg: "게시글 조회 중 에러가 발생했습니다" });
+  }
 };
 
+
+
 //이벤트2 포스트 전체 불러오기
-export const event2list = async (req, res) => {
-  Post.find({ event2list: true, postState: true }, (err, post) => {
+export const event2list = async (ctx, res) => {
+  console.log(ctx.query);
+  const page = parseInt(ctx.query.page || '1', 10);
+  if(page < 1){
+    res.status = 400;
+    return;      
+  }
+try{
+  const posts = await Post.find({ event2list: true, postState: true }, (err,post) => {
     if (err) return res.status(500).send({ error: err });
     res.send(post);
-  });
+  })
+    .sort({ _id: -1 })
+    .limit(10)
+    .skip((page - 1) * 10)
+    .lean()
+    .exec();
+    const postCount = await Post.countDocuments(posts).exec();
+    ctx.set('Last-Page', Math.ceil(postCount / 10));
+    ctx.body = posts.map((post) => ({
+      post,
+      body: removeHtmlAndShorten(post.body),
+    }));
+
+  }
+  catch (err) {
+    // console.log("게시물 조회중 발생한 에러: ", err);
+    // return res
+    //   .status(500)
+    //   .json({ success: false, msg: "게시글 조회 중 에러가 발생했습니다" });
+  }
 };
 
 //이벤트3 포스트 전체 불러오기
-export const event3list = async (req, res) => {
-  Post.find({ event3list: true, postState: true }, (err, post) => {
+export const event3list = async (ctx, res) => {
+  console.log(ctx.query);
+  const page = parseInt(ctx.query.page || '1', 10);
+  if(page < 1){
+    res.status = 400;
+    return;      
+  }
+try{
+  const posts = await Post.find({ event3list: true, postState: true }, (err,post) => {
     if (err) return res.status(500).send({ error: err });
     res.send(post);
-  });
+  })
+    .sort({ _id: -1 })
+    .limit(10)
+    .skip((page - 1) * 10)
+    .lean()
+    .exec();
+    const postCount = await Post.countDocuments(posts).exec();
+    ctx.set('Last-Page', Math.ceil(postCount / 10));
+    ctx.body = posts.map((post) => ({
+      post,
+      body: removeHtmlAndShorten(post.body),
+    }));
+
+  }
+  catch (err) {
+    // console.log("게시물 조회중 발생한 에러: ", err);
+    // return res
+    //   .status(500)
+    //   .json({ success: false, msg: "게시글 조회 중 에러가 발생했습니다" });
+  }
 };
 
 //_id으로 해당 포스트 찾기
