@@ -21,7 +21,7 @@ postRouter.get("/", postlist);
 postRouter.get("/event1list", event1list);
 postRouter.get("/event2list", event2list);
 postRouter.get("/event3list", event3list);
-postRouter.get("/:postid", authMiddleware, postfind);
+postRouter.get("/:postid", postfind);
 postRouter.patch(
   "/postupdate/:postid",
   authMiddleware,
