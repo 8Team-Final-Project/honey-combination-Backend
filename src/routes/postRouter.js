@@ -1,5 +1,5 @@
 import { authMiddleware, authorCheck } from "../middlewares/authMiddlewares.js";
-import { uploadSingle } from "../middlewares/imagepostMiddlewares.js";
+import {uploadSingle} from "../middlewares/imagepostMiddlewares.js";
 import { Post } from "../models/Post.js";
 import express from "express";
 import {
@@ -12,7 +12,7 @@ import {
   postupdate,
   postdelete,
   postuploadimg,
-  // posttagsearch,
+  posttagsearch,
 } from "../controllers/postController.js";
 const postRouter = express.Router();
 
@@ -22,7 +22,7 @@ postRouter.get("/", postlist);
 postRouter.get("/event1list", event1list);
 postRouter.get("/event2list", event2list);
 postRouter.get("/event3list", event3list);
-// postRouter.get("/posttag", posttagsearch);
+postRouter.get("/posttag", posttagsearch);
 postRouter.get("/:postid", postfind);
 postRouter.patch(
   "/postupdate/:postid",

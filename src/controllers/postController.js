@@ -284,38 +284,57 @@ export const postuploadimg = async (req, res) => {
   }
 };
 
-// //검색 api
-// export const posttagsearch = async (ctx, res, next) => {
-//     console.log(ctx.query);
-//     const countAllpost = await Post.countDocuments({mainlist: true, postState: true});
-//     const page = parseInt(ctx.query.page || "1", 10);
-//     if (page < 1) {
-//       res.status = 400;
-//       return;
-//     }
-//     try {
-//       const posts = await Post.find(
-//         { mainlist: true, postState: true },
-//         (err, post) => {
-//           if (err) return res.status(500).send({ error: err });
-//           res.send([post,{countAllpost:countAllpost}]);
-//         }
-//       )
-//         .sort({ _id: -1 })
-//         .limit(10)
-//         .skip((page - 1) * 10)
-//         .lean()
-//         .exec();
-//       const postCount = await Post.countDocuments(posts).exec();
-//       ctx.set("Last-Page", Math.ceil(postCount / 10));
-//       ctx.body = posts.map((post) => ({
-//         post,
-//         body: removeHtmlAndShorten(post.body),
-//       }));
-//     } catch (err) {
-//       // console.log("게시물 조회중 발생한 에러: ", err);
-//       // return res
-//       //   .status(500)
-//       //   .json({ success: false, msg: "게시글 조회 중 에러가 발생했습니다" });
-//     }
-//   };
+//검색 api
+export const posttagsearch = async (ctx, res, next) => {
+    console.log(ctx.query);
+    const countAllpost = await Post.countDocuments({mainlist: true, postState: true});
+    const page = parseInt(ctx.query.page || "1", 10);
+    let options = [];
+    if (page < 1) {
+      res.status = 400;
+      return;
+    }
+    try {
+
+      if(ctx.query.option == "posttag1"){
+        console.log(ctx.query)
+        options = [{ postTag: new RegExp(ctx.query.content) }];
+      } else if(ctx.query.option == 'posttag2'){
+        options = [{ postTag: new RegExp(ctx.query.content) }];
+      } else if(ctx.query.option == 'posttag3'){
+        options = [{ postTag: new RegExp(ctx.query.content) }];
+      // } else if(ctx.query.option == 'title_body'){
+      //   options = [{ title: new RegExp(ctx.query.content) }, { body: new RegExp(ctx.query.content) }];
+      } else {
+        const err = new Error('검색 옵션이 없습니다.');
+        err.status = 400;
+        throw err;
+      }
+
+      const posts = await Post.find({$or: options },
+        (err, post) => {
+          if (err) return res.status(500).send({ error: err });
+          res.send([post,{countAllpost:countAllpost}]);
+        }
+       
+        
+        )
+        .sort({ _id: -1 })
+        .limit(10)
+        .skip((page - 1) * 10)
+        .lean()
+        .exec()
+
+      const postCount = await Post.countDocuments(posts).exec();
+      ctx.set("Last-Page", Math.ceil(postCount / 10));
+      ctx.body = posts.map((post) => ({
+        post,
+        body: removeHtmlAndShorten(post.body),
+      }));
+    } catch (err) {
+      // console.log("게시물 조회중 발생한 에러: ", err);
+      // return res
+      //   .status(500)
+      //   .json({ success: false, msg: "게시글 조회 중 에러가 발생했습니다" });
+    }
+  };

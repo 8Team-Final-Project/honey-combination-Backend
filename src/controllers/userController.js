@@ -246,6 +246,6 @@ export const profilepatch = async (req, res) => {
 };
 
 //탈퇴기능-부가기능
-export const quitme = (req, res) => {
-  return res.send("quitme");
-};
+// export const quitme = (req, res) => {
+//   return res.send("quitme");
+// };

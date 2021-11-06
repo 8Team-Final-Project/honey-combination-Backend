@@ -105,4 +105,6 @@ postSchema.set("toJSON", {
 const Post = mongoose.model("Post", postSchema);
 const Like = mongoose.model("Like", likeSchema);
 
+// postSchema.index({ postTitle: 'text', postContent: 'text', postTag: 'text' });
+
 export { Post, Like };
