@@ -29,11 +29,6 @@ const postSchema = new mongoose.Schema(
       required: false,
       unique: false,
     },
-    postSubtitle: {
-      type: String,
-      required: false,
-      unique: false,
-    },
     postContent: {
       type: String,
       required: false,

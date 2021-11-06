@@ -11,9 +11,8 @@ export const postcreate = async (req, res) => {
   try {
     const {
       postTitle,
-      postSubtitle,
-      postContent,
       postRecipe,
+      postContent,
       postTag,
       postImg,
       mainlist,
@@ -35,9 +34,8 @@ export const postcreate = async (req, res) => {
       userId,
       userNickname,
       postTitle,
-      postSubtitle,
-      postContent,
       postRecipe,
+      postContent,
       postImg,
       postTag,
       myPost,
@@ -212,7 +210,7 @@ export const event3list = async (ctx, res) => {
 //_id으로 해당 포스트 찾기
 export const postfind = async (req, res) => {
   Post.findOne({ _id: req.params.postid }, (err, post) => {
-    console.log(req)
+    console.log(req);
     if (err) return res.status(500).send({ error: err });
     if (!post)
       return res
@@ -231,9 +229,9 @@ export const postupdate = async (req, res) => {
         .status(404)
         .send({ error: "해당 포스트가 존재하지 않습니다." });
     post.postTitle = req.body.postTitle;
+    post.postRecipe = req.body.postRecipe;
     post.postContent = req.body.postContent;
     post.postImg = req.body.postImg;
-    post.postTag = req.body.postTag;
     // post.postImg = req.file.transforms[0].location;
     post.save((err) => {
       if (err) res.status(500).send({ error: "Failed to update!" });
