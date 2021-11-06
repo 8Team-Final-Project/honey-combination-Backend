@@ -105,6 +105,7 @@ postSchema.set("toJSON", {
 const Post = mongoose.model("Post", postSchema);
 const Like = mongoose.model("Like", likeSchema);
 
-// postSchema.index({ postTitle: 'text', postContent: 'text', postTag: 'text' });
+//109번째줄 7일 새벽에 박선웅 추가
+postSchema.index({ postTag: 'text' });
 
 export { Post, Like };

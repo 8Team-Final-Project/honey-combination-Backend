@@ -284,7 +284,7 @@ export const postuploadimg = async (req, res) => {
   }
 };
 
-//검색 api
+//검색 api 7일 새벽에 박선웅 추가
 export const posttagsearch = async (ctx, res, next) => {
     console.log(ctx.query);
     const countAllpost = await Post.countDocuments({mainlist: true, postState: true});
