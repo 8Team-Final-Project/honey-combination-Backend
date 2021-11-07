@@ -34,19 +34,29 @@ export const authMiddleware = async (req, res, next) => {
   }
 };
 
+// export const authForGuest = (req, res, next) => {
+//   try {
+//     const { authorization } = req.headers;
+//     if (!authorization) {
+//       req.user = 13;
+//       next();
+//     } else {
+//       const { _id } = jwt.verify(tokenValue, "honeytip-secret-key");
+//       const user = await User.findById(_id);
+//       req.user = user;
+//       next();
+//     }
+//   } catch (err) {
+//     console.log(err);
+//     res.status(401).send({
+//       errorMessage: "로그인 후 이용 가능한 기능입니다.",
+//     });
+//   }
+// };
+
 // 게시판 글 작성자 체크
 export const authorCheck = (req, res, next) => {
   Post.findById(req.params.postid, (err, post) => {
-    if (err) return res.json(err);
-    if (post.userId != req.user._id)
-      return res.send({ msg: "당신은 게시글 작성자가 아닙니다." });
-    next();
-  });
-};
-
-// 이벤트게시판 글 작성자 체크
-export const eventauthorCheck = (req, res, next) => {
-  Event.findById(req.params.postid, (err, post) => {
     if (err) return res.json(err);
     if (post.userId != req.user._id)
       return res.send({ msg: "당신은 게시글 작성자가 아닙니다." });
