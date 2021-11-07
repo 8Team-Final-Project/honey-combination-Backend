@@ -9,7 +9,8 @@ import {
   logout,
   me,
   profilepatch,
-  quitme,
+
+  // quitme,
 } from "../controllers/userController.js";
 
 const userRouter = express.Router();
@@ -22,7 +23,6 @@ userRouter.post("/login", login); //로그인
 userRouter.get("/logout", authMiddleware, logout); //post 로그아웃
 userRouter.get("/me", authMiddleware, me); //프로필
 userRouter.patch("/:userid", authMiddleware, profilepatch); //patch 프로필수정
-userRouter.get("/me", authMiddleware, quitme); //delete 탈퇴
-// userRouter.get("/uploadimg", uploadSingle.single("postImg"), postuploadimg);
+// userRouter.get("/me", authMiddleware, quitme); //delete 탈퇴
 
 export default userRouter;
