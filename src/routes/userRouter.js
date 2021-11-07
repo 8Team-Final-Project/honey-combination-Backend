@@ -9,10 +9,12 @@ import {
   logout,
   me,
   profilepatch,
+<<<<<<< HEAD
 
+=======
+>>>>>>> b114154dc74ea70374347ea71f561df2e8f36fa4
   // quitme,
 } from "../controllers/userController.js";
-
 const userRouter = express.Router();
 
 userRouter.get("/logincheck", authMiddleware, logincheck); //로그인 인증 유지
