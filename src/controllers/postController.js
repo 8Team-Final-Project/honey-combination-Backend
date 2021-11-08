@@ -331,7 +331,7 @@ export const posttagsearch = async (ctx, res, next) => {
       if (err) return res.status(500).send({ error: err });
       res.send([post, { countAllpost: 50 }]);
     })
-      .sort({ _id: -1 })
+      .sort({ postTag: -1 })
       .limit(10)
       .skip((page - 1) * 10)
       .lean()
