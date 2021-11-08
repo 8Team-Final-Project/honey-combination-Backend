@@ -314,7 +314,7 @@ export const posttagsearch = async (ctx, res, next) => {
       const posts = await Post.find({$or: options },
         (err, post) => {
           if (err) return res.status(500).send({ error: err });
-          res.send([post,{countAllpost:countAllpost}]);
+          res.send([post,{countAllpost:50}]);
         }
        
         
