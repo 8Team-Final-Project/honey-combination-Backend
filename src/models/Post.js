@@ -74,6 +74,7 @@ const postSchema = new mongoose.Schema(
     likeCnt: {
       type: Number,
     },
+    keepUser: [{ _id: { type: String } }],
     mainlist: {
       type: Boolean,
       required: false,
@@ -106,6 +107,6 @@ const Post = mongoose.model("Post", postSchema);
 const Like = mongoose.model("Like", likeSchema);
 
 //109번째줄 7일 새벽에 박선웅 추가
-postSchema.index({ postTag: 'text' });
+postSchema.index({ postTag: "text" });
 
 export { Post, Like };

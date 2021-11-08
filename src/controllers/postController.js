@@ -1,4 +1,5 @@
 import { Post, Like } from "../models/Post.js";
+
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -63,7 +64,10 @@ export const postcreate = async (req, res) => {
 export const postlist = async (ctx, res, next) => {
   console.log(ctx.query);
   console.log(ctx.query.postTag);
-  const countAllpost = await Post.countDocuments({mainlist: true, postState: true});
+  const countAllpost = await Post.countDocuments({
+    mainlist: true,
+    postState: true,
+  });
   const page = parseInt(ctx.query.page || "1", 10);
   if (page < 1) {
     res.status = 400;
@@ -75,7 +79,7 @@ export const postlist = async (ctx, res, next) => {
       (err, post) => {
         if (err) return res.status(500).send({ error: err });
         // if (post) res.send()
-        res.send([post,{countAllpost:countAllpost}]);
+        res.send([post, { countAllpost: countAllpost }]);
       }
     )
       .sort({ _id: -1 })
@@ -89,8 +93,7 @@ export const postlist = async (ctx, res, next) => {
       post,
       body: removeHtmlAndShorten(post.body),
     }));
-    
-  }catch (err) {
+  } catch (err) {
     // console.log("게시물 조회중 발생한 에러: ", err);
     // return res
     //   .status(500)
@@ -109,7 +112,10 @@ export const postlist = async (ctx, res, next) => {
 //이벤트1 포스트 전체 불러오기
 export const event1list = async (ctx, res) => {
   console.log(ctx.query);
-  const countAllpost = await Post.countDocuments({event1list: true, postState: true});
+  const countAllpost = await Post.countDocuments({
+    event1list: true,
+    postState: true,
+  });
   const page = parseInt(ctx.query.page || "1", 10);
   if (page < 1) {
     res.status = 400;
@@ -120,7 +126,7 @@ export const event1list = async (ctx, res) => {
       { event1list: true, postState: true },
       (err, post) => {
         if (err) return res.status(500).send({ error: err });
-        res.send([post,{countAllpost:countAllpost}]);
+        res.send([post, { countAllpost: countAllpost }]);
       }
     )
       .sort({ _id: -1 })
@@ -145,7 +151,10 @@ export const event1list = async (ctx, res) => {
 //이벤트2 포스트 전체 불러오기
 export const event2list = async (ctx, res) => {
   console.log(ctx.query);
-  const countAllpost = await Post.countDocuments({event2list: true, postState: true});
+  const countAllpost = await Post.countDocuments({
+    event2list: true,
+    postState: true,
+  });
   const page = parseInt(ctx.query.page || "1", 10);
   if (page < 1) {
     res.status = 400;
@@ -156,7 +165,7 @@ export const event2list = async (ctx, res) => {
       { event2list: true, postState: true },
       (err, post) => {
         if (err) return res.status(500).send({ error: err });
-        res.send([post,{countAllpost:countAllpost}]);
+        res.send([post, { countAllpost: countAllpost }]);
       }
     )
       .sort({ _id: -1 })
@@ -181,7 +190,10 @@ export const event2list = async (ctx, res) => {
 //이벤트3 포스트 전체 불러오기
 export const event3list = async (ctx, res) => {
   console.log(ctx.query);
-  const countAllpost = await Post.countDocuments({event3list: true, postState: true});
+  const countAllpost = await Post.countDocuments({
+    event3list: true,
+    postState: true,
+  });
   const page = parseInt(ctx.query.page || "1", 10);
   if (page < 1) {
     res.status = 400;
@@ -192,7 +204,7 @@ export const event3list = async (ctx, res) => {
       { event3list: true, postState: true },
       (err, post) => {
         if (err) return res.status(500).send({ error: err });
-        res.send([post,{countAllpost:countAllpost}]);
+        res.send([post, { countAllpost: countAllpost }]);
       }
     )
       .sort({ _id: -1 })
@@ -216,12 +228,15 @@ export const event3list = async (ctx, res) => {
 
 //_id으로 해당 포스트 찾기
 export const postfind = async (req, res) => {
+  const userId = req.user._id;
+  console.log(userId);
   Post.findOne({ _id: req.params.postid }, (err, post) => {
     if (err) return res.status(500).send({ error: err });
     if (!post)
       return res
         .status(404)
         .send({ error: "해당 포스트가 존재하지 않습니다." });
+
     res.send(post);
   });
 };
@@ -284,57 +299,41 @@ export const postuploadimg = async (req, res) => {
   }
 };
 
-//검색 api 7일 새벽에 박선웅 추가
+//검색 api
 export const posttagsearch = async (ctx, res, next) => {
-    console.log(ctx.query);
-    const countAllpost = await Post.countDocuments({mainlist: true, postState: true});
-    const page = parseInt(ctx.query.page || "1", 10);
-    let options = [];
-    if (page < 1) {
-      res.status = 400;
-      return;
-    }
-    try {
-
-      if(ctx.query.option == "posttag1"){
-        console.log(ctx.query)
-        options = [{ postTag: new RegExp(ctx.query.content) }];
-      } else if(ctx.query.option == 'posttag2'){
-        options = [{ postTag: new RegExp(ctx.query.content) }];
-      } else if(ctx.query.option == 'posttag3'){
-        options = [{ postTag: new RegExp(ctx.query.content) }];
-      // } else if(ctx.query.option == 'title_body'){
-      //   options = [{ title: new RegExp(ctx.query.content) }, { body: new RegExp(ctx.query.content) }];
-      } else {
-        const err = new Error('검색 옵션이 없습니다.');
-        err.status = 400;
-        throw err;
+  console.log(ctx.query);
+  const countAllpost = await Post.countDocuments({
+    mainlist: true,
+    postState: true,
+  });
+  const page = parseInt(ctx.query.page || "1", 10);
+  if (page < 1) {
+    res.status = 400;
+    return;
+  }
+  try {
+    const posts = await Post.find(
+      { mainlist: true, postState: true },
+      (err, post) => {
+        if (err) return res.status(500).send({ error: err });
+        res.send([post, { countAllpost: countAllpost }]);
       }
-
-      const posts = await Post.find({$or: options },
-        (err, post) => {
-          if (err) return res.status(500).send({ error: err });
-          res.send([post,{countAllpost:countAllpost}]);
-        }
-       
-        
-        )
-        .sort({ _id: -1 })
-        .limit(10)
-        .skip((page - 1) * 10)
-        .lean()
-        .exec()
-
-      const postCount = await Post.countDocuments(posts).exec();
-      ctx.set("Last-Page", Math.ceil(postCount / 10));
-      ctx.body = posts.map((post) => ({
-        post,
-        body: removeHtmlAndShorten(post.body),
-      }));
-    } catch (err) {
-      // console.log("게시물 조회중 발생한 에러: ", err);
-      // return res
-      //   .status(500)
-      //   .json({ success: false, msg: "게시글 조회 중 에러가 발생했습니다" });
-    }
-  };
+    )
+      .sort({ _id: -1 })
+      .limit(10)
+      .skip((page - 1) * 10)
+      .lean()
+      .exec();
+    const postCount = await Post.countDocuments(posts).exec();
+    ctx.set("Last-Page", Math.ceil(postCount / 10));
+    ctx.body = posts.map((post) => ({
+      post,
+      body: removeHtmlAndShorten(post.body),
+    }));
+  } catch (err) {
+    // console.log("게시물 조회중 발생한 에러: ", err);
+    // return res
+    //   .status(500)
+    //   .json({ success: false, msg: "게시글 조회 중 에러가 발생했습니다" });
+  }
+};

@@ -1,4 +1,5 @@
 import { Post, Like } from "../models/Post.js";
+import User from "../models/User.js";
 // import { Event, EventLike } from "../models/Event.js";
 
 export const likeclick = async (req, res) => {
@@ -14,14 +15,22 @@ export const likeclick = async (req, res) => {
           })
         );
         post.likeCnt += 1;
-        post.likeState = true; //이건 논의 해보자
         post.save();
+        User.findOne({ _id: userId }, (err, user) => {
+          if (err) return res.status(500).send({ error: "Datebase Failure!" });
+          user.likePost.push(postId);
+          user.save();
+        });
         return res.status(200).send({ msg: "좋아요 성공" });
       } else {
         post.likeUser.pull(userId);
         post.likeCnt -= 1;
-        post.likeState = false;
         post.save();
+        User.findOne({ _id: userId }, (err, user) => {
+          if (err) return res.status(500).send({ error: "Datebase Failure!" });
+          user.likePost.pull(postId);
+          user.save();
+        });
         return res.status(200).send({ msg: "취소성공" });
       }
     } catch (error) {

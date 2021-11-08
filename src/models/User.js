@@ -46,6 +46,7 @@ const userSchema = new Schema(
         keepPoststate: { type: Boolean, default: true },
       },
     ],
+    likePost: [{ _id: { type: String } }],
   },
   { versionKey: false }
 );
