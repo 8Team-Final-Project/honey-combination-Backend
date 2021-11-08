@@ -309,10 +309,12 @@ export const posttagsearch = async (ctx, res, next) => {
     if(ctx.query.option == "posttag1"){
       console.log(ctx.query)
       options = [{ postTag: new RegExp(ctx.query.content) }];
-    } else if(ctx.query.option == 'posttag2'){
-      options = [{ postTag: new RegExp(ctx.query.content) }];
-    } else if(ctx.query.option == 'posttag3'){
-      options = [{ postTag: new RegExp(ctx.query.content) }];
+    } 
+    if(ctx.query.option2 == "posttag2"){
+      options = [{ postTag: new RegExp(ctx.query.content) },{ postTag: new RegExp(ctx.query.content2) }];
+    } 
+    else if(ctx.query.option3 == "posttag3"){
+      options = [{ postTag: new RegExp(ctx.query.content3) }];
     // } else if(ctx.query.option == 'title_body'){
     //   options = [{ title: new RegExp(ctx.query.content) }, { body: new RegExp(ctx.query.content) }];
     } else {
@@ -326,7 +328,7 @@ export const posttagsearch = async (ctx, res, next) => {
         res.send([post,{countAllpost:50}]);
       }
       )
-      .sort({ _id: -1 })
+      .sort({ postTag: -1 })
       .limit(10)
       .skip((page - 1) * 10)
       .lean()
