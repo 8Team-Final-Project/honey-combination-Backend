@@ -21,7 +21,8 @@ export const likeclick = async (req, res) => {
           user.likePost.push(postId);
           user.save();
         });
-        return res.status(200).send({ msg: "좋아요 성공" });
+        const likeCntmsg = post.likeCnt;
+        return res.status(200).send({ likeCntmsg, msg: "좋아요성공" });
       } else {
         post.likeUser.pull(userId);
         post.likeCnt -= 1;
