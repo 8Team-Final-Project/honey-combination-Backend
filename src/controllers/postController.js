@@ -298,7 +298,10 @@ export const postuploadimg = async (req, res) => {
 //검색 api 7일 새벽에 박선웅 추가
 export const posttagsearch = async (ctx, res, next) => {
   console.log(ctx.query);
-  const countAllpost = await Post.countDocuments({mainlist: true, postState: true});
+  const countAllpost = await Post.countDocuments({
+    mainlist: true,
+    postState: true,
+  });
   const page = parseInt(ctx.query.page || "1", 10);
   let options = [];
   if (page < 1) {
@@ -306,31 +309,33 @@ export const posttagsearch = async (ctx, res, next) => {
     return;
   }
   try {
-    if(ctx.query.option == "posttag1"){
-      console.log(ctx.query)
+    if (ctx.query.option == "posttag1") {
+      console.log(ctx.query);
       options = [{ postTag: new RegExp(ctx.query.content) }];
-    } else if(ctx.query.option == 'posttag2'){
-      options = [{ postTag: new RegExp(ctx.query.content) }];
-    } else if(ctx.query.option == 'posttag3'){
-      options = [{ postTag: new RegExp(ctx.query.content) }];
-    // } else if(ctx.query.option == 'title_body'){
-    //   options = [{ title: new RegExp(ctx.query.content) }, { body: new RegExp(ctx.query.content) }];
+    }
+    if (ctx.query.option2 == "posttag2") {
+      options = [
+        { postTag: new RegExp(ctx.query.content) },
+        { postTag: new RegExp(ctx.query.content2) },
+      ];
+    } else if (ctx.query.option3 == "posttag3") {
+      options = [{ postTag: new RegExp(ctx.query.content3) }];
+      // } else if(ctx.query.option == 'title_body'){
+      //   options = [{ title: new RegExp(ctx.query.content) }, { body: new RegExp(ctx.query.content) }];
     } else {
-      const err = new Error('검색 옵션이 없습니다.');
+      const err = new Error("검색 옵션이 없습니다.");
       err.status = 400;
       throw err;
     }
-    const posts = await Post.find({$or: options },
-      (err, post) => {
-        if (err) return res.status(500).send({ error: err });
-        res.send([post,{countAllpost:50}]);
-      }
-      )
+    const posts = await Post.find({ $or: options }, (err, post) => {
+      if (err) return res.status(500).send({ error: err });
+      res.send([post, { countAllpost: 50 }]);
+    })
       .sort({ _id: -1 })
       .limit(10)
       .skip((page - 1) * 10)
       .lean()
-      .exec()
+      .exec();
     const postCount = await Post.countDocuments(posts).exec();
     ctx.set("Last-Page", Math.ceil(postCount / 10));
     ctx.body = posts.map((post) => ({
