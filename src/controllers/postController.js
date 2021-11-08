@@ -1,5 +1,4 @@
 import { Post, Like } from "../models/Post.js";
-
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -228,15 +227,12 @@ export const event3list = async (ctx, res) => {
 
 //_id으로 해당 포스트 찾기
 export const postfind = async (req, res) => {
-  const userId = req.user._id;
-  console.log(userId);
   Post.findOne({ _id: req.params.postid }, (err, post) => {
     if (err) return res.status(500).send({ error: err });
     if (!post)
       return res
         .status(404)
         .send({ error: "해당 포스트가 존재하지 않습니다." });
-
     res.send(post);
   });
 };
