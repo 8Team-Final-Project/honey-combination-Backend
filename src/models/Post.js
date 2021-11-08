@@ -69,7 +69,7 @@ const postSchema = new mongoose.Schema(
       required: false,
       unique: false,
     },
-    likeUser: [likeSchema],
+    likeUser: [{ _id: { type: String } }],
     postTag: [String],
     likeCnt: {
       type: Number,
