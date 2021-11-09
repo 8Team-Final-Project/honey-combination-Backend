@@ -32,7 +32,7 @@ postRouter.patch(
   authorCheck,
   postupdate
 );
-postRouter.patch(
+postRouter.delete(
   "/postdelete/:postid",
   authMiddleware,
   authorCheck,
