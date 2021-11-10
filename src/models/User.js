@@ -40,8 +40,9 @@ const userSchema = new Schema(
         postSubtitle: { type: String },
         postImg: {},
         postTag: {},
-        likeCount: { type: Number, default: 0 },
-        postCount: { type: Number, default: 0 },
+        likeCnt: {
+          type: Number,
+        },
         likeState: { type: Boolean, default: false },
         keepPoststate: { type: Boolean, default: true },
       },
