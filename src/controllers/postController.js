@@ -258,20 +258,15 @@ export const postupdate = async (req, res) => {
 };
 //update 아래에 작성해주세요
 
-//삭제
-
+//삭제 11월 10일 오후 6시
 export const postdelete = async (req, res) => {
-  Post.findOne({ _id: req.params.postid }, (err, post) => {
+  Post.deleteOne({ _id: req.params.postid }, (err, post) => {
     if (err) return res.status(500).send({ error: "Database Failure!" });
     if (!post)
       return res
         .status(404)
         .send({ error: "해당 포스트가 존재하지 않습니다." });
-    post.postState = false;
-    post.save((err) => {
-      if (err) res.status(500).send({ error: "Failed to update!" });
-      res.send({ message: "삭제가 완료되었습니다!" });
-    });
+    res.status(200).send({ message: "삭제가 완료되었습니다!" });
   });
 };
 
