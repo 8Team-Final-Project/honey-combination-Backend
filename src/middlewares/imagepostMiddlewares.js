@@ -10,7 +10,7 @@ const s3 = new AWS.S3({
   accessKeyId: "AKIARCNRLSCXDBSGO6P4",
   secretAccessKey: "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",
   region: "ap-northeast-2",
-   });
+});
 
 export const uploadSingle = multer({
   storage: multerS3({

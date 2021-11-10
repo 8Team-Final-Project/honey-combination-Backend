@@ -160,7 +160,7 @@ export const logout = (req, res) => {
   }
 };
 
-//마이프로필API-작업중(아직 글 더미 데이터 넣어보고 테스트 안함)
+//마이프로필API
 export const me = async (req, res, next) => {
   const { authorization } = req.headers;
   const [tokenType, tokenValue] = authorization.split(" ");
@@ -246,6 +246,6 @@ export const profilepatch = async (req, res) => {
 };
 
 //탈퇴기능-부가기능
-export const quitme = (req, res) => {
-  return res.send("quitme");
-};
+// export const quitme = (req, res) => {
+//   return res.send("quitme");
+// };

@@ -69,11 +69,17 @@ const postSchema = new mongoose.Schema(
       required: false,
       unique: false,
     },
-    likeUser: [likeSchema],
-    postTag: [String],
+    likeUser: [{ _id: { type: String } }],
+    //11/09오후7시변경
+    postTag: {
+      type: String,
+      required: false,
+      unique: false,
+    },
     likeCnt: {
       type: Number,
     },
+    keepUser: [{ _id: { type: String } }],
     mainlist: {
       type: Boolean,
       required: false,
@@ -104,5 +110,8 @@ postSchema.set("toJSON", {
 
 const Post = mongoose.model("Post", postSchema);
 const Like = mongoose.model("Like", likeSchema);
+
+//109번째줄 7일 새벽에 박선웅 추가
+postSchema.index({ postTag: "text" });
 
 export { Post, Like };
