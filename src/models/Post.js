@@ -72,7 +72,7 @@ const postSchema = new mongoose.Schema(
     likeUser: [{ _id: { type: String } }],
     //11/09오후7시변경
     postTag: {
-      type: String,
+      type: Array,
       required: false,
       unique: false,
     },
