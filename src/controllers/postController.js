@@ -258,8 +258,7 @@ export const postupdate = async (req, res) => {
 };
 //update 아래에 작성해주세요
 
-//삭제
-
+//삭제 11월 10일 오후 6시
 export const postdelete = async (req, res) => {
   Post.deleteOne({ _id: req.params.postid }, (err, post) => {
     if (err) return res.status(500).send({ error: "Database Failure!" });
@@ -300,22 +299,34 @@ export const posttagsearch = async (ctx, res, next) => {
   });
   const page = parseInt(ctx.query.page || "1", 10);
   let options = [];
+  let options2 = [];
+  let options3 = [];
   if (page < 1) {
     res.status = 400;
     return;
   }
   try {
     if (ctx.query.option == "posttag1") {
-      console.log(ctx.query);
+      // ,ctx.query.option2 == "posttag2",ctx.query.option3 == "posttag3"){
+      //   console.log(ctx.query)
       options = [{ postTag: new RegExp(ctx.query.content) }];
+      //   options2 = [{ postTag: new RegExp(ctx.query.content2) }];
+      //   options3 = [{ postTag: new RegExp(ctx.query.content3) }];
+      //   ctx.query.content2 = { }
+      //   ctx.query.content3 = { }
     }
-    if (ctx.query.option2 == "posttag2") {
+    if ((ctx.query.option2 == "posttag2", ctx.query.option == "posttag1")) {
       options = [
         { postTag: new RegExp(ctx.query.content) },
         { postTag: new RegExp(ctx.query.content2) },
       ];
-    } else if (ctx.query.option3 == "posttag3") {
-      options = [{ postTag: new RegExp(ctx.query.content3) }];
+    }
+    if (ctx.query.option3 == "posttag3") {
+      options = [
+        { postTag: new RegExp(ctx.query.content3) },
+        { postTag: new RegExp(ctx.query.content) },
+        { postTag: new RegExp(ctx.query.content2) },
+      ];
       // } else if(ctx.query.option == 'title_body'){
       //   options = [{ title: new RegExp(ctx.query.content) }, { body: new RegExp(ctx.query.content) }];
     } else {
