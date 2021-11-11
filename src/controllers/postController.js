@@ -1,6 +1,8 @@
 import { Post, Like } from "../models/Post.js";
+import User from "../models/User.js";
 import dotenv from "dotenv";
 dotenv.config();
+import jwtToken from "jsonwebtoken";
 
 import express from "express";
 //CREATE
@@ -227,13 +229,58 @@ export const event3list = async (ctx, res) => {
 
 //_id으로 해당 포스트 찾기
 export const postfind = async (req, res) => {
+  const { authorization } = req.headers;
+  const [tokenType, tokenValue] = authorization.split(" ");
+  const { _id } = jwtToken.verify(tokenValue, "honeytip-secret-key");
+  const user = await User.findById(_id);
+  req.user = user; //token에서 유저뽑아내기
+  const realLikepost = user.likePost;
   Post.findOne({ _id: req.params.postid }, (err, post) => {
     if (err) return res.status(500).send({ error: err });
     if (!post)
       return res
         .status(404)
         .send({ error: "해당 포스트가 존재하지 않습니다." });
-    res.send(post);
+    // console.log("User.likePost",realLikepost);
+    // console.log("postid",req.params.postid)
+
+    /**
+     * user.likePost.length 길이만큼 for문을 돈다.
+     * id가 같은게 나올때까지 루프를 돈다.
+     * 1. 같은게 나오면 true로 설정하고 리턴
+     * 2. 같은게 안나오면 나올때까지 루프를 도는데
+     * 2-1. 다 돌았는데 id가 같은게 안나오면?
+     * 조건 1) res.status를 중복 설정하면 안된다.
+     */
+    const likeStatus = false;
+    for (let i = 0; i < user.likePost.length; i++) {
+      console.log(i)
+      if (user.likePost[i]._id == req.params.postid) {
+        // const likeStatus = true;
+        post.likeStatus = true
+      }  
+      else {
+        // const likeStatus = false;
+        post.likeStatus = false    
+ 
+      }
+      i++
+    }
+    return res.status(200).send(post);
+    // 루프가 끝났을 때는 id를 찾았는지 못찾았는지 알수 있어야 함
+    
+    /**
+     * if() res.status(200).send(post)
+     * else res.status(201).send(post)
+     */
+
+    // console.log("글 안에 좋아요 유저", post.likeUser_id)
+    // if (realLikepost == req.params.postid){
+    //       likeStatus == true;
+    //   }else {
+    //       likeStatus == false;
+    //   }
+    console.log(likeStatus);
   });
 };
 

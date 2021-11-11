@@ -48,6 +48,9 @@ export const signup = async (req, res) => {
       userEmail,
       userNickname,
       userPassword: hashedPassword,
+      likePost:         {
+        "_id": "aaa666e96f7638a759d25981"
+    }
     };
     // await User.save(newUser); //create에서 변경
     await User.create(newUser);
