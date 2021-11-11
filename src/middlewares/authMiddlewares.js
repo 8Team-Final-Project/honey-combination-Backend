@@ -31,6 +31,7 @@ export const authMiddleware = async (req, res, next) => {
     res.status(401).send({
       errorMessage: "로그인 후 이용 가능한 기능입니다.",
     });
+    
   }
 };
 
@@ -79,8 +80,9 @@ export const authForGuest = async (req, res, next) => {
   try {
     const { authorization } = req.headers;
     if (!authorization) {
-      res.locals.user = 1;
-      console.log(res.locals.user);
+      // res.locals.user = 7;
+      // user.likePost.length = 1;
+      // console.log(res.locals.user);
       next();
     } else {
       const [tokenType, tokenValue] = authorization.split(" ");

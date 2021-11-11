@@ -106,6 +106,11 @@ const postSchema = new mongoose.Schema(
       required: false,
       unique: false,    
     },
+    keepStatus: {
+      type: Boolean,
+      required: false,
+      unique: false,    
+    },
   },
   { versionKey: false }
 );

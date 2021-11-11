@@ -3,8 +3,8 @@ import User from "../models/User.js";
 import dotenv from "dotenv";
 dotenv.config();
 import jwtToken from "jsonwebtoken";
-
 import express from "express";
+import { authMiddleware } from "/users/psw1414/sparta/honey-tip/src/middlewares/authmiddlewares.js";
 //CREATE
 
 export const postcreate = async (req, res) => {
@@ -228,13 +228,29 @@ export const event3list = async (ctx, res) => {
 };
 
 //_id으로 해당 포스트 찾기
-export const postfind = async (req, res) => {
+export const postfind = async (req, res,next) => {
   const { authorization } = req.headers;
+  if (!authorization) {
+    Post.findOne({ _id: req.params.postid }, (err, post) => {
+      if (err) return res.status(500).send({ error: err });
+      if (!post)
+        return res
+          .status(404)
+          .send({ error: "해당 포스트가 존재하지 않습니다." });
+          post.likeStatus = false
+          post.keepStatus = false    
+    res.status(200).send(post);
+    next();
+    })}
+    if(authorization){
   const [tokenType, tokenValue] = authorization.split(" ");
   const { _id } = jwtToken.verify(tokenValue, "honeytip-secret-key");
+  console.log("레스로컬",res.locals);
+
   const user = await User.findById(_id);
+  // const user = res.locals.user
   req.user = user; //token에서 유저뽑아내기
-  const realLikepost = user.likePost;
+  // const realLikepost = user.likePost;
   Post.findOne({ _id: req.params.postid }, (err, post) => {
     if (err) return res.status(500).send({ error: err });
     if (!post)
@@ -254,17 +270,26 @@ export const postfind = async (req, res) => {
      */
     const likeStatus = false;
     for (let i = 0; i < user.likePost.length; i++) {
-      console.log(i)
       if (user.likePost[i]._id == req.params.postid) {
-        // const likeStatus = true;
         post.likeStatus = true
+
+        for (let i = 0; i < user.keepPost.length; i++){
+        user.keepPost.forEach(keep => {
+          post.keepStatus = user.keepPost[i]._id == req.params.postid ? true : false;
+        })
+        }
+
       }  
       else {
         // const likeStatus = false;
         post.likeStatus = false    
- 
+
+        for (let i = 0; i < user.keepPost.length; i++){
+          user.keepPost.forEach(keep => {
+            post.keepStatus = user.keepPost[i]._id == req.params.postid ? true : false;
+          })
+          }
       }
-      i++
     }
     return res.status(200).send(post);
     // 루프가 끝났을 때는 id를 찾았는지 못찾았는지 알수 있어야 함
@@ -280,9 +305,8 @@ export const postfind = async (req, res) => {
     //   }else {
     //       likeStatus == false;
     //   }
-    console.log(likeStatus);
   });
-};
+}};
 
 //update수정
 export const postupdate = async (req, res) => {
