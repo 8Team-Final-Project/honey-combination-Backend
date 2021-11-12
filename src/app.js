@@ -8,22 +8,20 @@ import likeRouter from "../src/routes/likeRouter.js";
 import keepRouter from "../src/routes/keepRouter.js";
 // import public from "../src/public";
 // import swaggerUi from './modules/swagger.js';
-import specs from './modules/swagger.js';
+import specs from "./modules/swagger.js";
 
-
-const swaggerUi = require("swagger-ui-express")
+const swaggerUi = require("swagger-ui-express");
 const express = require("express");
-const cors = require("cors");
 const app = express();
+const cors = require("cors");
 
 //스웨거 적용
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 const dotenv = require("dotenv");
 dotenv.config();
 const mongoose = require("mongoose");
 const port = process.env.PORT || 8000;
-
 
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));

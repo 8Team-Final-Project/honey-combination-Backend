@@ -70,6 +70,7 @@ const postSchema = new mongoose.Schema(
       unique: false,
     },
     likeUser: [{ _id: { type: String } }],
+    
     //11/09오후7시변경
     postTag: {
       type: Array,
@@ -99,6 +100,16 @@ const postSchema = new mongoose.Schema(
       type: Boolean,
       required: false,
       unique: false,
+    },
+    likeStatus: {
+      type: Boolean,
+      required: false,
+      unique: false,    
+    },
+    keepStatus: {
+      type: Boolean,
+      required: false,
+      unique: false,    
     },
   },
   { versionKey: false }
