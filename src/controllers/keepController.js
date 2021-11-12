@@ -3,7 +3,7 @@ import { Post } from "../models/Post.js";
 // import { Event } from "../models/Event.js";
 
 export const keepclick = async (req, res) => {
-  const userId = req.user._id;
+  const userId = req.user?._id;
   const postId = req.params.postid;
   const user = await User.findById(userId);
   const post = await Post.findById(postId);
@@ -20,7 +20,7 @@ export const keepclick = async (req, res) => {
           post.keepUser.push(userId);
           post.save();
         });
-        return res.status(200).send({ msg: "게시물이 찜 되었습니다" });
+        return res.status(200).send({msg: "게시물이 찜 되었습니다" });
       } else {
         user.keepPost.pull(post);
         user.save();
