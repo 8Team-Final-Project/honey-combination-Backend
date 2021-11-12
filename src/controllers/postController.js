@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import jwtToken from "jsonwebtoken";
 import express from "express";
-import { authMiddleware } from "/users/psw1414/sparta/honey-tip/src/middlewares/authmiddlewares.js";
+import { authMiddleware } from "../middlewares/authMiddlewares.js";
 //CREATE
 
 export const postcreate = async (req, res) => {
