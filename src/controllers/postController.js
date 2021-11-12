@@ -371,8 +371,8 @@ export const posttagsearch = async (ctx, res, next) => {
   });
   const page = parseInt(ctx.query.page || "1", 10);
   let options = [];
-  let options2 = [];
-  let options3 = [];
+  // let options2 = [];
+  // let options3 = [];
   if (page < 1) {
     res.status = 400;
     return;
@@ -386,19 +386,19 @@ export const posttagsearch = async (ctx, res, next) => {
       //   options3 = [{ postTag: new RegExp(ctx.query.content3) }];
       //   ctx.query.content2 = { }
       //   ctx.query.content3 = { }
-    }
-    if ((ctx.query.option2 == "posttag2", ctx.query.option == "posttag1")) {
-      options = [
-        { postTag: new RegExp(ctx.query.content) },
-        { postTag: new RegExp(ctx.query.content2) },
-      ];
-    }
-    if (ctx.query.option3 == "posttag3") {
-      options = [
-        { postTag: new RegExp(ctx.query.content3) },
-        { postTag: new RegExp(ctx.query.content) },
-        { postTag: new RegExp(ctx.query.content2) },
-      ];
+    // }
+    // if ((ctx.query.option2 == "posttag2", ctx.query.option == "posttag1")) {
+    //   options = [
+    //     { postTag: new RegExp(ctx.query.content) },
+    //     { postTag: new RegExp(ctx.query.content2) },
+    //   ];
+    // }
+    // if (ctx.query.option3 == "posttag3") {
+    //   options = [
+    //     { postTag: new RegExp(ctx.query.content3) },
+    //     { postTag: new RegExp(ctx.query.content) },
+    //     { postTag: new RegExp(ctx.query.content2) },
+    //   ];
       // } else if(ctx.query.option == 'title_body'){
       //   options = [{ title: new RegExp(ctx.query.content) }, { body: new RegExp(ctx.query.content) }];
     } else {
