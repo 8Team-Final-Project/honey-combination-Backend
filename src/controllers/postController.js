@@ -50,6 +50,7 @@ export const postcreate = async (req, res) => {
       event1list,
       event2list,
       event3list,
+      keepUser :{"_id" : "777777068ab908b096cfa86c"}
     });
     console.log(event1list);
     return res.status(200).send({ success: true, newPost: newPost });
