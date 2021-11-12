@@ -31,6 +31,7 @@ export const authMiddleware = async (req, res, next) => {
     res.status(401).send({
       errorMessage: "로그인 후 이용 가능한 기능입니다.",
     });
+    
   }
 };
 
@@ -64,25 +65,37 @@ export const authorCheck = (req, res, next) => {
   });
 };
 
-// export const authForGuest = async (req, res, next) => {
-//   try {
-//     const { authorization } = req.headers;
-//     if (!authorization) {
-//       res.locals.user = 2;
-//       console.log(res.locals.user);
-//       next();
-//     } else {
-//       const [tokenType, tokenValue] = authorization.split(" ");
-//       const { id } = jwt.verify(tokenValue, "honeytip-secret-key");
-//       res.locals.user = id;
-//       console.log(res.locals.user);
-//       next();
-//     }
-//   } catch (err) {
-//     console.error(err);
-//     next(err);
-//   }
-// };
+
+
+
+
+
+
+
+
+
+
+
+export const authForGuest = async (req, res, next) => {
+  try {
+    const { authorization } = req.headers;
+    if (!authorization) {
+      // res.locals.user = 7;
+      // user.likePost.length = 1;
+      // console.log(res.locals.user);
+      next();
+    } else {
+      const [tokenType, tokenValue] = authorization.split(" ");
+      const { id } = jwt.verify(tokenValue, "honeytip-secret-key");
+      res.locals.user = id;
+      console.log(res.locals.user);
+      next();
+    }
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
 
 // const jwt = require('jsonwebtoken');
 // require('dotenv').config;

@@ -48,6 +48,8 @@ export const signup = async (req, res) => {
       userEmail,
       userNickname,
       userPassword: hashedPassword,
+      likePost: {"_id": "aaaaaae96f7638a759d25981"},      
+      keepPost: {"_id": "aaaaaae96f7638a759d25981"},
     };
     // await User.save(newUser); //create에서 변경
     await User.create(newUser);
@@ -175,10 +177,15 @@ export const me = async (req, res, next) => {
     // const owner = await Post.findById(Post.userId).populate(User.id)
     // console.log("owner",owner)
     // console.log("userId",userId)
+
+    // const keepPost = await Post.keepUser.find({_id: userId});
     const keepPost = user.keepPost;
+    // for (let i = 0; i < Post.keepUser.length; i++) {
+    //   if (Post.keepUser[i]._id == user._id) {
+    //     User.keepPost.push(keepPost)
+    //   }  
+    // }
     const myPost = await Post.find({ userId: userId });
-    console.log("Post.userId", userId);
-    console.log("myPost", myPost);
     user.myPost.push(myPost);
     user.myPost;
     user.save();
