@@ -246,7 +246,7 @@ export const postfind = async (req, res,next) => {
     if(authorization){
   const [tokenType, tokenValue] = authorization.split(" ");
   const { _id } = jwtToken.verify(tokenValue, "honeytip-secret-key");
-  console.log("레스로컬",res.locals);
+  console.log("res.locals",res.locals);
 
   const user = await User.findById(_id);
   // const user = res.locals.user
