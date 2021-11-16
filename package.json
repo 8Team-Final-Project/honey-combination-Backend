@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon --exec babel-node src/app.js"
+    "dev": "nodemon --exec babel-node src/app.js",
+    "test":"exit"
   },
   "type": "module",
   "author": "",
