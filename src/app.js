@@ -20,10 +20,14 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 const dotenv = require("dotenv");
 dotenv.config();
+const corsOptions = {
+  origin: true,
+  credentials: true,
+};
 const mongoose = require("mongoose");
 const port = process.env.PORT || 8000;
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 //여기 스웨거 하느라 추가한 22번째 줄
