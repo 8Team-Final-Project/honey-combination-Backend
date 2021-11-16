@@ -34,10 +34,9 @@ const userSchema = new Schema(
     ],
     keepPost: [
       {
-        _id: { type: String },
+        postId: { type: String },
         createDate: { type: String },
         postTitle: { type: String },
-        postSubtitle: { type: String },
         postImg: {},
         postTag: {},
         likeCount: { type: Number, default: 0 },
@@ -45,7 +44,7 @@ const userSchema = new Schema(
           type: Number,
         },
         likeState: { type: Boolean, default: false },
-        keepPoststate: { type: Boolean, default: true },
+        keepPoststate: { type: Boolean, default: false },
       },
     ],
     likePost: [{ _id: { type: String } }],
