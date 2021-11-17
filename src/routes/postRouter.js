@@ -39,7 +39,18 @@ postRouter.delete(
   postdelete
 );
 
-postRouter.post("/uploadimg", uploadSingle.single("postImg"), postuploadimg);
+postRouter.post("/uploadimg", uploadSingle.array("postImg",5), postuploadimg),function(req,res){
+  if (req.files.length >= 6){
+    return res.status(400).send({message:'5개까지만 사진을 업로드가 가능해요'});
+  }
+};
+// postRouter.post("/uploadimg", uploadSingle.fields([{ name: 'postImg1', maxCount:1 }, { name: 'postImg2', maxCount:1 }]), postuploadimg);
+// postRouter.post("/uploadimg", uploadSingle.fields([{ name: 'postImg1', maxCount:1 }, { name: 'postImg2', maxCount:1 }, { name: 'postImg3', maxCount:1 }, { name: 'postImg4', maxCount:1 }, { name: 'postImg5', maxCount:1 }]), postuploadimg);
+
+// postRouter.post("/uploadimg", uploadSingle.single("postImg"), postuploadimg);
+// postRouter.post("/uploadimg", uploadSingle.array("postImg",2), postuploadimg);
+// postRouter.post("/uploadimg", uploadSingle.fields([{ name: 'postImg1' }, { name: 'postImg2' }, { name: 'postImg3' }, { name: 'postImg4' }, { name: 'postImg5' }]), postuploadimg);
+
 // /image
 //단일 url 만들고 이미지 리턴 post이미지에 그대로 url req로 다시 돌려 받는다.
 export default postRouter;

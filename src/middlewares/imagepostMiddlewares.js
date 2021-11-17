@@ -7,30 +7,33 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const s3 = new AWS.S3({
-  accessKeyId: "AKIARCNRLSCXDBSGO6P4",
-  secretAccessKey: "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",
-  region: "ap-northeast-2",
-   });
+  accessKeyId: process.env.S3_ACCESS_KEY,
+  secretAccessKey: process.env.S3_SECRET_KEY,
+  region: process.env.S3_BUCKET_REGION,
+  });
 
 export const uploadSingle = multer({
   storage: multerS3({
     s3: s3,
     bucket: "honey-tip-post-picture-upload",
+    limits: { fileSize: 10 * 1024 * 1024,files: 5 },
     shouldTransform: function (req, file, cb) {
       cb(null, /^image/i.test(file.mimetype));
     },
     transforms: [
       {
         id: "original",
-        key: function (req, file, cb) {
-          cb(null, `${Date.now()}${file.originalname}`); //use Date.now() for unique file keys
+        key: function (req, files, cb) {
+          cb(null, `${Date.now()}${files.originalname}`); //use Date.now() for unique file keys
         },
         transform: function (req, file, cb) {
           //Perform desired transformations
           cb(null, sharp().resize(300, 300).withMetadata());
         },
       },
+      
     ],
+    
   }),
-  // limits: { fileSize: 5 * 1024 * 1024 }
+
 });

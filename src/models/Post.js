@@ -44,6 +44,31 @@ const postSchema = new mongoose.Schema(
       required: false,
       unique: false,
     },
+    postImg1: {
+      type: String,
+      required: false,
+      unique: false,
+    },
+    postImg2: {
+      type: String,
+      required: false,
+      unique: false,
+    },
+    postImg3: {
+      type: String,
+      required: false,
+      unique: false,
+    },
+    postImg4: {
+      type: String,
+      required: false,
+      unique: false,
+    },
+    postImg5: {
+      type: String,
+      required: false,
+      unique: false,
+    },
     myPost: {
       type: Boolean,
       required: false,
