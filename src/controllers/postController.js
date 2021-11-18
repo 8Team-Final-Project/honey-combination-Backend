@@ -1,5 +1,6 @@
 import { Post, Like } from "../models/Post.js";
 import User from "../models/User.js";
+import { Comment } from "../models/Comment.js";
 import dotenv from "dotenv";
 dotenv.config();
 import jwtToken from "jsonwebtoken";
@@ -317,7 +318,9 @@ export const postfind = async (req, res, next) => {
           }
         }
       }
-      return res.status(200).send(post);
+
+      res.status(200).send(post);
+
       // 루프가 끝났을 때는 id를 찾았는지 못찾았는지 알수 있어야 함
 
       /**

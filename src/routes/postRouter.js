@@ -1,4 +1,8 @@
-import { authMiddleware, authorCheck,authForGuest } from "../middlewares/authMiddlewares.js";
+import {
+  authMiddleware,
+  authorCheck,
+  authForGuest,
+} from "../middlewares/authMiddlewares.js";
 import { uploadSingle } from "../middlewares/imagepostMiddlewares.js";
 import { Post } from "../models/Post.js";
 
@@ -19,8 +23,8 @@ const postRouter = express.Router();
 
 //multer을 어스와 post 사이에 넣기
 postRouter.post("/", authMiddleware, postcreate);
-postRouter.get("/",  postlist);
-postRouter.get("/event1list",  event1list);
+postRouter.get("/", postlist);
+postRouter.get("/event1list", event1list);
 postRouter.get("/event2list", event2list);
 postRouter.get("/event3list", event3list);
 //26번째줄 7일 새벽에 박선웅 추가

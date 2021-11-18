@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 // import User from "../models/User.js";
 import User from "../models/User.js";
 import { Post } from "../models/Post.js";
+import { Comment } from "../models/Comment.js";
 // import { Event } from "../models/Event.js";
 
 export const authMiddleware = async (req, res, next) => {
@@ -31,7 +32,6 @@ export const authMiddleware = async (req, res, next) => {
     res.status(401).send({
       errorMessage: "로그인 후 이용 가능한 기능입니다.",
     });
-    
   }
 };
 
@@ -65,16 +65,15 @@ export const authorCheck = (req, res, next) => {
   });
 };
 
-
-
-
-
-
-
-
-
-
-
+//댓글 작성자 체크
+export const commentAuthorCheck = (req, res, next) => {
+  Comment.findById(req.params.commentid, (err, comment) => {
+    if (err) return res.json(err);
+    if (comment.userId != req.user._id)
+      return res.send({ msg: "당신은 게시글 작성자가 아닙니다." });
+    next();
+  });
+};
 
 export const authForGuest = async (req, res, next) => {
   try {

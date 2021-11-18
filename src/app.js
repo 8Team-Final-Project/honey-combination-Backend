@@ -6,6 +6,7 @@ import userRouter from "../src/routes/userRouter.js";
 import postRouter from "../src/routes/postRouter.js";
 import likeRouter from "../src/routes/likeRouter.js";
 import keepRouter from "../src/routes/keepRouter.js";
+import commentRouter from "../src/routes/commentRouter.js";
 // import public from "../src/public";
 // import swaggerUi from './modules/swagger.js';
 import specs from "./modules/swagger.js";
@@ -62,3 +63,7 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/post", postRouter);
 app.use("/api/v1/like", likeRouter);
 app.use("/api/v1/keep", keepRouter);
+app.use("/api/v1/comment", commentRouter);
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
