@@ -79,15 +79,15 @@ export const authForGuest = async (req, res, next) => {
   try {
     const { authorization } = req.headers;
     if (!authorization) {
-      // res.locals.user = 7;
+      res.locals.user = 5;
       // user.likePost.length = 1;
-      // console.log(res.locals.user);
+      console.log(res.locals.user);
       next();
     } else {
       const [tokenType, tokenValue] = authorization.split(" ");
       const { id } = jwt.verify(tokenValue, "honeytip-secret-key");
       res.locals.user = id;
-      console.log(res.locals.user);
+      console.log("로그인했을 때 유저",res.locals.user);
       next();
     }
   } catch (err) {
