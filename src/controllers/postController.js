@@ -1,5 +1,6 @@
 import { Post, Like } from "../models/Post.js";
 import User from "../models/User.js";
+import { Comment } from "../models/Comment.js";
 import dotenv from "dotenv";
 dotenv.config();
 import jwtToken from "jsonwebtoken";
@@ -34,14 +35,18 @@ function dateFormat(date) {
 }
 export const postcreate = async (req, res) => {
   const post = new Post();
-
+//11월18일 오전9시 이미지업로드 수정과 동시 수정
   try {
     const {
       postTitle,
       postRecipe,
       postContent,
       postTag,
-      postImg,
+      postImg1,
+      postImg2,
+      postImg3,
+      postImg4,
+      postImg5,
       mainlist,
       event1list,
       event2list,
@@ -62,7 +67,11 @@ export const postcreate = async (req, res) => {
       postTitle,
       postRecipe,
       postContent,
-      postImg,
+      postImg1,
+      postImg2,
+      postImg3,
+      postImg4,
+      postImg5,
       postTag,
       myPost,
       likeState,
@@ -271,12 +280,14 @@ export const postfind = async (req, res, next) => {
   if (authorization) {
     const [tokenType, tokenValue] = authorization.split(" ");
     const { _id } = jwtToken.verify(tokenValue, "honeytip-secret-key");
-    console.log("레스로컬", res.locals);
+    console.log("레스로컬,유저가 있음", res.locals);
 
     const user = await User.findById(_id);
     // const user = res.locals.user
     req.user = user; //token에서 유저뽑아내기
     // const realLikepost = user.likePost;
+    console.log('요청 유저',req.user)
+    console.log('요청 유저',user)
     Post.findOne({ _id: req.params.postid }, (err, post) => {
       if (err) return res.status(500).send({ error: err });
       if (!post)
@@ -317,7 +328,9 @@ export const postfind = async (req, res, next) => {
           }
         }
       }
-      return res.status(200).send(post);
+
+      res.status(200).send(post);
+
       // 루프가 끝났을 때는 id를 찾았는지 못찾았는지 알수 있어야 함
 
       /**
@@ -346,7 +359,12 @@ export const postupdate = async (req, res) => {
     post.postTitle = req.body.postTitle;
     post.postRecipe = req.body.postRecipe;
     post.postContent = req.body.postContent;
-    post.postImg = req.body.postImg;
+    //11월18일 오전9시 이미지업로드 수정과 동시 수정
+    post.postImg1 = req.body.postImg1;
+    post.postImg2 = req.body.postImg2;
+    post.postImg3 = req.body.postImg3;
+    post.postImg4 = req.body.postImg4;
+    post.postImg5 = req.body.postImg5;
     // post.postImg = req.file.transforms[0].location;
     post.save((err) => {
       if (err) res.status(500).send({ error: "Failed to update!" });
@@ -368,18 +386,130 @@ export const postdelete = async (req, res) => {
   });
 };
 
+
 //이미지 업로드 API
 export const postuploadimg = async (req, res) => {
   const post = new Post();
 
   try {
-    console.log(req.file);
-    const postImg = req.file.transforms[0].location;
-    const newPost = await Post.create({
-      postImg,
-    });
+    // console.log(req.files);
+    // console.log('트렌스폼',req.files.postImg2[0].transforms[0])
+    // console.log(req.files.postImg2[0].transforms[0].location);
+    // console.log("트렌스폼1",req.files[0].transforms[0].location)
+    // console.log("트렌스폼2",req.files[1].transforms[0].location)
+    // const postImg =  req.files[0].transforms[0].location;
+    // const postImg2 =  req.files[1].transforms[0].location;
+    // const postImg1 =''
+    // const postImg2 =''
+    if (req.files.length >= 6){
+      return res.status(400).send({message:'5개까지만 사진을 업로드가 가능해요'});
+    }
 
-    return res.status(200).send({ postImg: postImg });
+    if (req.files.length == 5){
+      const postImg1 = String(req.files[0].transforms[0].location);
+      const postImg2 = String(req.files[1].transforms[0].location);
+      const postImg3 = String(req.files[2].transforms[0].location);
+      const postImg4 = String(req.files[3].transforms[0].location);
+      const postImg5 = String(req.files[4].transforms[0].location);
+
+    
+    const newPost = await Post.create({
+      postImg: postImg1,
+      postImg: postImg2,
+      // postImg: postImg3,
+      // postImg: postImg4,
+      // postImg: postImg5,
+    });
+  return res.status(200).send([{postImg1:postImg1},{postImg2:postImg2},{postImg3:postImg3},{postImg4:postImg4},{postImg5:postImg5}]);
+  }
+  if (req.files.length == 4){
+    const postImg1 = String(req.files[0].transforms[0].location);
+    const postImg2 = String(req.files[1].transforms[0].location);
+    const postImg3 = String(req.files[2].transforms[0].location);
+    const postImg4 = String(req.files[3].transforms[0].location);
+  
+  return res.status(200).send([{postImg1:postImg1},{postImg2:postImg2},{postImg3:postImg3},{postImg4:postImg4}]);
+  }
+  if (req.files.length == 3){
+    const postImg1 = String(req.files[0].transforms[0].location);
+    const postImg2 = String(req.files[1].transforms[0].location);
+    const postImg3 = String(req.files[2].transforms[0].location);
+  
+  return res.status(200).send([{postImg1:postImg1},{postImg2:postImg2},{postImg3:postImg3}]);
+  }
+  if (req.files.length == 2){
+    const postImg1 = String(req.files[0].transforms[0].location);
+    const postImg2 = String(req.files[1].transforms[0].location);
+  
+  return res.status(200).send([{postImg1:postImg1},{postImg2:postImg2}]);
+  }
+  if (req.files.length == 1){
+    const postImg1 = String(req.files[0].transforms[0].location);
+  return res.status(200).send([{postImg1:postImg1}]);
+  }
+  else{
+  return res.status(400).send({message:'없음'});
+  }
+
+  //   console.log(req.files.length)
+  // const postImg1 = String(req.files[0].transforms[0].location);
+  // const postImg2 = String(req.files[1].transforms[0].location);
+
+  //   const newPost = await Post.create({
+  //     postImg: postImg1,
+  //     postImg: postImg2,
+  //     // postImg: postImg3,
+  //     // postImg: postImg4,
+  //     // postImg: postImg5,
+  //   });
+  //   console.log(req.files)
+  //           return res.status(200).send([{postImg1:postImg1},{postImg2:postImg2}]);
+
+    // const postImg = req.files.transforms[0].location;
+    // const postImg = req.file.transforms[0].location;
+    // if(postImg1&&postImg2){
+    //   const postImg1 = String(req.files.postImg1[0].transforms[0].location);
+    //   const postImg2 = String(req.files.postImg2[0].transforms[0].location);
+    //     return res.status(200).send([{postImg1:postImg1},{postImg2:postImg2}]);
+    // }
+    // if (postImg1==''&&postImg2==''){
+    //   return res
+    //   .status(209)
+    //   .send([{postImg1:0},{postImg2:0}]);
+    // }
+    // else if(postImg2==''){
+    //   const postImg1 = String(req.files.postImg1[0].transforms[0].location);
+    //     return res.status(200).send([{postImg1:postImg1},{postImg2:0}]);
+    // }
+
+
+
+    // if(postImg1||postImg2){
+    //   const postImg1 = String(req.files.postImg1[0].transforms[0].location);
+    //   const postImg2 = String(req.files.postImg2[0].transforms[0].location);
+    //     return res.status(200).send([{postImg1:postImg1},{postImg2:postImg2}]);
+    // }else if(postImg2==''){
+    //   const postImg1 = String(req.files.postImg1[0].transforms[0].location);
+    //     return res.status(200).send([{postImg1:postImg1},{postImg2:0}]);
+    // }else if (postImg1==''&&postImg2==''){
+    //   return res
+    //   .status(209)
+    //   .send([{postImg1:0},{postImg2:0}]);
+    //   }
+    
+   // const postImg3 = String(req.files.postImg3[0].transforms[0].location);
+    // const postImg4 = String(req.files.postImg4[0].transforms[0].location);
+    // const postImg5 = String(req.files.postImg5[0].transforms[0].location);
+    // // const postImg3 = req.file.transforms[0].location;
+    // const postImg4 = req.file.transforms[0].location;
+    // const postImg5 = req.file.transforms[0].location;
+    // const postImg11 = postImg1.toString()
+    // const postImg22 = postImg2.toString()
+
+
+
+    // return res.status(200).send([{postImg1:postImg1},{postImg2:postImg2},{postImg3:postImg3},{postImg4:postImg4},{postImg5:postImg5}]);
+    // return res.status(200).send({ postImg1: postImg1, postImg2: postImg2 });
   } catch (err) {
     console.log("게시글 등록 기능 중 발생한 에러: ", err);
     return res
@@ -387,6 +517,7 @@ export const postuploadimg = async (req, res) => {
       .json({ success: false, msg: "게시글 등록 중 에러가 발생했습니다" });
   }
 };
+
 
 //검색 api 7일 새벽에 박선웅 추가
 export const posttagsearch = async (ctx, res, next) => {

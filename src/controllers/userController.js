@@ -48,8 +48,8 @@ export const signup = async (req, res) => {
       userEmail,
       userNickname,
       userPassword: hashedPassword,
-      // myPost:{"postId": "aaaaaae96f7638a759d25981"},
-      myPost,
+      myPost:{"postId": "aaaaaae96f7638a759d25981"},
+      // myPost,
       likePost: {"_id": "aaaaaae96f7638a759d25981"},      
       keepPost: {"_id": "aaaaaae96f7638a759d25981"},
     };
