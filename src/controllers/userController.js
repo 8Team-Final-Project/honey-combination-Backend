@@ -48,6 +48,8 @@ export const signup = async (req, res) => {
       userEmail,
       userNickname,
       userPassword: hashedPassword,
+      myPost:{"postId": "aaaaaae96f7638a759d25981"},
+      // myPost,
       likePost: {"_id": "aaaaaae96f7638a759d25981"},      
       keepPost: {"_id": "aaaaaae96f7638a759d25981"},
     };
@@ -180,15 +182,26 @@ export const me = async (req, res, next) => {
 
     // const keepPost = await Post.keepUser.find({_id: userId});
     const keepPost = user.keepPost;
-    // for (let i = 0; i < Post.keepUser.length; i++) {
-    //   if (Post.keepUser[i]._id == user._id) {
-    //     User.keepPost.push(keepPost)
-    //   }  
-    // }
+    const post = await Post.find()
+    
+        // console.log(post[0])
+    // console.log(post[0].keepUser)
+    // console.log(post[0].keepUser.length)
+    for(let l = 0; l < post[l].length; l++){
+      console.log(l)
+    for (let i = 0; i < post[i].keepUser.length; i++) {
+      if (post[l].keepUser[i]._id == user._id) {
+        user.keepPost.push(post)
+        user.keepPost
+        user.save();
+        console.log(post)
+        // user.keepPost.push(post.likeCnt)
+      }  
+    }}
     const myPost = await Post.find({ userId: userId });
     user.myPost.push(myPost);
     user.myPost;
-    user.save();
+    // user.save();
     res.status(200).send({ userNickname, userEmail, myPost, userId, keepPost });
     next();
   } catch (err) {

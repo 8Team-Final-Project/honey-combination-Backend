@@ -39,6 +39,7 @@ const userSchema = new Schema(
         postTitle: { type: String },
         postImg: {},
         postTag: {},
+        likeCount: { type: Number, default: 0 },
         likeCnt: {
           type: Number,
         },

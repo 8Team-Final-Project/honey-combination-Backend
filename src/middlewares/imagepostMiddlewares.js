@@ -16,14 +16,15 @@ export const uploadSingle = multer({
   storage: multerS3({
     s3: s3,
     bucket: "honey-tip-post-picture-upload",
+    limits: { fileSize: 10 * 1024 * 1024, files: 5 },
     shouldTransform: function (req, file, cb) {
       cb(null, /^image/i.test(file.mimetype));
     },
     transforms: [
       {
         id: "original",
-        key: function (req, file, cb) {
-          cb(null, `${Date.now()}${file.originalname}`); //use Date.now() for unique file keys
+        key: function (req, files, cb) {
+          cb(null, `${Date.now()}${files.originalname}`); //use Date.now() for unique file keys
         },
         transform: function (req, file, cb) {
           //Perform desired transformations
@@ -32,5 +33,4 @@ export const uploadSingle = multer({
       },
     ],
   }),
-  // limits: { fileSize: 5 * 1024 * 1024 }
 });
