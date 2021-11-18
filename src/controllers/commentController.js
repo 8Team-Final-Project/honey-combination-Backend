@@ -67,7 +67,7 @@ export const commentlist = async (req, res) => {
 
 export const commentupdate = async (req, res) => {
   Comment.findOne({ _id: req.params.commentid }, (err, comment) => {
-    if (err) return res.status(500).send({ error: "댓글없는듯?" });
+    if (err) return res.status(500).send({ error: "서버문제" });
     if (!comment)
       return res.status(404).send({ error: "해당 댓글이 존재하지 않습니다." });
     comment.commentContent = req.body.commentContent;
