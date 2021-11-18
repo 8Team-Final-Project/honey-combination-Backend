@@ -43,11 +43,7 @@ postRouter.delete(
   postdelete
 );
 
-postRouter.post("/uploadimg", uploadSingle.array("postImg",5), postuploadimg),function(req,res){
-  if (req.files.length >= 6){
-    return res.status(400).send({message:'5개까지만 사진을 업로드가 가능해요'});
-  }
-};
+postRouter.post("/uploadimg", uploadSingle.array("postImg",30), postuploadimg);
 // postRouter.post("/uploadimg", uploadSingle.fields([{ name: 'postImg1', maxCount:1 }, { name: 'postImg2', maxCount:1 }]), postuploadimg);
 // postRouter.post("/uploadimg", uploadSingle.fields([{ name: 'postImg1', maxCount:1 }, { name: 'postImg2', maxCount:1 }, { name: 'postImg3', maxCount:1 }, { name: 'postImg4', maxCount:1 }, { name: 'postImg5', maxCount:1 }]), postuploadimg);
 

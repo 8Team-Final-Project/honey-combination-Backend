@@ -401,8 +401,10 @@ export const postuploadimg = async (req, res) => {
     // const postImg2 =  req.files[1].transforms[0].location;
     // const postImg1 =''
     // const postImg2 =''
+    console.log('6개 업로드',req.files)
     if (req.files.length >= 6){
       return res.status(400).send({message:'5개까지만 사진을 업로드가 가능해요'});
+      
     }
 
     if (req.files.length == 5){
