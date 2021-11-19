@@ -294,17 +294,7 @@ export const postfind = async (req, res, next) => {
         return res
           .status(404)
           .send({ error: "해당 포스트가 존재하지 않습니다." });
-      // console.log("User.likePost",realLikepost);
-      // console.log("postid",req.params.postid)
-
-      /**
-       * user.likePost.length 길이만큼 for문을 돈다.
-       * id가 같은게 나올때까지 루프를 돈다.
-       * 1. 같은게 나오면 true로 설정하고 리턴
-       * 2. 같은게 안나오면 나올때까지 루프를 도는데
-       * 2-1. 다 돌았는데 id가 같은게 안나오면?
-       * 조건 1) res.status를 중복 설정하면 안된다.
-       */
+          
       const likeStatus = false;
       for (let i = 0; i < user.likePost.length; i++) {
         if (user.likePost[i]._id == req.params.postid) {
