@@ -264,7 +264,7 @@ export const event3list = async (ctx, res) => {
 //_id으로 해당 포스트 찾기
 export const postfind = async (req, res, next) => {
   const { authorization } = req.headers;
-  if (!authorization) {
+  if (authorization=='null') {
     Post.findOne({ _id: req.params.postid }, (err, post) => {
       if (err) return res.status(500).send({ error: err });
       if (!post)
@@ -280,8 +280,6 @@ export const postfind = async (req, res, next) => {
   if (authorization) {
     const [tokenType, tokenValue] = authorization.split(" ");
     const { _id } = jwtToken.verify(tokenValue, "honeytip-secret-key");
-    console.log("레스로컬", res.locals);
-
     const user = await User.findById(_id);
     // const user = res.locals.user
     req.user = user; //token에서 유저뽑아내기
