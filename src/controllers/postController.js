@@ -277,6 +277,7 @@ export const postfind = async (req, res, next) => {
       next();
     });
   }
+ 
   if (authorization) {
     const [tokenType, tokenValue] = authorization.split(" ");
     const { _id } = jwtToken.verify(tokenValue, "honeytip-secret-key");
@@ -330,7 +331,6 @@ export const postfind = async (req, res, next) => {
       }
 
       res.status(200).send(post);
-
       // 루프가 끝났을 때는 id를 찾았는지 못찾았는지 알수 있어야 함
 
       /**
