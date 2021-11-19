@@ -264,7 +264,7 @@ export const event3list = async (ctx, res) => {
 //_id으로 해당 포스트 찾기
 export const postfind = async (req, res, next) => {
   const { authorization } = req.headers;
-  if (!authorization) {
+  if (authorization=='null') {
     Post.findOne({ _id: req.params.postid }, (err, post) => {
       if (err) return res.status(500).send({ error: err });
       if (!post)
@@ -280,14 +280,11 @@ export const postfind = async (req, res, next) => {
   if (authorization) {
     const [tokenType, tokenValue] = authorization.split(" ");
     const { _id } = jwtToken.verify(tokenValue, "honeytip-secret-key");
-    console.log("레스로컬,유저가 있음", res.locals);
-
+    // console.log("토큰있을때 2", res.locals);
     const user = await User.findById(_id);
     // const user = res.locals.user
     req.user = user; //token에서 유저뽑아내기
     // const realLikepost = user.likePost;
-    console.log('요청 유저',req.user)
-    console.log('요청 유저',user)
     Post.findOne({ _id: req.params.postid }, (err, post) => {
       if (err) return res.status(500).send({ error: err });
       if (!post)
@@ -299,7 +296,6 @@ export const postfind = async (req, res, next) => {
       for (let i = 0; i < user.likePost.length; i++) {
         if (user.likePost[i]._id == req.params.postid) {
           post.likeStatus = true;
-
           for (let i = 0; i < user.keepPost.length; i++) {
             user.keepPost.forEach((keep) => {
               post.keepStatus =
@@ -309,7 +305,6 @@ export const postfind = async (req, res, next) => {
         } else {
           // const likeStatus = false;
           post.likeStatus = false;
-
           for (let i = 0; i < user.keepPost.length; i++) {
             user.keepPost.forEach((keep) => {
               post.keepStatus =
@@ -318,7 +313,6 @@ export const postfind = async (req, res, next) => {
           }
         }
       }
-
       res.status(200).send(post);
 
       // 루프가 끝났을 때는 id를 찾았는지 못찾았는지 알수 있어야 함
