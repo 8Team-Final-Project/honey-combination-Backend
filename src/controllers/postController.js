@@ -264,7 +264,7 @@ export const event3list = async (ctx, res) => {
 //_id으로 해당 포스트 찾기
 export const postfind = async (req, res, next) => {
   const { authorization } = req.headers;
-  if (!authorization) {
+  if (authorization=='null') {
     Post.findOne({ _id: req.params.postid }, (err, post) => {
       if (err) return res.status(500).send({ error: err });
       if (!post)
@@ -281,36 +281,22 @@ export const postfind = async (req, res, next) => {
   if (authorization) {
     const [tokenType, tokenValue] = authorization.split(" ");
     const { _id } = jwtToken.verify(tokenValue, "honeytip-secret-key");
-    console.log("레스로컬,유저가 있음", res.locals);
-
+    // console.log("토큰있을때 2", res.locals);
     const user = await User.findById(_id);
     // const user = res.locals.user
     req.user = user; //token에서 유저뽑아내기
     // const realLikepost = user.likePost;
-    console.log('요청 유저',req.user)
-    console.log('요청 유저',user)
     Post.findOne({ _id: req.params.postid }, (err, post) => {
       if (err) return res.status(500).send({ error: err });
       if (!post)
         return res
           .status(404)
           .send({ error: "해당 포스트가 존재하지 않습니다." });
-      // console.log("User.likePost",realLikepost);
-      // console.log("postid",req.params.postid)
-
-      /**
-       * user.likePost.length 길이만큼 for문을 돈다.
-       * id가 같은게 나올때까지 루프를 돈다.
-       * 1. 같은게 나오면 true로 설정하고 리턴
-       * 2. 같은게 안나오면 나올때까지 루프를 도는데
-       * 2-1. 다 돌았는데 id가 같은게 안나오면?
-       * 조건 1) res.status를 중복 설정하면 안된다.
-       */
+          
       const likeStatus = false;
       for (let i = 0; i < user.likePost.length; i++) {
         if (user.likePost[i]._id == req.params.postid) {
           post.likeStatus = true;
-
           for (let i = 0; i < user.keepPost.length; i++) {
             user.keepPost.forEach((keep) => {
               post.keepStatus =
@@ -320,7 +306,6 @@ export const postfind = async (req, res, next) => {
         } else {
           // const likeStatus = false;
           post.likeStatus = false;
-
           for (let i = 0; i < user.keepPost.length; i++) {
             user.keepPost.forEach((keep) => {
               post.keepStatus =
@@ -329,7 +314,6 @@ export const postfind = async (req, res, next) => {
           }
         }
       }
-
       res.status(200).send(post);
       // 루프가 끝났을 때는 id를 찾았는지 못찾았는지 알수 있어야 함
 
@@ -401,8 +385,10 @@ export const postuploadimg = async (req, res) => {
     // const postImg2 =  req.files[1].transforms[0].location;
     // const postImg1 =''
     // const postImg2 =''
+    console.log('6개 업로드',req.files)
     if (req.files.length >= 6){
       return res.status(400).send({message:'5개까지만 사진을 업로드가 가능해요'});
+      
     }
 
     if (req.files.length == 5){

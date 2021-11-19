@@ -31,7 +31,7 @@ export const uploadSingle = multer({
           cb(null, sharp().resize(300, 300).withMetadata());
         },
       },
-      
+
     ],
     
   }),
