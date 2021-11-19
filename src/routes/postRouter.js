@@ -1,7 +1,7 @@
 import {
   authMiddleware,
   authorCheck,
-  authForGuest,
+  // authForGuest,
 } from "../middlewares/authMiddlewares.js";
 import { uploadSingle } from "../middlewares/imagepostMiddlewares.js";
 import { Post } from "../models/Post.js";
@@ -29,7 +29,8 @@ postRouter.get("/event2list", event2list);
 postRouter.get("/event3list", event3list);
 //26번째줄 7일 새벽에 박선웅 추가
 postRouter.get("/posttag", posttagsearch);
-postRouter.get("/:postid", authForGuest, postfind);
+//19일 authForGuest제거
+postRouter.get("/:postid", postfind);
 postRouter.patch(
   "/postupdate/:postid",
   authMiddleware,
