@@ -1,6 +1,6 @@
 import { Post, Like } from "../models/Post.js";
 import User from "../models/User.js";
-import { Tag } from "../models/Tag.js";
+import { Comment } from "../models/Comment.js";
 import dotenv from "dotenv";
 dotenv.config();
 import jwtToken from "jsonwebtoken";
@@ -22,23 +22,20 @@ function dateFormat(date) {
   minute = minute >= 10 ? minute : "0" + minute;
   second = second >= 10 ? second : "0" + second;
   return (
-    date.getFullYear() +
-    ". " +
-    month +
-    ". " +
-    day +
-    " " +
-    hour +
-    ":" +
-    minute +
-    ":" +
-    second
+    date.getFullYear() + ". " + month + ". " + day
+    //+
+    // " "
+    // +
+    // hour +
+    // ":" +
+    // minute +
+    // ":" +
+    // second
   );
 }
-
 export const postcreate = async (req, res) => {
   const post = new Post();
-  //11월18일 오전9시 이미지업로드 수정과 동시 수정
+//11월18일 오전9시 이미지업로드 수정과 동시 수정
   try {
     const {
       postTitle,
@@ -88,7 +85,7 @@ export const postcreate = async (req, res) => {
       event3list,
       keepUser: { _id: "777777068ab908b096cfa86c" },
     });
-    console.log(currentDate);
+    console.log(event1list);
     return res.status(200).send({ success: true, newPost: newPost });
   } catch (err) {
     console.log("게시글 등록 기능 중 발생한 에러: ", err);
@@ -267,7 +264,7 @@ export const event3list = async (ctx, res) => {
 //_id으로 해당 포스트 찾기
 export const postfind = async (req, res, next) => {
   const { authorization } = req.headers;
-  if (authorization == "null") {
+  if (authorization=='null') {
     Post.findOne({ _id: req.params.postid }, (err, post) => {
       if (err) return res.status(500).send({ error: err });
       if (!post)
@@ -283,6 +280,7 @@ export const postfind = async (req, res, next) => {
   if (authorization) {
     const [tokenType, tokenValue] = authorization.split(" ");
     const { _id } = jwtToken.verify(tokenValue, "honeytip-secret-key");
+    // console.log("토큰있을때 2", res.locals);
     const user = await User.findById(_id);
     // const user = res.locals.user
     req.user = user; //token에서 유저뽑아내기
@@ -293,22 +291,11 @@ export const postfind = async (req, res, next) => {
         return res
           .status(404)
           .send({ error: "해당 포스트가 존재하지 않습니다." });
-      // console.log("User.likePost",realLikepost);
-      // console.log("postid",req.params.postid)
-
-      /**
-       * user.likePost.length 길이만큼 for문을 돈다.
-       * id가 같은게 나올때까지 루프를 돈다.
-       * 1. 같은게 나오면 true로 설정하고 리턴
-       * 2. 같은게 안나오면 나올때까지 루프를 도는데
-       * 2-1. 다 돌았는데 id가 같은게 안나오면?
-       * 조건 1) res.status를 중복 설정하면 안된다.
-       */
+          
       const likeStatus = false;
       for (let i = 0; i < user.likePost.length; i++) {
         if (user.likePost[i]._id == req.params.postid) {
           post.likeStatus = true;
-
           for (let i = 0; i < user.keepPost.length; i++) {
             user.keepPost.forEach((keep) => {
               post.keepStatus =
@@ -318,7 +305,6 @@ export const postfind = async (req, res, next) => {
         } else {
           // const likeStatus = false;
           post.likeStatus = false;
-
           for (let i = 0; i < user.keepPost.length; i++) {
             user.keepPost.forEach((keep) => {
               post.keepStatus =
@@ -327,7 +313,6 @@ export const postfind = async (req, res, next) => {
           }
         }
       }
-
       res.status(200).send(post);
 
       // 루프가 끝났을 때는 id를 찾았는지 못찾았는지 알수 있어야 함
@@ -385,6 +370,7 @@ export const postdelete = async (req, res) => {
   });
 };
 
+
 //이미지 업로드 API
 export const postuploadimg = async (req, res) => {
   const post = new Post();
@@ -399,92 +385,71 @@ export const postuploadimg = async (req, res) => {
     // const postImg2 =  req.files[1].transforms[0].location;
     // const postImg1 =''
     // const postImg2 =''
-    if (req.files.length >= 6) {
-      return res
-        .status(400)
-        .send({ message: "5개까지만 사진을 업로드가 가능해요" });
+    console.log('6개 업로드',req.files)
+    if (req.files.length >= 6){
+      return res.status(400).send({message:'5개까지만 사진을 업로드가 가능해요'});
+      
     }
 
-    if (req.files.length == 5) {
+    if (req.files.length == 5){
       const postImg1 = String(req.files[0].transforms[0].location);
       const postImg2 = String(req.files[1].transforms[0].location);
       const postImg3 = String(req.files[2].transforms[0].location);
       const postImg4 = String(req.files[3].transforms[0].location);
       const postImg5 = String(req.files[4].transforms[0].location);
 
-      const newPost = await Post.create({
-        postImg: postImg1,
-        postImg: postImg2,
-        // postImg: postImg3,
-        // postImg: postImg4,
-        // postImg: postImg5,
-      });
-      return res
-        .status(200)
-        .send([
-          { postImg1: postImg1 },
-          { postImg2: postImg2 },
-          { postImg3: postImg3 },
-          { postImg4: postImg4 },
-          { postImg5: postImg5 },
-        ]);
-    }
-    if (req.files.length == 4) {
-      const postImg1 = String(req.files[0].transforms[0].location);
-      const postImg2 = String(req.files[1].transforms[0].location);
-      const postImg3 = String(req.files[2].transforms[0].location);
-      const postImg4 = String(req.files[3].transforms[0].location);
+    
+    const newPost = await Post.create({
+      postImg: postImg1,
+      postImg: postImg2,
+      // postImg: postImg3,
+      // postImg: postImg4,
+      // postImg: postImg5,
+    });
+  return res.status(200).send([{postImg1:postImg1},{postImg2:postImg2},{postImg3:postImg3},{postImg4:postImg4},{postImg5:postImg5}]);
+  }
+  if (req.files.length == 4){
+    const postImg1 = String(req.files[0].transforms[0].location);
+    const postImg2 = String(req.files[1].transforms[0].location);
+    const postImg3 = String(req.files[2].transforms[0].location);
+    const postImg4 = String(req.files[3].transforms[0].location);
+  
+  return res.status(200).send([{postImg1:postImg1},{postImg2:postImg2},{postImg3:postImg3},{postImg4:postImg4}]);
+  }
+  if (req.files.length == 3){
+    const postImg1 = String(req.files[0].transforms[0].location);
+    const postImg2 = String(req.files[1].transforms[0].location);
+    const postImg3 = String(req.files[2].transforms[0].location);
+  
+  return res.status(200).send([{postImg1:postImg1},{postImg2:postImg2},{postImg3:postImg3}]);
+  }
+  if (req.files.length == 2){
+    const postImg1 = String(req.files[0].transforms[0].location);
+    const postImg2 = String(req.files[1].transforms[0].location);
+  
+  return res.status(200).send([{postImg1:postImg1},{postImg2:postImg2}]);
+  }
+  if (req.files.length == 1){
+    const postImg1 = String(req.files[0].transforms[0].location);
+  return res.status(200).send([{postImg1:postImg1}]);
+  }
+  else{
+  return res.status(400).send({message:'없음'});
+  }
 
-      return res
-        .status(200)
-        .send([
-          { postImg1: postImg1 },
-          { postImg2: postImg2 },
-          { postImg3: postImg3 },
-          { postImg4: postImg4 },
-        ]);
-    }
-    if (req.files.length == 3) {
-      const postImg1 = String(req.files[0].transforms[0].location);
-      const postImg2 = String(req.files[1].transforms[0].location);
-      const postImg3 = String(req.files[2].transforms[0].location);
+  //   console.log(req.files.length)
+  // const postImg1 = String(req.files[0].transforms[0].location);
+  // const postImg2 = String(req.files[1].transforms[0].location);
 
-      return res
-        .status(200)
-        .send([
-          { postImg1: postImg1 },
-          { postImg2: postImg2 },
-          { postImg3: postImg3 },
-        ]);
-    }
-    if (req.files.length == 2) {
-      const postImg1 = String(req.files[0].transforms[0].location);
-      const postImg2 = String(req.files[1].transforms[0].location);
-
-      return res
-        .status(200)
-        .send([{ postImg1: postImg1 }, { postImg2: postImg2 }]);
-    }
-    if (req.files.length == 1) {
-      const postImg1 = String(req.files[0].transforms[0].location);
-      return res.status(200).send([{ postImg1: postImg1 }]);
-    } else {
-      return res.status(400).send({ message: "없음" });
-    }
-
-    //   console.log(req.files.length)
-    // const postImg1 = String(req.files[0].transforms[0].location);
-    // const postImg2 = String(req.files[1].transforms[0].location);
-
-    //   const newPost = await Post.create({
-    //     postImg: postImg1,
-    //     postImg: postImg2,
-    //     // postImg: postImg3,
-    //     // postImg: postImg4,
-    //     // postImg: postImg5,
-    //   });
-    //   console.log(req.files)
-    //           return res.status(200).send([{postImg1:postImg1},{postImg2:postImg2}]);
+  //   const newPost = await Post.create({
+  //     postImg: postImg1,
+  //     postImg: postImg2,
+  //     // postImg: postImg3,
+  //     // postImg: postImg4,
+  //     // postImg: postImg5,
+  //   });
+  //   console.log(req.files)
+  //           return res.status(200).send([{postImg1:postImg1},{postImg2:postImg2}]);
 
     // const postImg = req.files.transforms[0].location;
     // const postImg = req.file.transforms[0].location;
@@ -503,6 +468,8 @@ export const postuploadimg = async (req, res) => {
     //     return res.status(200).send([{postImg1:postImg1},{postImg2:0}]);
     // }
 
+
+
     // if(postImg1||postImg2){
     //   const postImg1 = String(req.files.postImg1[0].transforms[0].location);
     //   const postImg2 = String(req.files.postImg2[0].transforms[0].location);
@@ -515,8 +482,8 @@ export const postuploadimg = async (req, res) => {
     //   .status(209)
     //   .send([{postImg1:0},{postImg2:0}]);
     //   }
-
-    // const postImg3 = String(req.files.postImg3[0].transforms[0].location);
+    
+   // const postImg3 = String(req.files.postImg3[0].transforms[0].location);
     // const postImg4 = String(req.files.postImg4[0].transforms[0].location);
     // const postImg5 = String(req.files.postImg5[0].transforms[0].location);
     // // const postImg3 = req.file.transforms[0].location;
@@ -524,6 +491,8 @@ export const postuploadimg = async (req, res) => {
     // const postImg5 = req.file.transforms[0].location;
     // const postImg11 = postImg1.toString()
     // const postImg22 = postImg2.toString()
+
+
 
     // return res.status(200).send([{postImg1:postImg1},{postImg2:postImg2},{postImg3:postImg3},{postImg4:postImg4},{postImg5:postImg5}]);
     // return res.status(200).send({ postImg1: postImg1, postImg2: postImg2 });
@@ -534,6 +503,7 @@ export const postuploadimg = async (req, res) => {
       .json({ success: false, msg: "게시글 등록 중 에러가 발생했습니다" });
   }
 };
+
 
 //검색 api 7일 새벽에 박선웅 추가
 export const posttagsearch = async (ctx, res, next) => {
