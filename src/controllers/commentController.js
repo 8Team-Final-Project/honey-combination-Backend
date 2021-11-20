@@ -1,7 +1,6 @@
 import { Comment } from "../models/Comment.js";
 import dotenv from "dotenv";
 dotenv.config();
-import jwtToken from "jsonwebtoken";
 
 const commentDate = new Date();
 
@@ -45,7 +44,8 @@ export const commentcreate = async (req, res) => {
       commentContent,
       createDate: currentDate,
     });
-    return res.status(201).send({
+    console.log(newComment);
+    return res.status(200).send({
       success: true,
       msg: "댓글이 작성되었습니다",
       newComment: newComment,
