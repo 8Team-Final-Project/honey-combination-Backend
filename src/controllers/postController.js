@@ -1,6 +1,6 @@
 import { Post, Like } from "../models/Post.js";
 import User from "../models/User.js";
-import { Comment } from "../models/Comment.js";
+import { Tag } from "../models/Tag.js";
 import dotenv from "dotenv";
 dotenv.config();
 import jwtToken from "jsonwebtoken";
@@ -22,17 +22,20 @@ function dateFormat(date) {
   minute = minute >= 10 ? minute : "0" + minute;
   second = second >= 10 ? second : "0" + second;
   return (
-    date.getFullYear() + ". " + month + ". " + day
-    //+
-    // " "
-    // +
-    // hour +
-    // ":" +
-    // minute +
-    // ":" +
-    // second
+    date.getFullYear() +
+    ". " +
+    month +
+    ". " +
+    day +
+    " " +
+    hour +
+    ":" +
+    minute +
+    ":" +
+    second
   );
 }
+
 export const postcreate = async (req, res) => {
   const post = new Post();
   //11월18일 오전9시 이미지업로드 수정과 동시 수정
@@ -85,7 +88,7 @@ export const postcreate = async (req, res) => {
       event3list,
       keepUser: { _id: "777777068ab908b096cfa86c" },
     });
-    console.log(event1list);
+    console.log(currentDate);
     return res.status(200).send({ success: true, newPost: newPost });
   } catch (err) {
     console.log("게시글 등록 기능 중 발생한 에러: ", err);

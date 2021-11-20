@@ -1,7 +1,7 @@
 import {
   authMiddleware,
   authorCheck,
-  authForGuest,
+  //  authForGuest,
 } from "../middlewares/authMiddlewares.js";
 import { uploadSingle } from "../middlewares/imagepostMiddlewares.js";
 import { Post } from "../models/Post.js";
@@ -29,7 +29,7 @@ postRouter.get("/event2list", event2list);
 postRouter.get("/event3list", event3list);
 //26번째줄 7일 새벽에 박선웅 추가
 postRouter.get("/posttag", posttagsearch);
-postRouter.get("/:postid", authForGuest, postfind);
+postRouter.get("/:postid", postfind);
 postRouter.patch(
   "/postupdate/:postid",
   authMiddleware,
@@ -43,7 +43,7 @@ postRouter.delete(
   postdelete
 );
 
-postRouter.post("/uploadimg", uploadSingle.array("postImg",30), postuploadimg);
+postRouter.post("/uploadimg", uploadSingle.array("postImg", 30), postuploadimg);
 // postRouter.post("/uploadimg", uploadSingle.fields([{ name: 'postImg1', maxCount:1 }, { name: 'postImg2', maxCount:1 }]), postuploadimg);
 // postRouter.post("/uploadimg", uploadSingle.fields([{ name: 'postImg1', maxCount:1 }, { name: 'postImg2', maxCount:1 }, { name: 'postImg3', maxCount:1 }, { name: 'postImg4', maxCount:1 }, { name: 'postImg5', maxCount:1 }]), postuploadimg);
 
