@@ -87,7 +87,7 @@ export const commentAuthorCheck = (req, res, next) => {
 //       const [tokenType, tokenValue] = authorization.split(" ");
 //       const { id } = jwt.verify(tokenValue, "honeytip-secret-key");
 //       res.locals.user = id;
-//       console.log(res.locals.user);
+//       console.log("로그인했을 때 유저",res.locals.user);
 //       next();
 //     }
 //   } catch (err) {
