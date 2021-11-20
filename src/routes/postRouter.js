@@ -43,7 +43,14 @@ postRouter.delete(
   postdelete
 );
 
-postRouter.post("/uploadimg", uploadSingle.single("postImg"), postuploadimg);
+postRouter.post("/uploadimg", uploadSingle.array("postImg",30), postuploadimg);
+// postRouter.post("/uploadimg", uploadSingle.fields([{ name: 'postImg1', maxCount:1 }, { name: 'postImg2', maxCount:1 }]), postuploadimg);
+// postRouter.post("/uploadimg", uploadSingle.fields([{ name: 'postImg1', maxCount:1 }, { name: 'postImg2', maxCount:1 }, { name: 'postImg3', maxCount:1 }, { name: 'postImg4', maxCount:1 }, { name: 'postImg5', maxCount:1 }]), postuploadimg);
+
+// postRouter.post("/uploadimg", uploadSingle.single("postImg"), postuploadimg);
+// postRouter.post("/uploadimg", uploadSingle.array("postImg",2), postuploadimg);
+// postRouter.post("/uploadimg", uploadSingle.fields([{ name: 'postImg1' }, { name: 'postImg2' }, { name: 'postImg3' }, { name: 'postImg4' }, { name: 'postImg5' }]), postuploadimg);
+
 // /image
 //단일 url 만들고 이미지 리턴 post이미지에 그대로 url req로 다시 돌려 받는다.
 export default postRouter;
