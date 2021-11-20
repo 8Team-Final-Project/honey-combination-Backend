@@ -3,15 +3,14 @@ import { Post } from "../models/Post.js";
 const tag = new Tag();
 
 //태그 추가
-export const tagCheck = async (req, res) => {
+export const tagCheck = (req, res) => {
   const { tagName } = req.body; //여기는 {}로 감쌌다는걸 프론트분들께 알려줘야해!
   console.log(tagName);
   Tag.findOne({ tagName: tagName }, (err, tag) => {
     try {
       if (err) return res.status(500).send({ error: "Datebase Failure!" });
-      console.log(tag);
       if (!tag) {
-        const tagCount = 0;
+        const tagCount = 1;
         const newTag = Tag.create({
           tagName,
           tagCount,
