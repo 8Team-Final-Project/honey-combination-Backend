@@ -1,7 +1,6 @@
 import { Comment } from "../models/Comment.js";
 import dotenv from "dotenv";
 dotenv.config();
-import jwtToken from "jsonwebtoken";
 
 const commentDate = new Date();
 
@@ -45,7 +44,8 @@ export const commentcreate = async (req, res) => {
       commentContent,
       createDate: currentDate,
     });
-    return res.status(201).send({
+    console.log(newComment);
+    return res.status(200).send({
       success: true,
       msg: "댓글이 작성되었습니다",
       newComment: newComment,
@@ -67,7 +67,7 @@ export const commentlist = async (req, res) => {
 
 export const commentupdate = async (req, res) => {
   Comment.findOne({ _id: req.params.commentid }, (err, comment) => {
-    if (err) return res.status(500).send({ error: "서버오류" });
+    if (err) return res.status(500).send({ error: "서버문제" });
     if (!comment)
       return res.status(404).send({ error: "해당 댓글이 존재하지 않습니다." });
     comment.commentContent = req.body.commentContent;
