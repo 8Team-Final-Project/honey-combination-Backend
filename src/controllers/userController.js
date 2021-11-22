@@ -52,6 +52,7 @@ export const signup = async (req, res) => {
       // myPost,
       likePost: {"_id": "aaaaaae96f7638a759d25981"},      
       keepPost: {"_id": "aaaaaae96f7638a759d25981"},
+      userImg:"https://honey-tip-post-picture-upload.s3.ap-northeast-2.amazonaws.com/1637398226232pig.png"
     };
     // await User.save(newUser); //create에서 변경
     await User.create(newUser);
@@ -176,6 +177,7 @@ export const me = async (req, res, next) => {
     const userEmail = user.userEmail;
     // const myPost = user.myPost;
     const userId = user._id;
+    const userImg = user.userImg;
     // const owner = await Post.findById(Post.userId).populate(User.id)
     // console.log("owner",owner)
     // console.log("userId",userId)
@@ -202,7 +204,7 @@ export const me = async (req, res, next) => {
     user.myPost.push(myPost);
     user.myPost;
     // user.save();
-    res.status(200).send({ userNickname, userEmail, myPost, userId, keepPost });
+    res.status(200).send({ userNickname, userEmail, myPost, userId, keepPost,userImg });
     next();
   } catch (err) {
     console.log(err);
@@ -222,6 +224,7 @@ export const profilepatch = async (req, res) => {
     req.user = user;
     const userNickname = user.userNickname;
     const userEmail = user.userEmail;
+    const userImg = user.userImg;
     const re_userEmail = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
     const re_userNickname = /^[가-힣a-zA-Z0-9]{2,10}$/;
     // const { nicknameNew, passwordOld, passwordNew } = res.verifyBody;
@@ -251,6 +254,7 @@ export const profilepatch = async (req, res) => {
           $set: {
             userNickname: req.body.userNickname,
             userEmail: req.body.userEmail,
+            userImg: req.body.userImg
           },
         },
         { where: { _id: user._id } }

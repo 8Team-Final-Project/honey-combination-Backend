@@ -19,6 +19,11 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    userImg: {
+      type: String,
+      required: false,
+      unique: false,
+    },
     myPost: [
       {
         postId: { type: String },
