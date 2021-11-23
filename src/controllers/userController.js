@@ -48,11 +48,12 @@ export const signup = async (req, res) => {
       userEmail,
       userNickname,
       userPassword: hashedPassword,
-      myPost:{"postId": "aaaaaae96f7638a759d25981"},
+      myPost: { postId: "aaaaaae96f7638a759d25981" },
       // myPost,
-      likePost: {"_id": "aaaaaae96f7638a759d25981"},      
-      keepPost: {"_id": "aaaaaae96f7638a759d25981"},
-      userImg:"https://honey-tip-post-picture-upload.s3.ap-northeast-2.amazonaws.com/1637398226232pig.png"
+      likePost: { _id: "aaaaaae96f7638a759d25981" },
+      keepPost: { _id: "aaaaaae96f7638a759d25981" },
+      userImg:
+        "https://honey-tip-post-picture-upload.s3.ap-northeast-2.amazonaws.com/1637398226232pig.png",
     };
     // await User.save(newUser); //create에서 변경
     await User.create(newUser);
@@ -175,36 +176,24 @@ export const me = async (req, res, next) => {
     req.user = user; //token에서 유저뽑아내기
     const userNickname = user.userNickname;
     const userEmail = user.userEmail;
-    // const myPost = user.myPost;
     const userId = user._id;
     const userImg = user.userImg;
-    // const owner = await Post.findById(Post.userId).populate(User.id)
-    // console.log("owner",owner)
-    // console.log("userId",userId)
 
-    // const keepPost = await Post.keepUser.find({_id: userId});
-    const keepPost = user.keepPost;
-    const post = await Post.find()
-    
-        // console.log(post[0])
-    // console.log(post[0].keepUser)
-    // console.log(post[0].keepUser.length)
-    for(let l = 0; l < post[l].length; l++){
-      console.log(l)
-    for (let i = 0; i < post[i].keepUser.length; i++) {
-      if (post[l].keepUser[i]._id == user._id) {
-        user.keepPost.push(post)
-        user.keepPost
-        user.save();
-        console.log(post)
-        // user.keepPost.push(post.likeCnt)
-      }  
-    }}
+    //11-23 주동재 찜목록수정
+    const keepPost = await Post.find({ _id: user.keepPost });
+
     const myPost = await Post.find({ userId: userId });
     user.myPost.push(myPost);
     user.myPost;
-    // user.save();
-    res.status(200).send({ userNickname, userEmail, myPost, userId, keepPost,userImg });
+
+    res.status(200).send({
+      userNickname,
+      userEmail,
+      myPost,
+      userId,
+      keepPost,
+      userImg,
+    });
     next();
   } catch (err) {
     console.log(err);
@@ -254,7 +243,7 @@ export const profilepatch = async (req, res) => {
           $set: {
             userNickname: req.body.userNickname,
             userEmail: req.body.userEmail,
-            userImg: req.body.userImg
+            userImg: req.body.userImg,
           },
         },
         { where: { _id: user._id } }

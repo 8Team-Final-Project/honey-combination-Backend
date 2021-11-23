@@ -21,7 +21,7 @@ commentRouter.patch(
   commentupdate
 );
 commentRouter.delete(
-  "/commentdelete/:commentid",
+  "/commentdelete/:commentid/:postid",
   authMiddleware,
   commentAuthorCheck,
   commentdelete

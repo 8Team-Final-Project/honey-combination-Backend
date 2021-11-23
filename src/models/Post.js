@@ -105,6 +105,9 @@ const postSchema = new mongoose.Schema(
     likeCnt: {
       type: Number,
     },
+    commentCount: {
+      type: Number,
+    },
     keepUser: [{ _id: { type: String } }],
     mainlist: {
       type: Boolean,
