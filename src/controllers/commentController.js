@@ -1,5 +1,4 @@
 import { Comment } from "../models/Comment.js";
-import { Post } from "../models/Post.js";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -45,11 +44,6 @@ export const commentcreate = async (req, res) => {
       commentContent,
       createDate: currentDate,
     });
-    Post.findOne({ _id: postId }, (err, post) => {
-      if (err) return res.status(500).send({ error: "데이터베이스실패" });
-      post.commentCount += 1;
-      post.save();
-    });
     console.log(newComment);
     return res.status(200).send({
       success: true,
@@ -85,17 +79,10 @@ export const commentupdate = async (req, res) => {
 };
 
 export const commentdelete = async (req, res) => {
-  const postId = req.params.postid;
-  Post.findOne({ _id: postId }, (err, post) => {
-    if (err) return res.status(500).send({ error: "데이터베이스실패" });
-    post.commentCount -= 1;
-    post.save();
-  });
   Comment.deleteOne({ _id: req.params.commentid }, (err, comment) => {
     if (err) return res.status(500).send({ error: "서버문제" });
     if (!comment)
       return res.status(404).send({ error: "해당 댓글이 존재하지 않습니다" });
-
     res.status(200).send({ message: "삭제가 완료되었습니다" });
   });
 };

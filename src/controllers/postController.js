@@ -33,7 +33,6 @@ function dateFormat(date) {
     // second
   );
 }
-
 export const postcreate = async (req, res) => {
   const post = new Post();
   //11월18일 오전9시 이미지업로드 수정과 동시 수정
@@ -53,10 +52,6 @@ export const postcreate = async (req, res) => {
       event2list,
       event3list,
     } = req.body;
-    const title = await Post.find({ postTitle: req.body.postTitle });
-    if (title.length >= 5) {
-      return res.send({ msg: "같은 제목의 게시글은 5개가 최대입니다." });
-    }
     // const postImg= req.file.transforms[0].location;
     const userId = req.user._id;
     const userNickname = req.user.userNickname;
@@ -66,7 +61,6 @@ export const postcreate = async (req, res) => {
     const postState = true;
     let currentDate = dateFormat(postDate);
     const likeCnt = 0;
-    const commentCount = 0;
     const newPost = await Post.create({
       userId,
       userNickname,
@@ -85,7 +79,6 @@ export const postcreate = async (req, res) => {
       postState,
       createDate: currentDate,
       likeCnt,
-      commentCount,
       mainlist,
       event1list,
       event2list,
@@ -592,19 +585,5 @@ export const posttagsearch = async (ctx, res, next) => {
     // return res
     //   .status(500)
     //   .json({ success: false, msg: "게시글 조회 중 에러가 발생했습니다" });
-  }
-};
-
-export const postlike = async (req, res) => {
-  try {
-    Post.find({}, (err, posts) => {
-      if (err) return res.status(500).send({ error: err });
-      res.status(200).send({ success: true, posts: posts });
-    }).sort({ likeCnt: -1 });
-  } catch (err) {
-    console.log("좋아요 조회 중 발생한 에러: ", err);
-    return res
-      .status(500)
-      .send({ success: false, msg: "좋아요 조회 중 에러 발생" });
   }
 };
