@@ -7,16 +7,16 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const s3 = new AWS.S3({
-  accessKeyId: "AKIARCNRLSCXDBSGO6P4",
-  secretAccessKey: "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",
-  region: "ap-northeast-2",
-});
+  accessKeyId: process.env.S3_ACCESS_KEY,
+  secretAccessKey: process.env.S3_SECRET_KEY,
+  region: process.env.S3_BUCKET_REGION,
+  });
 
 export const uploadSingle = multer({
   storage: multerS3({
     s3: s3,
     bucket: "honey-tip-post-picture-upload",
-    limits: { fileSize: 10 * 1024 * 1024, files: 5 },
+    // limits: { fileSize: 100 * 7000 * 7000, files: 5 },
     shouldTransform: function (req, file, cb) {
       cb(null, /^image/i.test(file.mimetype));
     },
