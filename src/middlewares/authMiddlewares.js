@@ -1,13 +1,10 @@
 import jwt from "jsonwebtoken";
-// import User from "../models/User.js";
 import User from "../models/User.js";
 import { Post } from "../models/Post.js";
 import { Comment } from "../models/Comment.js";
-// import { Event } from "../models/Event.js";
 
 export const authMiddleware = async (req, res, next) => {
   const { authorization } = req.headers;
-  // const authorization = req.headers.authorization;
   if (!authorization) {
     return res.status(401).send({
       errorMessage: "로그인 후 사용하세요",
@@ -74,61 +71,3 @@ export const commentAuthorCheck = (req, res, next) => {
     next();
   });
 };
-
-// export const authForGuest = async (req, res, next) => {
-//   try {
-//     const { authorization } = req.headers;
-//     if (!authorization) {
-//       res.locals.user = 5;
-//       // user.likePost.length = 1;
-//       console.log(res.locals.user);
-//       next();
-//     } else {
-//       const [tokenType, tokenValue] = authorization.split(" ");
-//       const { id } = jwt.verify(tokenValue, "honeytip-secret-key");
-//       res.locals.user = id;
-//       console.log("로그인했을 때 유저",res.locals.user);
-//       next();
-//     }
-//   } catch (err) {
-//     console.error(err);
-//     next(err);
-//   }
-// };
-
-// const jwt = require('jsonwebtoken');
-// require('dotenv').config;
-
-// module.exports = {
-//   authForGuest: async (req, res, next) => {
-//     try {
-//       const token = req.cookies.user;
-//       if (!token) {
-//         res.locals.user = 13;
-//         next();
-//       } else {
-//         const { id } = jwt.verify(token, process.env.SECRET_KEY);
-//         res.locals.user = id;
-//         next();
-//       }
-//     } catch (err) {
-//       console.error(err);
-//       next(err);
-//     }
-//   },
-//   auth: async (req, res, next) => {
-//     try {
-//       const token = req.cookies.user;
-//       if (!token) {
-//         res.status(401).json({ success: false });
-//       } else {
-//         const { id } = jwt.verify(token, process.env.SECRET_KEY);
-//         res.locals.user = id;
-//         next();
-//       }
-//     } catch (err) {
-//       console.error(err);
-//       next(err);
-//     }
-//   },
-// };

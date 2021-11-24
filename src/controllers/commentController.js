@@ -17,14 +17,6 @@ function dateFormat(date) {
   second = second >= 10 ? second : "0" + second;
   return (
     date.getFullYear() + ". " + month + ". " + day
-    //+
-    // " "
-    // +
-    // hour +
-    // ":" +
-    // minute +
-    // ":" +
-    // second
   );
 }
 

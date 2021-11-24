@@ -170,13 +170,12 @@ export const me = async (req, res, next) => {
   try {
     const { _id } = jwtToken.verify(tokenValue, "honeytip-secret-key");
     const user = await User.findById(_id);
-    req.user = user; //token에서 유저뽑아내기
+    req.user = user; 
     const userNickname = user.userNickname;
     const userEmail = user.userEmail;
     const userId = user._id;
     const userImg = user.userImg;
 
-    //11-23 주동재 찜목록수정
     const keepPost = await Post.find({ _id: user.keepPost });
 
     const myPost = await Post.find({ userId: userId });
@@ -221,18 +220,6 @@ export const profilepatch = async (req, res) => {
     //닉네임
     const checkemail = await User.findOne({ userEmail }); //
     //등록된 유저가 있는지 다시 한번 조회
-    // if (existUser) {
-    //     return err({message: "유저가 존재하지 않습니다."})
-    // };
-    // if (!checknick && !checkemail) {
-    //     return error.status(403).send({ errorMessage: "이미 존재하는 이메일이나 닉네임 입니다" })
-    // };
-    // if (userEmail.search(re_userEmail) == -1 && userNickname.search(re_userNickname) == -1) {
-    //     return error.status(403).send({ errorMessage: "이메일의 형식이 일치하지 않습니다." });
-    // };
-    //기존 비밀번호 확인
-    // if (bcrypt.compareSync(passwordOld, existUser.password)) {
-    //   const encryptPassword = bcrypt.hashSync(passwordNew, 10);
     if (existUser) {
       await User.updateOne(
         { _id: user._id },

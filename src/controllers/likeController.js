@@ -2,7 +2,6 @@ import { Post, Like } from "../models/Post.js";
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwtToken from "jsonwebtoken";
-// import { Event, EventLike } from "../models/Event.js";
 
 export const likeclick = async (req, res) => {
   const postId = req.params.postid;
