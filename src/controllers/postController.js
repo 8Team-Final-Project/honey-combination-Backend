@@ -60,6 +60,7 @@ export const postcreate = async (req, res) => {
     // const postImg= req.file.transforms[0].location;
     const userId = req.user._id;
     const userNickname = req.user.userNickname;
+    const userImg = req.user.userImg;
     const myPost = false;
     const likeState = false;
     const keepPoststate = false;
@@ -70,6 +71,7 @@ export const postcreate = async (req, res) => {
     const newPost = await Post.create({
       userId,
       userNickname,
+      userImg,
       postTitle,
       postRecipe,
       postContent,
