@@ -378,15 +378,6 @@ export const postuploadimg = async (req, res) => {
   const post = new Post();
 
   try {
-    // console.log(req.files);
-    // console.log('트렌스폼',req.files.postImg2[0].transforms[0])
-    // console.log(req.files.postImg2[0].transforms[0].location);
-    // console.log("트렌스폼1",req.files[0].transforms[0].location)
-    // console.log("트렌스폼2",req.files[1].transforms[0].location)
-    // const postImg =  req.files[0].transforms[0].location;
-    // const postImg2 =  req.files[1].transforms[0].location;
-    // const postImg1 =''
-    // const postImg2 =''
     if (req.files.length >= 6) {
       return res
         .status(400)
