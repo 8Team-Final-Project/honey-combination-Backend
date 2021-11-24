@@ -18,6 +18,7 @@ import {
   postdelete,
   postuploadimg,
   posttagsearch,
+  postlike,
 } from "../controllers/postController.js";
 const postRouter = express.Router();
 
@@ -29,13 +30,17 @@ postRouter.get("/event2list", event2list);
 postRouter.get("/event3list", event3list);
 //26번째줄 7일 새벽에 박선웅 추가
 postRouter.get("/posttag", posttagsearch);
-postRouter.get("/:postid", postfind);
+//좋아요 순으로 나열
+postRouter.get("/postlikes", postlike);
+postRouter.get("/:postid", postfind); //이거 다음에는 왜 좋아요 순으로 나열이 안되지?
+
 postRouter.patch(
   "/postupdate/:postid",
   authMiddleware,
   authorCheck,
   postupdate
 );
+
 postRouter.delete(
   "/postdelete/:postid",
   authMiddleware,
@@ -43,7 +48,8 @@ postRouter.delete(
   postdelete
 );
 
-postRouter.post("/uploadimg", uploadSingle.array("postImg",30), postuploadimg);
+postRouter.post("/uploadimg", uploadSingle.array("postImg", 30), postuploadimg);
+
 // postRouter.post("/uploadimg", uploadSingle.fields([{ name: 'postImg1', maxCount:1 }, { name: 'postImg2', maxCount:1 }]), postuploadimg);
 // postRouter.post("/uploadimg", uploadSingle.fields([{ name: 'postImg1', maxCount:1 }, { name: 'postImg2', maxCount:1 }, { name: 'postImg3', maxCount:1 }, { name: 'postImg4', maxCount:1 }, { name: 'postImg5', maxCount:1 }]), postuploadimg);
 
