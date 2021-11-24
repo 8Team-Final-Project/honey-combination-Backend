@@ -2,7 +2,6 @@ import multer from "multer";
 import multerS3 from "multer-s3-transform";
 import sharp from "sharp";
 import AWS from "aws-sdk";
-// require('dotenv').config();
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -24,10 +23,9 @@ export const uploadSingle = multer({
       {
         id: "original",
         key: function (req, files, cb) {
-          cb(null, `${Date.now()}${files.originalname}`); //use Date.now() for unique file keys
+          cb(null, `${Date.now()}${files.originalname}`); 
         },
         transform: function (req, file, cb) {
-          //Perform desired transformations
           cb(null, sharp().resize(300, 300).withMetadata());
         },
       },

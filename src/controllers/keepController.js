@@ -1,6 +1,5 @@
 import User from "../models/User.js";
 import { Post } from "../models/Post.js";
-// import { Event } from "../models/Event.js";
 
 export const keepclick = async (req, res) => {
   const userId = req.user?._id;
@@ -14,9 +13,6 @@ export const keepclick = async (req, res) => {
       if (!user.keepPost.id(postId)) {
         user.keepPost.push(postId);
         user.save();
-        // for (let i = 0; i <= user.keepPost.length; i++) {
-        //   Post.findOne({ _id: postId }, (err, post));
-        // }
         Post.findOne({ _id: postId }, (err, post) => {
           if (err) return res.status(500).send({ error: "Datebase Failure!" });
           post.keepUser.push(userId);
