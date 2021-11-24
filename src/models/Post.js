@@ -24,6 +24,11 @@ const postSchema = new mongoose.Schema(
       required: false,
       unique: false,
     },
+    userImg: {
+      type: String,
+      required: false,
+      unique: false,
+    },
     postTitle: {
       type: String,
       required: false,
