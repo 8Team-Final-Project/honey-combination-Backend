@@ -1,41 +1,31 @@
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
-// import globalRouter from "../src/routes/globalRouter.js";
-// import eventRouter from "../src/routes/eventRouter.js";
 import userRouter from "../src/routes/userRouter.js";
 import postRouter from "../src/routes/postRouter.js";
 import likeRouter from "../src/routes/likeRouter.js";
 import keepRouter from "../src/routes/keepRouter.js";
 import commentRouter from "../src/routes/commentRouter.js";
 import tagRouter from "../src/routes/tagRouter.js";
-// import public from "../src/public";
-// import swaggerUi from './modules/swagger.js';
 import specs from "./modules/swagger.js";
+import swaggerUi from 'swagger-ui-express';
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv'
+import mongoose from 'mongoose';
 
-const swaggerUi = require("swagger-ui-express");
-const express = require("express");
 const app = express();
-const cors = require("cors");
-
 //스웨거 적용
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
-const dotenv = require("dotenv");
 dotenv.config();
 const corsOptions = {
   origin: true,
   credentials: true,
 };
-const mongoose = require("mongoose");
 const port = process.env.PORT || 8000;
 
 app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-//여기 스웨거 하느라 추가한 22번째 줄
 
-// const Postmodel = require("./models/Post.js"); //post스키마를 쓰겠다.
-// const Post = require("./routes/post.cjs")(app, Postmodel);
 
 app.listen(port, function () {
   console.log("Express server has started on port " + port);

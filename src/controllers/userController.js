@@ -25,9 +25,7 @@ export const signup = async (req, res) => {
     });
   }
   try {
-    console.log(userEmail);
     const isemailExisting = await User.find({ userEmail }); //둘중 하나가 User 몽고DB에 존재하는지 여부 확인
-    console.log(isemailExisting);
     const isnickExisting = await User.find({ userNickname }); //둘중 하나가 User 몽고DB에 존재하는지 여부 확인
     if (isemailExisting.length) {
       //둘중 하나라도 존재하면 1이상의 값이 나오므로 true로 처리해서 아래 값을 return
@@ -57,14 +55,13 @@ export const signup = async (req, res) => {
     };
     // await User.save(newUser); //create에서 변경
     await User.create(newUser);
-    console.log(newUser);
     return res
-      .status(200)
+      .status(201)
       .send({ result: "success", msg: "회원가입에 성공하였습니다." });
   } catch (error) {
     console.log(error);
     return res
-      .status(405)
+      .status(500)
       .send({ result: "failure", msg: "DB 정보 조회 실패" });
   }
 };
