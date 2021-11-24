@@ -6,9 +6,10 @@ import jwtToken from "jsonwebtoken";
 
 export const likeclick = async (req, res) => {
   const postId = req.params.postid;
-  const userId = req.user._id;
+  const userId = req.user?._id;
   Post.findOne({ _id: postId }, (err, post) => {
     try {
+      console.log(req.user._id)
       if (err) return res.status(500).send({ error: "Database Failure!" });
       if (!post.likeUser.id(userId)) {
         post.likeUser.push(

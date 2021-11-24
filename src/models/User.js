@@ -19,6 +19,11 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    userImg: {
+      type: String,
+      required: false,
+      unique: false,
+    },
     myPost: [
       {
         postId: { type: String },
@@ -32,20 +37,8 @@ const userSchema = new Schema(
         keepPoststate: { type: Boolean, default: false },
       },
     ],
-    keepPost: [
-      {
-        postId: { type: String },
-        createDate: { type: String },
-        postTitle: { type: String },
-        postImg: {},
-        postTag: {},
-        likeCnt: {
-          type: Number,
-        },
-        likeState: { type: Boolean, default: false },
-        keepPoststate: { type: Boolean, default: false },
-      },
-    ],
+    keepPost: [{ postId: { type: String } }],
+    keepPostList: [],
     likePost: [{ _id: { type: String } }],
   },
   { versionKey: false }

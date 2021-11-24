@@ -6,6 +6,8 @@ import userRouter from "../src/routes/userRouter.js";
 import postRouter from "../src/routes/postRouter.js";
 import likeRouter from "../src/routes/likeRouter.js";
 import keepRouter from "../src/routes/keepRouter.js";
+import commentRouter from "../src/routes/commentRouter.js";
+import tagRouter from "../src/routes/tagRouter.js";
 // import public from "../src/public";
 // import swaggerUi from './modules/swagger.js';
 import specs from "./modules/swagger.js";
@@ -20,10 +22,14 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 const dotenv = require("dotenv");
 dotenv.config();
+const corsOptions = {
+  origin: true,
+  credentials: true,
+};
 const mongoose = require("mongoose");
 const port = process.env.PORT || 8000;
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 //여기 스웨거 하느라 추가한 22번째 줄
@@ -58,3 +64,8 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/post", postRouter);
 app.use("/api/v1/like", likeRouter);
 app.use("/api/v1/keep", keepRouter);
+app.use("/api/v1/comment", commentRouter);
+app.use("/api/v1/tag", tagRouter);
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
