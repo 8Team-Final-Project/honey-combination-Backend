@@ -283,31 +283,70 @@ export const postfind = async (req, res, next) => {
           .status(404)
           .send({ error: "해당 포스트가 존재하지 않습니다." });
 
-      const likeStatus = false;
-      for (let i = 0; i < user.likePost.length; i++) {
-        if (user.likePost[i]._id == req.params.postid) {
-          post.likeStatus = true;
-          for (let i = 0; i < user.keepPost.length; i++) {
-            user.keepPost.forEach((keep) => {
-              post.keepStatus =
-                user.keepPost[i]._id == req.params.postid ? true : false;
-            });
-          }
-        } else {
-          post.likeStatus = false;
-          for (let i = 0; i < user.keepPost.length; i++) {
-            user.keepPost.forEach((keep) => {
-              post.keepStatus =
-                user.keepPost[i]._id == req.params.postid ? true : false;
-            });
-          }
+      // const likeStatus = false;
+      // [{_id : "rtjt23iotjfgiodfgg"}, {_id : "rtjt23iotjfgiodfgg"},{_id : "rtjt23iotjfgiodfgg"}]
+      let likeStatus = false;
+      user.likePost.forEach((likePost) => {
+        if (likePost._id ==req.params.postid){
+          likeStatus = true;
         }
-      }
-      res.status(200).send(post);
+      })
+      let keepStatus = false;
+      user.keepPost.forEach((keepPost) => {
+        if (keepPost._id ==req.params.postid){
+          keepStatus = true;
+        }
+      })
+      console.log("유저상태",user)
+      console.log("포스트상태",post)
+      console.log("라이크상태",post.likeStatus)
+      console.log("찜상태",post.keepStatus)
+        res.status(200).send({post, likeStatus, keepStatus});
 
     });
   }
 };
+//이전 코드
+      // for (let i = 0; i < user.likePost.length; i++) {
+      //   if (user.likePost[i]._id == req.params.postid) {
+      //     post.likeStatus = true;
+      //     for (let i = 0; i < user.keepPost.length; i++) {
+      //       user.keepPost.forEach((keep) => {
+      //         post.keepStatus =
+      //           user.keepPost[i]._id == req.params.postid ? true : false;
+      //       });
+      //     }
+      //   } else {
+      //     post.likeStatus = false;
+      //     for (let i = 0; i < user.keepPost.length; i++) {
+      //       user.keepPost.forEach((keep) => {
+      //         post.keepStatus =
+      //           user.keepPost[i]._id == req.params.postid ? true : false;
+      //       });
+      //     }
+      //   }
+      // }
+
+// post 객체안에 데이터를 넣어야 함
+//   현재 로그인 한 사람이 좋아요, 찜하기를 했는지
+//   isLiked, isKeeped
+// //좋아요 확인
+// user.likePost.forEach((likepost) => {
+//   let isLiked = false;
+//   if (likepost._id === req.params.postid) {
+//     isLiked = true;
+//   }
+//   post.isLiked = isLiked;
+// });
+// // 찜하기 확인
+// user.keepPost.forEach((keeppost) => {
+//   let isKeeped = false;
+//   if (keeppost._id === req.params.postid) {
+//     isKeeped = true;
+//   }
+//   post.isKeeped = true;
+// });
+
 
 //update수정
 export const postupdate = async (req, res) => {
@@ -353,7 +392,54 @@ export const postuploadimg = async (req, res) => {
         .status(400)
         .send({ message: "5개까지만 사진을 업로드가 가능해요" });
     }
+/* 
+    이 놈이 해야할 일
+    S3에 이미지 저장
+    req.files => 배열 []
+    req.files [
+      {
+        ...
+        ...
+        location : s3/s/dsfsdfgdsog/sdgdsf
+      },
+      {
+        ...
+        ...
+        location : s3/s/dsfsdfgdsog/sdgdsf
+      },
+      {
+        ...
+        ...
+        location : s3/s/dsfsdfgdsog/sdgdsf
+      }
+    ]
+*/
+    // let locations = [];
+    // req.files.forEach(file => {
+    //   location.push(file.location);
+    // })
+    // locations = ["s3/dfsdfsdg/asdgdsg", "fdsfasdfsf", "dfadsfdasf"]
+    // locations = ["fdsfasdfsf", "dfadsfdasf"]
 
+    /*
+      location1 = "dsgdfgdfg",
+      location2 = "dsfsdfsdf"
+      
+      locations = ["dsgdfgdfg","dsfsdfsdf"];
+      model Post = {
+        _id,
+        ...
+        images : []
+      } 
+
+      await Post.create({
+        title : title,
+        ....
+        images : locations
+      })
+      프론트 배열로 줘도 처리 가능한지?
+    */
+    res.status(200).send(locations);
     if (req.files.length == 5) {
       const postImg1 = String(req.files[0].transforms[0].location);
       const postImg2 = String(req.files[1].transforms[0].location);

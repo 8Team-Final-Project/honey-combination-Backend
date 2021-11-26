@@ -18,6 +18,7 @@ export const likeclick = async (req, res) => {
         );
         post.likeCnt += 1;
         post.save();
+
         User.findOne({ _id: userId }, (err, user) => {
           if (err) return res.status(500).send({ error: "Datebase Failure!" });
           user.likePost.push(postId);
@@ -25,6 +26,7 @@ export const likeclick = async (req, res) => {
         });
         const likeCntmsg = post.likeCnt;
         const likeStatus = true;
+        
         if (Post.likeUser_id == userId){
         likeStatus == true;
       }else {
