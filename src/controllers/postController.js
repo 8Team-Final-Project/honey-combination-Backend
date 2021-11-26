@@ -285,23 +285,25 @@ export const postfind = async (req, res, next) => {
 
       // const likeStatus = false;
       // [{_id : "rtjt23iotjfgiodfgg"}, {_id : "rtjt23iotjfgiodfgg"},{_id : "rtjt23iotjfgiodfgg"}]
-      let likeStatus = false;
+      post.likeStatus = false;
+      
       user.likePost.forEach((likePost) => {
         if (likePost._id ==req.params.postid){
-          likeStatus = true;
+          // likeStatus = true;
+          post.likeStatus = true;
         }
       })
-      let keepStatus = false;
+      post.keepStatus = false;
       user.keepPost.forEach((keepPost) => {
         if (keepPost._id ==req.params.postid){
-          keepStatus = true;
+          post.keepStatus = true;
         }
       })
       console.log("유저상태",user)
       console.log("포스트상태",post)
       console.log("라이크상태",post.likeStatus)
       console.log("찜상태",post.keepStatus)
-        res.status(200).send({post, likeStatus, keepStatus});
+        res.status(200).send({post});
 
     });
   }
