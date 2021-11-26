@@ -79,11 +79,12 @@ const postSchema = new mongoose.Schema(
       required: false,
       unique: false,
     },
-    likeState: {
-      type: Boolean,
-      required: false,
-      unique: false,
-    },
+    // likeState: {
+    //   type: Boolean,
+    //   required: false,
+    //   unique: false,
+    //   default : false
+    // },
     keepPoststate: {
       type: Boolean,
       required: false,
@@ -134,16 +135,16 @@ const postSchema = new mongoose.Schema(
       required: false,
       unique: false,
     },
-    likeStatus: {
-      type: Boolean,
-      required: false,
-      unique: false,
-    },
-    keepStatus: {
-      type: Boolean,
-      required: false,
-      unique: false,
-    },
+    // likeStatus: {
+    //   type: Boolean,
+    //   required: false,
+    //   unique: false,
+    // },
+    // keepStatus: {
+    //   type: Boolean,
+    //   required: false,
+    //   unique: false,
+    // },
   },
   { versionKey: false }
 );
