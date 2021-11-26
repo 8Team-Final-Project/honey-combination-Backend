@@ -394,54 +394,6 @@ export const postuploadimg = async (req, res) => {
         .status(400)
         .send({ message: "5개까지만 사진을 업로드가 가능해요" });
     }
-/* 
-    이 놈이 해야할 일
-    S3에 이미지 저장
-    req.files => 배열 []
-    req.files [
-      {
-        ...
-        ...
-        location : s3/s/dsfsdfgdsog/sdgdsf
-      },
-      {
-        ...
-        ...
-        location : s3/s/dsfsdfgdsog/sdgdsf
-      },
-      {
-        ...
-        ...
-        location : s3/s/dsfsdfgdsog/sdgdsf
-      }
-    ]
-*/
-    // let locations = [];
-    // req.files.forEach(file => {
-    //   location.push(file.location);
-    // })
-    // locations = ["s3/dfsdfsdg/asdgdsg", "fdsfasdfsf", "dfadsfdasf"]
-    // locations = ["fdsfasdfsf", "dfadsfdasf"]
-
-    /*
-      location1 = "dsgdfgdfg",
-      location2 = "dsfsdfsdf"
-      
-      locations = ["dsgdfgdfg","dsfsdfsdf"];
-      model Post = {
-        _id,
-        ...
-        images : []
-      } 
-
-      await Post.create({
-        title : title,
-        ....
-        images : locations
-      })
-      프론트 배열로 줘도 처리 가능한지?
-    */
-    res.status(200).send(locations);
     if (req.files.length == 5) {
       const postImg1 = String(req.files[0].transforms[0].location);
       const postImg2 = String(req.files[1].transforms[0].location);
