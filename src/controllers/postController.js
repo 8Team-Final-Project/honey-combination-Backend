@@ -1,5 +1,6 @@
 import { Post, Like } from "../models/Post.js";
 import User from "../models/User.js";
+import { Tag } from "../models/Tag.js";
 import { Comment } from "../models/Comment.js";
 import dotenv from "dotenv";
 dotenv.config();
@@ -20,10 +21,7 @@ function dateFormat(date) {
   hour = hour >= 10 ? hour : "0" + hour;
   minute = minute >= 10 ? minute : "0" + minute;
   second = second >= 10 ? second : "0" + second;
-  return (
-    date.getFullYear() + ". " + month + ". " + day
-
-  );
+  return date.getFullYear() + ". " + month + ". " + day;
 }
 
 export const postcreate = async (req, res) => {
@@ -84,7 +82,12 @@ export const postcreate = async (req, res) => {
       event3list,
       keepUser: { _id: "777777068ab908b096cfa86c" },
     });
-    console.log(event1list);
+    //console.log(event1list);
+    // const taglist = await Tag.find({ tagName: postTag }, (err, tag) => {
+    //   console.log(taglist);
+    //   tag.tagCount += 1;
+    // });
+
     return res.status(200).send({ success: true, newPost: newPost });
   } catch (err) {
     console.log("게시글 등록 기능 중 발생한 에러: ", err);
@@ -133,7 +136,6 @@ export const postlist = async (ctx, res, next) => {
     //   .json({ success: false, msg: "게시글 조회 중 에러가 발생했습니다" });
   }
 };
-
 
 //이벤트1 포스트 전체 불러오기
 export const event1list = async (ctx, res) => {
@@ -304,7 +306,6 @@ export const postfind = async (req, res, next) => {
         }
       }
       res.status(200).send(post);
-
     });
   }
 };
@@ -332,6 +333,7 @@ export const postupdate = async (req, res) => {
   });
 };
 
+//게시글 삭제
 export const postdelete = async (req, res) => {
   Post.deleteOne({ _id: req.params.postid }, (err, post) => {
     if (err) return res.status(500).send({ error: "Database Failure!" });
@@ -420,7 +422,6 @@ export const postuploadimg = async (req, res) => {
     } else {
       return res.status(400).send({ message: "없음" });
     }
-
   } catch (err) {
     console.log("게시글 등록 기능 중 발생한 에러: ", err);
     return res
@@ -472,6 +473,7 @@ export const posttagsearch = async (ctx, res, next) => {
   }
 };
 
+//좋아요 순으로 나열->이벤트 게시물만 되게끔 바꾸어야함
 export const postlike = async (req, res) => {
   try {
     Post.find({}, (err, posts) => {
