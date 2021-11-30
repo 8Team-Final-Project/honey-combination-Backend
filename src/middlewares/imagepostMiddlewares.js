@@ -26,7 +26,7 @@ export const uploadSingle = multer({
           cb(null, `${Date.now()}${files.originalname}`); 
         },
         transform: function (req, file, cb) {
-          cb(null, sharp().resize(300, 300).withMetadata());
+          cb(null, sharp().resize(450, 450).withMetadata());
         },
       },
     ],

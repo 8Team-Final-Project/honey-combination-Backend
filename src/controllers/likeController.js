@@ -9,7 +9,7 @@ export const likeclick = async (req, res) => {
   Post.findOne({ _id: postId }, (err, post) => {
     try {
       console.log(req.user._id)
-      if (err) return res.status(500).send({ error: "Database Failure!" });
+      if (err) return res.status(501).send({ error: "Database Failure!" });
       if (!post.likeUser.id(userId)) {
         post.likeUser.push(
           new Like({
@@ -20,7 +20,7 @@ export const likeclick = async (req, res) => {
         post.save();
 
         User.findOne({ _id: userId }, (err, user) => {
-          if (err) return res.status(500).send({ error: "Datebase Failure!" });
+          if (err) return res.status(501).send({ error: "Datebase Failure!" });
           user.likePost.push(postId);
           user.save();
         });
@@ -32,13 +32,13 @@ export const likeclick = async (req, res) => {
       }else {
         likeStatus == false;
       }
-        return res.status(200).send({ likeCntmsg, msg: "좋아요성공",likeStatus: likeStatus });
+        return res.status(201).send({ likeCntmsg, msg: "좋아요성공",likeStatus: likeStatus });
       } else {
         post.likeUser.pull(userId);
         post.likeCnt -= 1;
         post.save();
         User.findOne({ _id: userId }, (err, user) => {
-          if (err) return res.status(500).send({ error: "Datebase Failure!" });
+          if (err) return res.status(501).send({ error: "Datebase Failure!" });
           user.likePost.pull(postId);
           user.save();
         });
@@ -48,11 +48,11 @@ export const likeclick = async (req, res) => {
       }else {
         likeStatus == false;
       }
-        return res.status(200).send({ msg: "취소성공",likeStatus: likeStatus });
+        return res.status(204).send({ msg: "취소성공",likeStatus: likeStatus });
       }
     } catch (error) {
       console.error(error);
-      return res.status(400).send({ msg: "실패" });
+      return res.status(500).send({ msg: "실패" });
     }
   });
 };
