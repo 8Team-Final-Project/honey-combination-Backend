@@ -5,11 +5,11 @@ import keepRouter from "../src/routes/keepRouter.js";
 import commentRouter from "../src/routes/commentRouter.js";
 import tagRouter from "../src/routes/tagRouter.js";
 import specs from "./modules/swagger.js";
-import swaggerUi from 'swagger-ui-express';
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv'
-import mongoose from 'mongoose';
+import swaggerUi from "swagger-ui-express";
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
 
 const app = express();
 //스웨거 적용
@@ -20,12 +20,12 @@ const corsOptions = {
   origin: true,
   credentials: true,
 };
+
 const port = process.env.PORT || 8000;
 
 app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
 
 app.listen(port, function () {
   console.log("Express server has started on port " + port);

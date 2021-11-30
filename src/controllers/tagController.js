@@ -5,29 +5,37 @@ const tag = new Tag();
 //태그 추가
 export const tagCheck = (req, res) => {
   const { tagName } = req.body; //여기는 {}로 감쌌다는걸 프론트분들께 알려줘야해!
-  console.log(tagName);
-  Tag.find({ tagName: tagName }, (err, tag) => {
-    // console.log(tag);
+  console.log("태그네임", tagName);
+  Tag.findOne({ tagName: tagName[0] }, async (err, tag) => {
     try {
-      if (err) return res.status(500).send({ error: "실패" });
-      let i;
-      for (i = 0; i < tag.length; i++) {
-        if (tag[i]) {
-          console.log(tag[i]);
-          tag[i].tagCount += 1;
-          tag[i].save();
-          console.log(tag[i]);
-        } else {
-          let tagName = tag[i].tagName;
-          let tagCount = 1;
+      if (err) return res.status(500).send({ error: "Datebase Failure!" });
+
+      //1개일때
+      if (tagName.length <= 3) {
+        console.log(tagName.length);
+        console.log(tagName[0]);
+        console.log("1개일때 태그종합", tag);
+        if (tag == null) {
+          console.log("태그", tag);
+          const tagCount = 1;
           const newTag = Tag.create({
             tagName,
             tagCount,
           });
-          console.log(newTag);
-        }
+          console.log("뉴태그", newTag);
+          return res.status(201).send({
+            success: true,
+            msg: "태그가 작성되었습니다.",
+            newTag: newTag,
+          });
+        } else console.log("태그있을때2222", tag);
+        tag.tagCount += 1;
+        tag.save();
+        return res
+          .status(201)
+          .send({ success: true, msg: "태그가 +1 되었습니다", tag: tag });
+        //tagcount를 보내는지 봐야됨
       }
-      return res.status(200);
     } catch (err) {
       console.log("태그 추가중 발생한 에러: ", err);
       return res
@@ -94,7 +102,7 @@ export const updateTag = async (req, res) => {
       tag.save();
       console.log(tag);
       return res
-        .status(200)
+        .status(201)
         .send({ success: true, msg: "태그가 -1 되었습니다", tag: tag });
     });
   } catch (err) {
