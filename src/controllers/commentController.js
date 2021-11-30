@@ -37,7 +37,7 @@ export const commentcreate = async (req, res) => {
       createDate: currentDate,
     });
     console.log(newComment);
-    return res.status(200).send({
+    return res.status(201).send({
       success: true,
       msg: "댓글이 작성되었습니다",
       newComment: newComment,
@@ -64,8 +64,8 @@ export const commentupdate = async (req, res) => {
       return res.status(404).send({ error: "해당 댓글이 존재하지 않습니다." });
     comment.commentContent = req.body.commentContent;
     comment.save((err) => {
-      if (err) res.status(500).send({ error: "수정실패" });
-      res.send({ message: "수정이 완료되었습니다" });
+      if (err) res.status(501).send({ error: "수정실패" });
+      res.status(201).send({ message: "수정이 완료되었습니다" });
     });
   });
 };
@@ -75,6 +75,6 @@ export const commentdelete = async (req, res) => {
     if (err) return res.status(500).send({ error: "서버문제" });
     if (!comment)
       return res.status(404).send({ error: "해당 댓글이 존재하지 않습니다" });
-    res.status(200).send({ message: "삭제가 완료되었습니다" });
+    res.status(204).send({ message: "삭제가 완료되었습니다" });
   });
 };
