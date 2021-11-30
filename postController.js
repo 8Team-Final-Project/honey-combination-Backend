@@ -6,6 +6,7 @@ dotenv.config();
 import jwtToken from "jsonwebtoken";
 import express from "express";
 import { authMiddleware } from "../middlewares/authMiddlewares.js";
+//CREATE
 
 const postDate = new Date();
 
@@ -20,11 +21,22 @@ function dateFormat(date) {
   hour = hour >= 10 ? hour : "0" + hour;
   minute = minute >= 10 ? minute : "0" + minute;
   second = second >= 10 ? second : "0" + second;
-  return date.getFullYear() + ". " + month + ". " + day;
+  return (
+    date.getFullYear() + ". " + month + ". " + day
+    //+
+    // " "
+    // +
+    // hour +
+    // ":" +
+    // minute +
+    // ":" +
+    // second
+  );
 }
 
 export const postcreate = async (req, res) => {
   const post = new Post();
+  //11월18일 오전9시 이미지업로드 수정과 동시 수정
   try {
     const {
       postTitle,
@@ -45,6 +57,7 @@ export const postcreate = async (req, res) => {
     if (title.length >= 5) {
       return res.send({ msg: "같은 제목의 게시글은 5개가 최대입니다." });
     }
+    // const postImg= req.file.transforms[0].location;
     const userId = req.user._id;
     const userNickname = req.user.userNickname;
     const userImg = req.user.userImg;
@@ -109,6 +122,7 @@ export const postlist = async (ctx, res, next) => {
       { mainlist: true, postState: true },
       (err, post) => {
         if (err) return res.status(500).send({ error: err });
+        // if (post) res.send()
         res.send([post, { countAllpost: countAllpost }]);
       }
     )
@@ -130,6 +144,14 @@ export const postlist = async (ctx, res, next) => {
     //   .json({ success: false, msg: "게시글 조회 중 에러가 발생했습니다" });
   }
 };
+
+//꿀조합 포스트 전체 불러오기
+// export const postlist = async (req, res) => {
+//   Post.find({ mainlist: true, postState: true }, (err, post) => {
+//     if (err) return res.status(500).send({ error: err });
+//     res.send(post);
+//   }).limit(10).skip((page-1)*10).lean().exec();
+// };
 
 //이벤트1 포스트 전체 불러오기
 export const event1list = async (ctx, res) => {
@@ -279,70 +301,45 @@ export const postfind = async (req, res, next) => {
           .status(404)
           .send({ error: "해당 포스트가 존재하지 않습니다." });
 
-      // const likeStatus = false;
-      // [{_id : "rtjt23iotjfgiodfgg"}, {_id : "rtjt23iotjfgiodfgg"},{_id : "rtjt23iotjfgiodfgg"}]
-      post.likeStatus = false;
-
-      user.likePost.forEach((likePost) => {
-        if (likePost._id == req.params.postid) {
-          // likeStatus = true;
+      const likeStatus = false;
+      for (let i = 0; i < user.likePost.length; i++) {
+        if (user.likePost[i]._id == req.params.postid) {
           post.likeStatus = true;
+          for (let i = 0; i < user.keepPost.length; i++) {
+            user.keepPost.forEach((keep) => {
+              post.keepStatus =
+                user.keepPost[i]._id == req.params.postid ? true : false;
+            });
+          }
+        } else {
+          // const likeStatus = false;
+          post.likeStatus = false;
+          for (let i = 0; i < user.keepPost.length; i++) {
+            user.keepPost.forEach((keep) => {
+              post.keepStatus =
+                user.keepPost[i]._id == req.params.postid ? true : false;
+            });
+          }
         }
-      });
-      post.keepStatus = false;
-      user.keepPost.forEach((keepPost) => {
-        if (keepPost._id == req.params.postid) {
-          post.keepStatus = true;
-        }
-      });
-      console.log("유저상태", user);
-      console.log("포스트상태", post);
-      console.log("라이크상태", post.likeStatus);
-      console.log("찜상태", post.keepStatus);
+      }
       res.status(200).send(post);
+
+      // 루프가 끝났을 때는 id를 찾았는지 못찾았는지 알수 있어야 함
+
+      /**
+       * if() res.status(200).send(post)
+       * else res.status(201).send(post)
+       */
+
+      // console.log("글 안에 좋아요 유저", post.likeUser_id)
+      // if (realLikepost == req.params.postid){
+      //       likeStatus == true;
+      //   }else {
+      //       likeStatus == false;
+      //   }
     });
   }
 };
-//이전 코드
-// for (let i = 0; i < user.likePost.length; i++) {
-//   if (user.likePost[i]._id == req.params.postid) {
-//     post.likeStatus = true;
-//     for (let i = 0; i < user.keepPost.length; i++) {
-//       user.keepPost.forEach((keep) => {
-//         post.keepStatus =
-//           user.keepPost[i]._id == req.params.postid ? true : false;
-//       });
-//     }
-//   } else {
-//     post.likeStatus = false;
-//     for (let i = 0; i < user.keepPost.length; i++) {
-//       user.keepPost.forEach((keep) => {
-//         post.keepStatus =
-//           user.keepPost[i]._id == req.params.postid ? true : false;
-//       });
-//     }
-//   }
-// }
-
-// post 객체안에 데이터를 넣어야 함
-//   현재 로그인 한 사람이 좋아요, 찜하기를 했는지
-//   isLiked, isKeeped
-// //좋아요 확인
-// user.likePost.forEach((likepost) => {
-//   let isLiked = false;
-//   if (likepost._id === req.params.postid) {
-//     isLiked = true;
-//   }
-//   post.isLiked = isLiked;
-// });
-// // 찜하기 확인
-// user.keepPost.forEach((keeppost) => {
-//   let isKeeped = false;
-//   if (keeppost._id === req.params.postid) {
-//     isKeeped = true;
-//   }
-//   post.isKeeped = true;
-// });
 
 //update수정
 export const postupdate = async (req, res) => {
@@ -355,18 +352,22 @@ export const postupdate = async (req, res) => {
     post.postTitle = req.body.postTitle;
     post.postRecipe = req.body.postRecipe;
     post.postContent = req.body.postContent;
+    //11월18일 오전9시 이미지업로드 수정과 동시 수정
     post.postImg1 = req.body.postImg1;
     post.postImg2 = req.body.postImg2;
     post.postImg3 = req.body.postImg3;
     post.postImg4 = req.body.postImg4;
     post.postImg5 = req.body.postImg5;
+    // post.postImg = req.file.transforms[0].location;
     post.save((err) => {
       if (err) res.status(500).send({ error: "Failed to update!" });
       res.send({ message: "수정이 완료되었습니다!" });
     });
   });
 };
+//update 아래에 작성해주세요
 
+//삭제 11월 10일 오후 6시
 export const postdelete = async (req, res) => {
   Post.deleteOne({ _id: req.params.postid }, (err, post) => {
     if (err) return res.status(500).send({ error: "Database Failure!" });
@@ -383,58 +384,21 @@ export const postuploadimg = async (req, res) => {
   const post = new Post();
 
   try {
+    // console.log(req.files);
+    // console.log('트렌스폼',req.files.postImg2[0].transforms[0])
+    // console.log(req.files.postImg2[0].transforms[0].location);
+    // console.log("트렌스폼1",req.files[0].transforms[0].location)
+    // console.log("트렌스폼2",req.files[1].transforms[0].location)
+    // const postImg =  req.files[0].transforms[0].location;
+    // const postImg2 =  req.files[1].transforms[0].location;
+    // const postImg1 =''
+    // const postImg2 =''
+    console.log("6개 업로드", req.files);
     if (req.files.length >= 6) {
       return res
         .status(400)
         .send({ message: "5개까지만 사진을 업로드가 가능해요" });
     }
-    /* 
-    이 놈이 해야할 일
-    S3에 이미지 저장
-    req.files => 배열 []
-    req.files [
-      {
-        ...
-        ...
-        location : s3/s/dsfsdfgdsog/sdgdsf
-      },
-      {
-        ...
-        ...
-        location : s3/s/dsfsdfgdsog/sdgdsf
-      },
-      {
-        ...
-        ...
-        location : s3/s/dsfsdfgdsog/sdgdsf
-      }
-    ]
-*/
-    // let locations = [];
-    // req.files.forEach(file => {
-    //   location.push(file.location);
-    // })
-    // locations = ["s3/dfsdfsdg/asdgdsg", "fdsfasdfsf", "dfadsfdasf"]
-    // locations = ["fdsfasdfsf", "dfadsfdasf"]
-
-    /*
-      location1 = "dsgdfgdfg",
-      location2 = "dsfsdfsdf"
-      
-      locations = ["dsgdfgdfg","dsfsdfsdf"];
-      model Post = {
-        _id,
-        ...
-        images : []
-      } 
-
-      await Post.create({
-        title : title,
-        ....
-        images : locations
-      })
-      프론트 배열로 줘도 처리 가능한지?
-    */
 
     if (req.files.length == 5) {
       const postImg1 = String(req.files[0].transforms[0].location);
@@ -502,6 +466,62 @@ export const postuploadimg = async (req, res) => {
     } else {
       return res.status(400).send({ message: "없음" });
     }
+
+    //   console.log(req.files.length)
+    // const postImg1 = String(req.files[0].transforms[0].location);
+    // const postImg2 = String(req.files[1].transforms[0].location);
+
+    //   const newPost = await Post.create({
+    //     postImg: postImg1,
+    //     postImg: postImg2,
+    //     // postImg: postImg3,
+    //     // postImg: postImg4,
+    //     // postImg: postImg5,
+    //   });
+    //   console.log(req.files)
+    //           return res.status(200).send([{postImg1:postImg1},{postImg2:postImg2}]);
+
+    // const postImg = req.files.transforms[0].location;
+    // const postImg = req.file.transforms[0].location;
+    // if(postImg1&&postImg2){
+    //   const postImg1 = String(req.files.postImg1[0].transforms[0].location);
+    //   const postImg2 = String(req.files.postImg2[0].transforms[0].location);
+    //     return res.status(200).send([{postImg1:postImg1},{postImg2:postImg2}]);
+    // }
+    // if (postImg1==''&&postImg2==''){
+    //   return res
+    //   .status(209)
+    //   .send([{postImg1:0},{postImg2:0}]);
+    // }
+    // else if(postImg2==''){
+    //   const postImg1 = String(req.files.postImg1[0].transforms[0].location);
+    //     return res.status(200).send([{postImg1:postImg1},{postImg2:0}]);
+    // }
+
+    // if(postImg1||postImg2){
+    //   const postImg1 = String(req.files.postImg1[0].transforms[0].location);
+    //   const postImg2 = String(req.files.postImg2[0].transforms[0].location);
+    //     return res.status(200).send([{postImg1:postImg1},{postImg2:postImg2}]);
+    // }else if(postImg2==''){
+    //   const postImg1 = String(req.files.postImg1[0].transforms[0].location);
+    //     return res.status(200).send([{postImg1:postImg1},{postImg2:0}]);
+    // }else if (postImg1==''&&postImg2==''){
+    //   return res
+    //   .status(209)
+    //   .send([{postImg1:0},{postImg2:0}]);
+    //   }
+
+    // const postImg3 = String(req.files.postImg3[0].transforms[0].location);
+    // const postImg4 = String(req.files.postImg4[0].transforms[0].location);
+    // const postImg5 = String(req.files.postImg5[0].transforms[0].location);
+    // // const postImg3 = req.file.transforms[0].location;
+    // const postImg4 = req.file.transforms[0].location;
+    // const postImg5 = req.file.transforms[0].location;
+    // const postImg11 = postImg1.toString()
+    // const postImg22 = postImg2.toString()
+
+    // return res.status(200).send([{postImg1:postImg1},{postImg2:postImg2},{postImg3:postImg3},{postImg4:postImg4},{postImg5:postImg5}]);
+    // return res.status(200).send({ postImg1: postImg1, postImg2: postImg2 });
   } catch (err) {
     console.log("게시글 등록 기능 중 발생한 에러: ", err);
     return res
@@ -510,6 +530,7 @@ export const postuploadimg = async (req, res) => {
   }
 };
 
+//검색 api 7일 새벽에 박선웅 추가
 export const posttagsearch = async (ctx, res, next) => {
   console.log(ctx.query);
   const countAllpost = await Post.countDocuments({
@@ -518,13 +539,36 @@ export const posttagsearch = async (ctx, res, next) => {
   });
   const page = parseInt(ctx.query.page || "1", 10);
   let options = [];
+  // let options2 = [];
+  // let options3 = [];
   if (page < 1) {
     res.status = 400;
     return;
   }
   try {
     if (ctx.query.option == "posttag1") {
+      // ,ctx.query.option2 == "posttag2",ctx.query.option3 == "posttag3"){
+      //   console.log(ctx.query)
       options = [{ postTag: new RegExp(ctx.query.content) }];
+      //   options2 = [{ postTag: new RegExp(ctx.query.content2) }];
+      //   options3 = [{ postTag: new RegExp(ctx.query.content3) }];
+      //   ctx.query.content2 = { }
+      //   ctx.query.content3 = { }
+      // }
+      // if ((ctx.query.option2 == "posttag2", ctx.query.option == "posttag1")) {
+      //   options = [
+      //     { postTag: new RegExp(ctx.query.content) },
+      //     { postTag: new RegExp(ctx.query.content2) },
+      //   ];
+      // }
+      // if (ctx.query.option3 == "posttag3") {
+      //   options = [
+      //     { postTag: new RegExp(ctx.query.content3) },
+      //     { postTag: new RegExp(ctx.query.content) },
+      //     { postTag: new RegExp(ctx.query.content2) },
+      //   ];
+      // } else if(ctx.query.option == 'title_body'){
+      //   options = [{ title: new RegExp(ctx.query.content) }, { body: new RegExp(ctx.query.content) }];
     } else {
       const err = new Error("검색 옵션이 없습니다.");
       err.status = 400;

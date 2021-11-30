@@ -9,7 +9,7 @@ const s3 = new AWS.S3({
   accessKeyId: process.env.S3_ACCESS_KEY,
   secretAccessKey: process.env.S3_SECRET_KEY,
   region: process.env.S3_BUCKET_REGION,
-  });
+});
 
 export const uploadSingle = multer({
   storage: multerS3({
@@ -23,10 +23,10 @@ export const uploadSingle = multer({
       {
         id: "original",
         key: function (req, files, cb) {
-          cb(null, `${Date.now()}${files.originalname}`); 
+          cb(null, `${Date.now()}${files.originalname}`);
         },
         transform: function (req, file, cb) {
-          cb(null, sharp().resize(300, 300).withMetadata());
+          cb(null, sharp().resize(450, 450).withMetadata());
         },
       },
     ],
