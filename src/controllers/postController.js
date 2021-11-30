@@ -1,5 +1,6 @@
 import { Post, Like } from "../models/Post.js";
 import User from "../models/User.js";
+import { Tag } from "../models/Tag.js";
 import { Comment } from "../models/Comment.js";
 import dotenv from "dotenv";
 dotenv.config();
@@ -43,7 +44,9 @@ export const postcreate = async (req, res) => {
     } = req.body;
     const title = await Post.find({ postTitle: req.body.postTitle });
     if (title.length >= 5) {
-      return res.send({ msg: "같은 제목의 게시글은 5개가 최대입니다." });
+      return res
+        .status(412)
+        .send({ msg: "같은 제목의 게시글은 5개가 최대입니다." });
     }
     const userId = req.user._id;
     const userNickname = req.user.userNickname;
@@ -81,7 +84,7 @@ export const postcreate = async (req, res) => {
       event3list,
       keepUser: { _id: "777777068ab908b096cfa86c" },
     });
-    console.log(event1list);
+
     return res.status(200).send({ success: true, newPost: newPost });
   } catch (err) {
     console.log("게시글 등록 기능 중 발생한 에러: ", err);
@@ -109,7 +112,7 @@ export const postlist = async (ctx, res, next) => {
       { mainlist: true, postState: true },
       (err, post) => {
         if (err) return res.status(500).send({ error: err });
-        res.send([post, { countAllpost: countAllpost }]);
+        res.status(200).send([post, { countAllpost: countAllpost }]);
       }
     )
       .sort({ _id: -1 })
@@ -148,7 +151,7 @@ export const event1list = async (ctx, res) => {
       { event1list: true, postState: true },
       (err, post) => {
         if (err) return res.status(500).send({ error: err });
-        res.send([post, { countAllpost: countAllpost }]);
+        res.status(200).send([post, { countAllpost: countAllpost }]);
       }
     )
       .sort({ _id: -1 })
@@ -187,7 +190,7 @@ export const event2list = async (ctx, res) => {
       { event2list: true, postState: true },
       (err, post) => {
         if (err) return res.status(500).send({ error: err });
-        res.send([post, { countAllpost: countAllpost }]);
+        res.status(200).send([post, { countAllpost: countAllpost }]);
       }
     )
       .sort({ _id: -1 })
@@ -226,7 +229,7 @@ export const event3list = async (ctx, res) => {
       { event3list: true, postState: true },
       (err, post) => {
         if (err) return res.status(500).send({ error: err });
-        res.send([post, { countAllpost: countAllpost }]);
+        res.status(200).send([post, { countAllpost: countAllpost }]);
       }
     )
       .sort({ _id: -1 })
@@ -362,11 +365,12 @@ export const postupdate = async (req, res) => {
     post.postImg5 = req.body.postImg5;
     post.save((err) => {
       if (err) res.status(500).send({ error: "Failed to update!" });
-      res.send({ message: "수정이 완료되었습니다!" });
+      res.status(201).send({ message: "수정이 완료되었습니다!" });
     });
   });
 };
 
+//게시글 삭제
 export const postdelete = async (req, res) => {
   Post.deleteOne({ _id: req.params.postid }, (err, post) => {
     if (err) return res.status(500).send({ error: "Database Failure!" });
@@ -374,68 +378,20 @@ export const postdelete = async (req, res) => {
       return res
         .status(404)
         .send({ error: "해당 포스트가 존재하지 않습니다." });
-    res.status(200).send({ message: "삭제가 완료되었습니다!" });
+    res.status(204).send({ message: "삭제가 완료되었습니다!" });
   });
 };
 
 //이미지 업로드 API
 export const postuploadimg = async (req, res) => {
-  const post = new Post();
+  // const post = new Post();
 
   try {
     if (req.files.length >= 6) {
       return res
-        .status(400)
+        .status(412)
         .send({ message: "5개까지만 사진을 업로드가 가능해요" });
     }
-    /* 
-    이 놈이 해야할 일
-    S3에 이미지 저장
-    req.files => 배열 []
-    req.files [
-      {
-        ...
-        ...
-        location : s3/s/dsfsdfgdsog/sdgdsf
-      },
-      {
-        ...
-        ...
-        location : s3/s/dsfsdfgdsog/sdgdsf
-      },
-      {
-        ...
-        ...
-        location : s3/s/dsfsdfgdsog/sdgdsf
-      }
-    ]
-*/
-    // let locations = [];
-    // req.files.forEach(file => {
-    //   location.push(file.location);
-    // })
-    // locations = ["s3/dfsdfsdg/asdgdsg", "fdsfasdfsf", "dfadsfdasf"]
-    // locations = ["fdsfasdfsf", "dfadsfdasf"]
-
-    /*
-      location1 = "dsgdfgdfg",
-      location2 = "dsfsdfsdf"
-      
-      locations = ["dsgdfgdfg","dsfsdfsdf"];
-      model Post = {
-        _id,
-        ...
-        images : []
-      } 
-
-      await Post.create({
-        title : title,
-        ....
-        images : locations
-      })
-      프론트 배열로 줘도 처리 가능한지?
-    */
-
     if (req.files.length == 5) {
       const postImg1 = String(req.files[0].transforms[0].location);
       const postImg2 = String(req.files[1].transforms[0].location);
@@ -443,15 +399,15 @@ export const postuploadimg = async (req, res) => {
       const postImg4 = String(req.files[3].transforms[0].location);
       const postImg5 = String(req.files[4].transforms[0].location);
 
-      const newPost = await Post.create({
-        postImg: postImg1,
-        postImg: postImg2,
-        // postImg: postImg3,
-        // postImg: postImg4,
-        // postImg: postImg5,
-      });
+      // const newPost = await Post.create({
+      //   postImg: postImg1,
+      //   postImg: postImg2,
+      //   // postImg: postImg3,
+      //   // postImg: postImg4,
+      //   // postImg: postImg5,
+      // });
       return res
-        .status(200)
+        .status(201)
         .send([
           { postImg1: postImg1 },
           { postImg2: postImg2 },
@@ -467,7 +423,7 @@ export const postuploadimg = async (req, res) => {
       const postImg4 = String(req.files[3].transforms[0].location);
 
       return res
-        .status(200)
+        .status(201)
         .send([
           { postImg1: postImg1 },
           { postImg2: postImg2 },
@@ -481,7 +437,7 @@ export const postuploadimg = async (req, res) => {
       const postImg3 = String(req.files[2].transforms[0].location);
 
       return res
-        .status(200)
+        .status(201)
         .send([
           { postImg1: postImg1 },
           { postImg2: postImg2 },
@@ -493,12 +449,12 @@ export const postuploadimg = async (req, res) => {
       const postImg2 = String(req.files[1].transforms[0].location);
 
       return res
-        .status(200)
+        .status(201)
         .send([{ postImg1: postImg1 }, { postImg2: postImg2 }]);
     }
     if (req.files.length == 1) {
       const postImg1 = String(req.files[0].transforms[0].location);
-      return res.status(200).send([{ postImg1: postImg1 }]);
+      return res.status(201).send([{ postImg1: postImg1 }]);
     } else {
       return res.status(400).send({ message: "없음" });
     }
@@ -510,6 +466,7 @@ export const postuploadimg = async (req, res) => {
   }
 };
 
+//해시태그 검색(단일 키워드) API
 export const posttagsearch = async (ctx, res, next) => {
   console.log(ctx.query);
   const countAllpost = await Post.countDocuments({
@@ -546,13 +503,13 @@ export const posttagsearch = async (ctx, res, next) => {
       body: removeHtmlAndShorten(post.body),
     }));
   } catch (err) {
-    // console.log("게시물 조회중 발생한 에러: ", err);
-    // return res
-    //   .status(500)
-    //   .json({ success: false, msg: "게시글 조회 중 에러가 발생했습니다" });
+    return res
+      .status(500)
+      .json({ success: false, msg: "게시글 조회 중 에러가 발생했습니다" });
   }
 };
 
+//좋아요 순으로 나열->이벤트 게시물만 되게끔 바꾸어야함
 export const postlike = async (req, res) => {
   try {
     Post.find({}, (err, posts) => {
