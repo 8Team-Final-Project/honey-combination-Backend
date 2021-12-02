@@ -1,8 +1,8 @@
-# [kkuljohab](https://www.kkuljohab.com/) backend
-## 안녕하세요. [꿀조합](https://www.kkuljohab.com/) 백엔드 입니다.
+# :star2:[kkuljohab](https://www.kkuljohab.com/) backend
+## :tada:안녕하세요. [꿀조합](https://www.kkuljohab.com/) 백엔드 입니다.
 <img width="1488" alt="꿀" src="https://user-images.githubusercontent.com/90677426/144429149-090bdcf6-223c-4a51-873e-1b0b52a10967.png">
 
-## 노션
+## :milky_way:노션
 https://www.notion.so/36a83d6f3fa548dbad72204c7cacfcdb
 
 ## :blush:서비스 소개
@@ -39,7 +39,7 @@ https://www.notion.so/36a83d6f3fa548dbad72204c7cacfcdb
 * 모바일 사용자의 수요를 반영하여 모바일 최적화 UI 적용  
 * 구글애널리틱스와 사용성 테스트로 다양한 유저피드백 해결  
 
-## 라이브러리
+## :green_book:라이브러리
 
 |라이브러리|설명|버전|
 |---|---|---|
