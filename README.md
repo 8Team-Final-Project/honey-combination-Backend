@@ -2,6 +2,8 @@
 ## 안녕하세요. [꿀조합](https://www.kkuljohab.com/) 백엔드 입니다.
 <img width="1488" alt="꿀" src="https://user-images.githubusercontent.com/90677426/144429149-090bdcf6-223c-4a51-873e-1b0b52a10967.png">
 
+## 노션
+https://www.notion.so/36a83d6f3fa548dbad72204c7cacfcdb
 
 ## :blush:서비스 소개
 
