@@ -37,6 +37,20 @@
 * 모바일 사용자의 수요를 반영하여 모바일 최적화 UI 적용  
 * 구글애널리틱스와 사용성 테스트로 다양한 유저피드백 해결  
 
+## 라이브러리
+
+|라이브러리|설명|버전|
+|---|---|---|
+|Express|Node.js|4.17.1|
+|Mongoose|변동성 많은 DB. NoSQL 적용|5.13.3|
+|HTTPS|웹사이트 데이터 보안화||
+|CORS|Request resouRce 제한|2.8.5|
+|Swagger|API 문서화|4.1.6|
+|Prettier|코드 포맷팅|2.3.2|
+|dotenv|보안 토큰, 키 관련 보안화|10.0.0|
+|JWT(BEARER)|사용자 인증, Bearer 토큰|8.5.1|
+|bcrypt|비밀번호 암호화|5.0.1|
+
 ## :newspaper:Tech Stack
 Express.js  
 MongoDB  
