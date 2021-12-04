@@ -23,7 +23,7 @@ export const tagCheck = (req, res) => {
             tagCount,
           });
           console.log("뉴태그", newTag);
-          return res.status(201).send({
+          return res.status(200).send({
             success: true,
             msg: "태그가 작성되었습니다.",
             newTag: newTag,
@@ -32,7 +32,7 @@ export const tagCheck = (req, res) => {
         tag.tagCount += 1;
         tag.save();
         return res
-          .status(201)
+          .status(200)
           .send({ success: true, msg: "태그가 +1 되었습니다", tag: tag });
         //tagcount를 보내는지 봐야됨
       }
@@ -75,7 +75,7 @@ export const updateTag = async (req, res) => {
       tag.save();
       console.log(tag);
       return res
-        .status(201)
+        .status(200)
         .send({ success: true, msg: "태그가 -1 되었습니다", tag: tag });
     });
   } catch (err) {

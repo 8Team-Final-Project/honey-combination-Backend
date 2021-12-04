@@ -15,9 +15,7 @@ function dateFormat(date) {
   hour = hour >= 10 ? hour : "0" + hour;
   minute = minute >= 10 ? minute : "0" + minute;
   second = second >= 10 ? second : "0" + second;
-  return (
-    date.getFullYear() + ". " + month + ". " + day
-  );
+  return date.getFullYear() + ". " + month + ". " + day;
 }
 
 export const commentcreate = async (req, res) => {

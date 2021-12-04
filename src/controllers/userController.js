@@ -16,11 +16,11 @@ export const signup = async (req, res) => {
       errorMessage: "이메일의 형식이 일치하지 않습니다.",
     });
   } else if (userNickname.search(re_userNickname) == -1) {
-    return res.status(401).send({
+    return res.status(400).send({
       errorMessage: "닉네임의 형식이 일치하지 않습니다.",
     });
   } else if (userPassword.search(re_userPassword) == -1) {
-    return res.status(402).send({
+    return res.status(400).send({
       errorMessage: "비밀번호의 형식이 일치하지 않습니다.",
     });
   }
@@ -29,12 +29,12 @@ export const signup = async (req, res) => {
     const isnickExisting = await User.find({ userNickname }); //둘중 하나가 User 몽고DB에 존재하는지 여부 확인
     if (isemailExisting.length) {
       //둘중 하나라도 존재하면 1이상의 값이 나오므로 true로 처리해서 아래 값을 return
-      return res.status(404).send({
+      return res.status(400).send({
         result: "failure",
         msg: "이미 가입한 이메일이 있습니다.",
       });
     } else if (isnickExisting.length) {
-      return res.status(408).send({
+      return res.status(400).send({
         result: "failure",
         msg: "이미 가입한 닉네임이 있습니다.",
       });
@@ -56,7 +56,7 @@ export const signup = async (req, res) => {
     // await User.save(newUser); //create에서 변경
     await User.create(newUser);
     return res
-      .status(201)
+      .status(200)
       .send({ result: "success", msg: "회원가입에 성공하였습니다." });
   } catch (error) {
     console.log(error);
@@ -86,7 +86,7 @@ export const login = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res
-      .status(405)
+      .status(400)
       .send({ result: "failure", msg: "DB 정보 조회 실패" });
   }
 };
@@ -139,7 +139,7 @@ export const logincheck = async (req, res, next) => {
     next();
   } catch (err) {
     console.log(err);
-    res.status(401).send({
+    res.status(400).send({
       errorMessage: "로그인 후 이용 가능한 기능입니다.",
     });
   }
@@ -170,7 +170,7 @@ export const me = async (req, res, next) => {
   try {
     const { _id } = jwtToken.verify(tokenValue, "honeytip-secret-key");
     const user = await User.findById(_id);
-    req.user = user; 
+    req.user = user;
     const userNickname = user.userNickname;
     const userEmail = user.userEmail;
     const userId = user._id;
@@ -193,7 +193,7 @@ export const me = async (req, res, next) => {
     next();
   } catch (err) {
     console.log(err);
-    res.status(401).send({
+    res.status(400).send({
       errorMessage: "로그인 후 이용 가능한 기능입니다.",
     });
   }

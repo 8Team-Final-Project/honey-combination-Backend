@@ -6,14 +6,14 @@ import { Comment } from "../models/Comment.js";
 export const authMiddleware = async (req, res, next) => {
   const { authorization } = req.headers;
   if (!authorization) {
-    return res.status(401).send({
+    return res.status(400).send({
       errorMessage: "로그인 후 사용하세요",
     });
   }
 
   const [tokenType, tokenValue] = authorization.split(" ");
   if (!tokenValue || tokenType !== "Bearer") {
-    res.status(401).send({
+    res.status(400).send({
       errorMessage: "로그인 후 사용하세요",
     });
     return;
@@ -26,7 +26,7 @@ export const authMiddleware = async (req, res, next) => {
     next();
   } catch (err) {
     console.log(err);
-    res.status(401).send({
+    res.status(400).send({
       errorMessage: "로그인 후 이용 가능한 기능입니다.",
     });
   }
@@ -45,7 +45,7 @@ export const guestCheck = async (req, res, next) => {
       next();
     } catch (err) {
       console.log(err);
-      res.status(401).send({
+      res.status(400).send({
         errorMessage: "로그인 후 이용 가능한 기능입니다.",
       });
     }

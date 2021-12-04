@@ -8,8 +8,8 @@ export const likeclick = async (req, res) => {
   const userId = req.user?._id;
   Post.findOne({ _id: postId }, (err, post) => {
     try {
-      console.log(req.user._id);
-      if (err) return res.status(500).send({ error: "Database Failure!" });
+      console.log(req.user._id)
+      if (err) return res.status(501).send({ error: "Database Failure!" });
       if (!post.likeUser.id(userId)) {
         post.likeUser.push(
           new Like({
@@ -20,39 +20,35 @@ export const likeclick = async (req, res) => {
         post.save();
 
         User.findOne({ _id: userId }, (err, user) => {
-          if (err) return res.status(500).send({ error: "Datebase Failure!" });
+          if (err) return res.status(501).send({ error: "Datebase Failure!" });
           user.likePost.push(postId);
           user.save();
         });
         const likeCntmsg = post.likeCnt;
         const likeStatus = true;
-
-        if (Post.likeUser_id == userId) {
-          likeStatus == true;
-        } else {
-          likeStatus == false;
-        }
-        return res
-          .status(200)
-          .send({ likeCntmsg, msg: "좋아요성공", likeStatus: likeStatus });
+        
+        if (Post.likeUser_id == userId){
+        likeStatus == true;
+      }else {
+        likeStatus == false;
+      }
+        return res.status(201).send({ likeCntmsg, msg: "좋아요성공",likeStatus: likeStatus });
       } else {
         post.likeUser.pull(userId);
         post.likeCnt -= 1;
         post.save();
         User.findOne({ _id: userId }, (err, user) => {
-          if (err) return res.status(500).send({ error: "Datebase Failure!" });
+          if (err) return res.status(501).send({ error: "Datebase Failure!" });
           user.likePost.pull(postId);
           user.save();
         });
         const likeStatus = false;
-        if (Post.likeUser_id == userId) {
-          likeStatus == true;
-        } else {
-          likeStatus == false;
-        }
-        return res
-          .status(200)
-          .send({ msg: "취소성공", likeStatus: likeStatus });
+        if (Post.likeUser_id == userId){
+        likeStatus == true;
+      }else {
+        likeStatus == false;
+      }
+        return res.status(204).send({ msg: "취소성공",likeStatus: likeStatus });
       }
     } catch (error) {
       console.error(error);
@@ -61,7 +57,10 @@ export const likeclick = async (req, res) => {
   });
 };
 
+
+
 //11.11 좋아요 2차 시도
+
 
 // //11.11 좋아요
 // export const likePost = async (req, res) => {
@@ -102,6 +101,9 @@ export const likeclick = async (req, res) => {
 //     res.status(400).send({ message: "fail", error });
 //   }
 // };
+
+
+
 
 // //11.11 싫어요 백엔드에서 구현
 // export const unlikePost = async (req,res) => {
@@ -149,7 +151,7 @@ export const likeclick = async (req, res) => {
 //     const { _id } = jwtToken.verify(tokenValue, "honeytip-secret-key");
 //     const user = await User.findById(_id);
 //     req.user = user; //token에서 유저뽑아내기
-
+  
 //     const userId = user._id;
 
 //     if (!userId) {

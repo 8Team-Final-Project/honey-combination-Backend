@@ -45,7 +45,7 @@ export const postcreate = async (req, res) => {
     const title = await Post.find({ postTitle: req.body.postTitle });
     if (title.length >= 5) {
       return res
-        .status(412)
+        .status(400)
         .send({ msg: "같은 제목의 게시글은 5개가 최대입니다." });
     }
     const userId = req.user._id;
@@ -259,7 +259,7 @@ export const postfind = async (req, res, next) => {
       if (err) return res.status(500).send({ error: err });
       if (!post)
         return res
-          .status(404)
+          .status(400)
           .send({ error: "해당 포스트가 존재하지 않습니다." });
       post.likeStatus = false;
       post.keepStatus = false;
@@ -279,7 +279,7 @@ export const postfind = async (req, res, next) => {
       if (err) return res.status(500).send({ error: err });
       if (!post)
         return res
-          .status(404)
+          .status(400)
           .send({ error: "해당 포스트가 존재하지 않습니다." });
 
       // const likeStatus = false;
@@ -353,7 +353,7 @@ export const postupdate = async (req, res) => {
     if (err) return res.status(500).send({ error: "Database Failure!" });
     if (!post)
       return res
-        .status(404)
+        .status(400)
         .send({ error: "해당 포스트가 존재하지 않습니다." });
     post.postTitle = req.body.postTitle;
     post.postRecipe = req.body.postRecipe;
@@ -365,7 +365,7 @@ export const postupdate = async (req, res) => {
     post.postImg5 = req.body.postImg5;
     post.save((err) => {
       if (err) res.status(500).send({ error: "Failed to update!" });
-      res.status(201).send({ message: "수정이 완료되었습니다!" });
+      res.status(200).send({ message: "수정이 완료되었습니다!" });
     });
   });
 };
@@ -376,20 +376,20 @@ export const postdelete = async (req, res) => {
     if (err) return res.status(500).send({ error: "Database Failure!" });
     if (!post)
       return res
-        .status(404)
+        .status(400)
         .send({ error: "해당 포스트가 존재하지 않습니다." });
-    res.status(204).send({ message: "삭제가 완료되었습니다!" });
+    res.status(200).send({ message: "삭제가 완료되었습니다!" });
   });
 };
 
 //이미지 업로드 API
 export const postuploadimg = async (req, res) => {
-  // const post = new Post();
+  const post = new Post();
 
   try {
     if (req.files.length >= 6) {
       return res
-        .status(412)
+        .status(400)
         .send({ message: "5개까지만 사진을 업로드가 가능해요" });
     }
     if (req.files.length == 5) {
@@ -407,7 +407,7 @@ export const postuploadimg = async (req, res) => {
       //   // postImg: postImg5,
       // });
       return res
-        .status(201)
+        .status(200)
         .send([
           { postImg1: postImg1 },
           { postImg2: postImg2 },
@@ -423,7 +423,7 @@ export const postuploadimg = async (req, res) => {
       const postImg4 = String(req.files[3].transforms[0].location);
 
       return res
-        .status(201)
+        .status(200)
         .send([
           { postImg1: postImg1 },
           { postImg2: postImg2 },
@@ -437,7 +437,7 @@ export const postuploadimg = async (req, res) => {
       const postImg3 = String(req.files[2].transforms[0].location);
 
       return res
-        .status(201)
+        .status(200)
         .send([
           { postImg1: postImg1 },
           { postImg2: postImg2 },
@@ -449,12 +449,12 @@ export const postuploadimg = async (req, res) => {
       const postImg2 = String(req.files[1].transforms[0].location);
 
       return res
-        .status(201)
+        .status(200)
         .send([{ postImg1: postImg1 }, { postImg2: postImg2 }]);
     }
     if (req.files.length == 1) {
       const postImg1 = String(req.files[0].transforms[0].location);
-      return res.status(201).send([{ postImg1: postImg1 }]);
+      return res.status(200).send([{ postImg1: postImg1 }]);
     } else {
       return res.status(400).send({ message: "없음" });
     }
@@ -503,9 +503,9 @@ export const posttagsearch = async (ctx, res, next) => {
       body: removeHtmlAndShorten(post.body),
     }));
   } catch (err) {
-    return res
-      .status(500)
-      .json({ success: false, msg: "게시글 조회 중 에러가 발생했습니다" });
+    // return res
+    //   .status(500)
+    //   .json({ success: false, msg: "게시글 조회 중 에러가 발생했습니다" });
   }
 };
 
