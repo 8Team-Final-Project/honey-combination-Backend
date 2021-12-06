@@ -4,12 +4,11 @@ import sharp from "sharp";
 import AWS from "aws-sdk";
 import dotenv from "dotenv";
 dotenv.config();
-
 const s3 = new AWS.S3({
-  accessKeyId: "AKIARCNRLSCXDBSGO6P4",
-  secretAccessKey: "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",
-  region: "ap-northeast-2",
-   });
+  accessKeyId: process.env.S3_ACCESS_KEY,
+  secretAccessKey: process.env.S3_SECRET_KEY,
+  region: process.env.S3_BUCKET_REGION,
+  });
 
 export const uploadSingle = multer({
   storage: multerS3({
@@ -23,7 +22,7 @@ export const uploadSingle = multer({
       {
         id: "original",
         key: function (req, files, cb) {
-          cb(null, `${Date.now()}${files.originalname}`); 
+          cb(null, `${Date.now()}${files.originalname}`);
         },
         transform: function (req, file, cb) {
           cb(null, sharp().resize(450, 450).withMetadata());

@@ -1,5 +1,6 @@
 import { Post, Like } from "../models/Post.js";
 import User from "../models/User.js";
+import { Tag } from "../models/Tag.js";
 import { Comment } from "../models/Comment.js";
 import dotenv from "dotenv";
 dotenv.config();
@@ -20,10 +21,7 @@ function dateFormat(date) {
   hour = hour >= 10 ? hour : "0" + hour;
   minute = minute >= 10 ? minute : "0" + minute;
   second = second >= 10 ? second : "0" + second;
-  return (
-    date.getFullYear() + ". " + month + ". " + day
-
-  );
+  return date.getFullYear() + ". " + month + ". " + day;
 }
 
 export const postcreate = async (req, res) => {
@@ -46,7 +44,9 @@ export const postcreate = async (req, res) => {
     } = req.body;
     const title = await Post.find({ postTitle: req.body.postTitle });
     if (title.length >= 5) {
-      return res.status(412).send({ msg: "같은 제목의 게시글은 5개가 최대입니다." });
+      return res
+        .status(400)
+        .send({ msg: "같은 제목의 게시글은 5개가 최대입니다." });
     }
     const userId = req.user._id;
     const userNickname = req.user.userNickname;
@@ -84,8 +84,8 @@ export const postcreate = async (req, res) => {
       event3list,
       keepUser: { _id: "777777068ab908b096cfa86c" },
     });
-    console.log(event1list);
-    return res.status(201).send({ success: true, newPost: newPost });
+
+    return res.status(200).send({ success: true, newPost: newPost });
   } catch (err) {
     console.log("게시글 등록 기능 중 발생한 에러: ", err);
     return res
@@ -133,7 +133,6 @@ export const postlist = async (ctx, res, next) => {
     //   .json({ success: false, msg: "게시글 조회 중 에러가 발생했습니다" });
   }
 };
-
 
 //이벤트1 포스트 전체 불러오기
 export const event1list = async (ctx, res) => {
@@ -260,7 +259,7 @@ export const postfind = async (req, res, next) => {
       if (err) return res.status(500).send({ error: err });
       if (!post)
         return res
-          .status(404)
+          .status(400)
           .send({ error: "해당 포스트가 존재하지 않습니다." });
       post.likeStatus = false;
       post.keepStatus = false;
@@ -280,54 +279,53 @@ export const postfind = async (req, res, next) => {
       if (err) return res.status(500).send({ error: err });
       if (!post)
         return res
-          .status(404)
+          .status(400)
           .send({ error: "해당 포스트가 존재하지 않습니다." });
 
       // const likeStatus = false;
       // [{_id : "rtjt23iotjfgiodfgg"}, {_id : "rtjt23iotjfgiodfgg"},{_id : "rtjt23iotjfgiodfgg"}]
       post.likeStatus = false;
-      
+
       user.likePost.forEach((likePost) => {
-        if (likePost._id ==req.params.postid){
+        if (likePost._id == req.params.postid) {
           // likeStatus = true;
           post.likeStatus = true;
         }
-      })
+      });
       post.keepStatus = false;
       user.keepPost.forEach((keepPost) => {
-        if (keepPost._id ==req.params.postid){
+        if (keepPost._id == req.params.postid) {
           post.keepStatus = true;
         }
-      })
-      console.log("유저상태",user)
-      console.log("포스트상태",post)
-      console.log("라이크상태",post.likeStatus)
-      console.log("찜상태",post.keepStatus)
-        res.status(200).send(post);
-
+      });
+      console.log("유저상태", user);
+      console.log("포스트상태", post);
+      console.log("라이크상태", post.likeStatus);
+      console.log("찜상태", post.keepStatus);
+      res.status(200).send(post);
     });
   }
 };
 //이전 코드
-      // for (let i = 0; i < user.likePost.length; i++) {
-      //   if (user.likePost[i]._id == req.params.postid) {
-      //     post.likeStatus = true;
-      //     for (let i = 0; i < user.keepPost.length; i++) {
-      //       user.keepPost.forEach((keep) => {
-      //         post.keepStatus =
-      //           user.keepPost[i]._id == req.params.postid ? true : false;
-      //       });
-      //     }
-      //   } else {
-      //     post.likeStatus = false;
-      //     for (let i = 0; i < user.keepPost.length; i++) {
-      //       user.keepPost.forEach((keep) => {
-      //         post.keepStatus =
-      //           user.keepPost[i]._id == req.params.postid ? true : false;
-      //       });
-      //     }
-      //   }
-      // }
+// for (let i = 0; i < user.likePost.length; i++) {
+//   if (user.likePost[i]._id == req.params.postid) {
+//     post.likeStatus = true;
+//     for (let i = 0; i < user.keepPost.length; i++) {
+//       user.keepPost.forEach((keep) => {
+//         post.keepStatus =
+//           user.keepPost[i]._id == req.params.postid ? true : false;
+//       });
+//     }
+//   } else {
+//     post.likeStatus = false;
+//     for (let i = 0; i < user.keepPost.length; i++) {
+//       user.keepPost.forEach((keep) => {
+//         post.keepStatus =
+//           user.keepPost[i]._id == req.params.postid ? true : false;
+//       });
+//     }
+//   }
+// }
 
 // post 객체안에 데이터를 넣어야 함
 //   현재 로그인 한 사람이 좋아요, 찜하기를 했는지
@@ -349,14 +347,13 @@ export const postfind = async (req, res, next) => {
 //   post.isKeeped = true;
 // });
 
-
 //update수정
 export const postupdate = async (req, res) => {
   Post.findOne({ _id: req.params.postid }, (err, post) => {
     if (err) return res.status(500).send({ error: "Database Failure!" });
     if (!post)
       return res
-        .status(404)
+        .status(400)
         .send({ error: "해당 포스트가 존재하지 않습니다." });
     post.postTitle = req.body.postTitle;
     post.postRecipe = req.body.postRecipe;
@@ -368,30 +365,31 @@ export const postupdate = async (req, res) => {
     post.postImg5 = req.body.postImg5;
     post.save((err) => {
       if (err) res.status(500).send({ error: "Failed to update!" });
-      res.status(201).send({ message: "수정이 완료되었습니다!" });
+      res.status(200).send({ message: "수정이 완료되었습니다!" });
     });
   });
 };
 
+//게시글 삭제
 export const postdelete = async (req, res) => {
   Post.deleteOne({ _id: req.params.postid }, (err, post) => {
     if (err) return res.status(500).send({ error: "Database Failure!" });
     if (!post)
       return res
-        .status(404)
+        .status(400)
         .send({ error: "해당 포스트가 존재하지 않습니다." });
-    res.status(204).send({ message: "삭제가 완료되었습니다!" });
+    res.status(200).send({ message: "삭제가 완료되었습니다!" });
   });
 };
 
 //이미지 업로드 API
 export const postuploadimg = async (req, res) => {
-  // const post = new Post();
+  const post = new Post();
 
   try {
     if (req.files.length >= 6) {
       return res
-        .status(412)
+        .status(400)
         .send({ message: "5개까지만 사진을 업로드가 가능해요" });
     }
     if (req.files.length == 5) {
@@ -409,7 +407,7 @@ export const postuploadimg = async (req, res) => {
       //   // postImg: postImg5,
       // });
       return res
-        .status(201)
+        .status(200)
         .send([
           { postImg1: postImg1 },
           { postImg2: postImg2 },
@@ -425,7 +423,7 @@ export const postuploadimg = async (req, res) => {
       const postImg4 = String(req.files[3].transforms[0].location);
 
       return res
-        .status(201)
+        .status(200)
         .send([
           { postImg1: postImg1 },
           { postImg2: postImg2 },
@@ -439,7 +437,7 @@ export const postuploadimg = async (req, res) => {
       const postImg3 = String(req.files[2].transforms[0].location);
 
       return res
-        .status(201)
+        .status(200)
         .send([
           { postImg1: postImg1 },
           { postImg2: postImg2 },
@@ -451,16 +449,15 @@ export const postuploadimg = async (req, res) => {
       const postImg2 = String(req.files[1].transforms[0].location);
 
       return res
-        .status(201)
+        .status(200)
         .send([{ postImg1: postImg1 }, { postImg2: postImg2 }]);
     }
     if (req.files.length == 1) {
       const postImg1 = String(req.files[0].transforms[0].location);
-      return res.status(201).send([{ postImg1: postImg1 }]);
+      return res.status(200).send([{ postImg1: postImg1 }]);
     } else {
       return res.status(400).send({ message: "없음" });
     }
-
   } catch (err) {
     console.log("게시글 등록 기능 중 발생한 에러: ", err);
     return res
@@ -512,7 +509,7 @@ export const posttagsearch = async (ctx, res, next) => {
   }
 };
 
-//좋아요 순으로 게시물을 나열(백엔드용) API
+//좋아요 순으로 나열->이벤트 게시물만 되게끔 바꾸어야함
 export const postlike = async (req, res) => {
   try {
     Post.find({}, (err, posts) => {
