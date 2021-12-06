@@ -506,9 +506,9 @@ export const posttagsearch = async (ctx, res, next) => {
       body: removeHtmlAndShorten(post.body),
     }));
   } catch (err) {
-    return res
-      .status(500)
-      .json({ success: false, msg: "게시글 조회 중 에러가 발생했습니다" });
+    // return res
+    //   .status(500)
+    //   .json({ success: false, msg: "게시글 조회 중 에러가 발생했습니다" });
   }
 };
 
