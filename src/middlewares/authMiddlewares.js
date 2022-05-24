@@ -6,6 +6,7 @@ import { Comment } from "../models/Comment.js";
 export const authMiddleware = async (req, res, next) => {
   const { authorization } = req.headers;
   if (!authorization) {
+    //authorization이 없다면 실행
     return res.status(400).send({
       errorMessage: "로그인 후 사용하세요",
     });

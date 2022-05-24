@@ -306,46 +306,6 @@ export const postfind = async (req, res, next) => {
     });
   }
 };
-//이전 코드
-// for (let i = 0; i < user.likePost.length; i++) {
-//   if (user.likePost[i]._id == req.params.postid) {
-//     post.likeStatus = true;
-//     for (let i = 0; i < user.keepPost.length; i++) {
-//       user.keepPost.forEach((keep) => {
-//         post.keepStatus =
-//           user.keepPost[i]._id == req.params.postid ? true : false;
-//       });
-//     }
-//   } else {
-//     post.likeStatus = false;
-//     for (let i = 0; i < user.keepPost.length; i++) {
-//       user.keepPost.forEach((keep) => {
-//         post.keepStatus =
-//           user.keepPost[i]._id == req.params.postid ? true : false;
-//       });
-//     }
-//   }
-// }
-
-// post 객체안에 데이터를 넣어야 함
-//   현재 로그인 한 사람이 좋아요, 찜하기를 했는지
-//   isLiked, isKeeped
-// //좋아요 확인
-// user.likePost.forEach((likepost) => {
-//   let isLiked = false;
-//   if (likepost._id === req.params.postid) {
-//     isLiked = true;
-//   }
-//   post.isLiked = isLiked;
-// });
-// // 찜하기 확인
-// user.keepPost.forEach((keeppost) => {
-//   let isKeeped = false;
-//   if (keeppost._id === req.params.postid) {
-//     isKeeped = true;
-//   }
-//   post.isKeeped = true;
-// });
 
 //update수정
 export const postupdate = async (req, res) => {
