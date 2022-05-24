@@ -12,7 +12,7 @@ import {
   // quitme,
 } from "../controllers/userController.js";
 const userRouter = express.Router();
-
+//이 url로 오면 middleware를 실행하고 logincheck함수를 실행한다.
 userRouter.get("/logincheck", authMiddleware, logincheck); //로그인 인증 유지
 userRouter.post("/signup", signup); //post 회원가입
 userRouter.post("/checkemail", checkemail); //post 이메일중복체크
@@ -24,3 +24,4 @@ userRouter.patch("/:userid", authMiddleware, profilepatch); //patch 프로필수
 // userRouter.get("/me", authMiddleware, quitme); //delete 탈퇴
 
 export default userRouter;
+//userRouter를 다른곳에서도 쓸수 있게 한다.

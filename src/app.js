@@ -10,17 +10,18 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-
+//babel을 이용하여 es7적용
 const app = express();
 //스웨거 적용
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
-dotenv.config();
+dotenv.config(); //.env사용
 const corsOptions = {
+  //cors옵션
   origin: true,
   credentials: true,
 };
-
+//.env.port가 없으면 8000번 포트를 쓰겠다
 const port = process.env.PORT || 8000;
 
 app.use(cors(corsOptions));
@@ -49,7 +50,7 @@ try {
 
 // module.exports = app;
 // app.use("/", globalRouter);
-app.use("/api/v1/users", userRouter);
+app.use("/api/v1/users", userRouter); //요청이 이 url로 오면 userRouter로 요청을 보낸다
 // app.use("/api/v1/event", eventRouter);
 app.use("/api/v1/post", postRouter);
 app.use("/api/v1/like", likeRouter);
